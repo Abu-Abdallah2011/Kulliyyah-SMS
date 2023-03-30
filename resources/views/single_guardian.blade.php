@@ -28,6 +28,11 @@
                         <h3 class="text-2xl">
                            NAME: {{$guardian->fullname}}
                         </h3>
+
+                        <div>
+                            <h3 class="text-2xl">
+                               USERNAME: {{$user->username}}
+                            </h3>
                             
                         <div class="text-xl mb-4">
                             <h3 class="text-2xl">
@@ -35,7 +40,7 @@
                             </h3>
                             <div class="text-xl mb-4">
                                 <h3 class="text-2xl">
-                            EMAIL ADDRESS: {{$guardian->email}}
+                            EMAIL ADDRESS: {{$user->email}}
                                 </h3>
                                 <div class="text-xl mb-4">
                                     <h3 class="text-2xl">
@@ -59,8 +64,10 @@
                     </div>
                 </div>
             </div>
+                    </div>
                 
         </div>
+        @can('isExecutive')
         <div class="bg-gray-50 border border-gray-200 rounded">
         <div class="mt-4 p-2 flex space-x-6"><a href="/guardians_database/{{$guardian->id}}/edit_guardian"><x-primary-button class="ml-3">
             <i class="fa-solid fa-pencil">  {{ __('Edit') }} </i>
@@ -84,6 +91,7 @@
 
 
         </div>
+        @endcan
 
     </div>
     

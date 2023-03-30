@@ -18,6 +18,7 @@
           }
         }
       }
+      
     }
   </script>
   {{-- End of Added css codes --}}

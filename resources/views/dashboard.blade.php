@@ -6,7 +6,6 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -20,6 +19,11 @@
 </div>
                     @endcan
 
-                    <x-guardian-view :guardians="$guardians" />
+                    {{-- <div class="max-w-7x mx-auto sm:px-6 lg:px-8">
+                    <x-sura-select id="sura-select" class="block mt-1 w-25" type="text" name="sura-select" :value="old('sura-select')" required autofocus autocomplete="sura-select" /> --}}
+                  
+                <x-guardian-view :guardians="$guardians" />
+
+                    
                
 </x-app-layout>

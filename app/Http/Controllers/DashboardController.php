@@ -22,12 +22,10 @@ class DashboardController extends Controller
             $query->orderBy('fullname');
         }])->with('user')
         ->get();
-
-        // $teachers = register_teacher::where('user_id', Auth::user()->id)->with('user')->get();
-
+        
         $guardians = register_guardian::where('user_id', Auth::user()->id)->with('students')->get();
 
-        return view('dashboard', ['teachers' => $teachers], ['guardians' => $guardians]);
+        return view('dashboard', ['teachers' => $teachers, 'guardians' => $guardians]);
     }
 
 

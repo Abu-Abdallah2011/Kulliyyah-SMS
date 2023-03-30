@@ -43,7 +43,8 @@ public function show(){
 // Show Single Guardian
 public function view($id) {
     $guardian = register_guardian::find($id);
-    return view('single_guardian', compact('guardian'));
+    $user = $guardian->user;
+    return view('single_guardian', compact('guardian', 'user'));
 }
 
    // Show Edit Form

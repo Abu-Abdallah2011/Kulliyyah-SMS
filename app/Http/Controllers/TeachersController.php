@@ -32,7 +32,7 @@ class TeachersController extends Controller
     }
 
 
-    // Show Single Student
+    // Show Single Teacher
     public function view($id) {
         $teacher = register_teacher::find($id);
         return view('single_teacher', compact('teacher'));

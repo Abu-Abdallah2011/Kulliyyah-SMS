@@ -16,7 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     
-                    @can('isExecutive')
+                    @can('isAdmin')
                     <x-nav-link :href="url('students_database')" :active="request()->routeIs('students_database')">
                         {{ __('Students') }}
                     </x-nav-link>
@@ -24,7 +24,8 @@
                     <x-nav-link :href="url('teachers_database')" :active="request()->routeIs('teachers_database')">
                         {{ __('Teachers') }}
                     </x-nav-link>
-
+                    @endcan
+                    @can('isExecutive')
                     <x-nav-link :href="url('guardians_database')" :active="request()->routeIs('guardians_database')">
                         {{ __('Guardians') }}
                     </x-nav-link>
@@ -91,7 +92,7 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            @can('isExecutive')
+            @can('isAdmin')
                 
             <x-nav-link :href="url('students_database')" :active="request()->routeIs('students_database')">
                 {{ __('Students') }}
@@ -100,7 +101,8 @@
             <x-nav-link :href="url('teachers_database')" :active="request()->routeIs('tachers_database')">
                 {{ __('Teachers') }}
             </x-nav-link>
-
+            @endcan
+            @can('isExecutive')
             <x-nav-link :href="url('guardians_database')" :active="request()->routeIs('guardians_database')">
                 {{ __('Guardians') }}
             </x-nav-link> 

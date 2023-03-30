@@ -1,7 +1,8 @@
+@foreach ($guardians as $guardian)
+    <div class="text-center font-bold">
+    <a href="{{ url('/guardians_database/' . $guardian->id) }}">{{$guardian->fullname}}</a>
+</div>
 <div class="lg:grid lg:grid-cols-2 gap-4 space-y-4 md:space-y-0 mx-4">
-                        
-    @foreach ($guardians as $guardian)
-
     
     @foreach ($guardian->students as $student)
 
@@ -14,7 +15,7 @@
                 </h3>
             <div class="font-bold">
                 <h3 class="text-2xl">
-                    {{$student->fullname}}
+                    <a href="{{ url('/students_database/' . $student->id) }}"> {{$student->fullname}}</a>
                 </h3>
                 <div class="text-xl mb-4">
                     {{$student->class}}
@@ -38,5 +39,7 @@
         </div>
     </div>
     @endforeach
-    @endforeach
+    
         </div>
+
+        @endforeach

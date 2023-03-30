@@ -71,6 +71,8 @@
             </div>
                 
         </div>
+
+        @can('isAdmin')
         <div class="bg-gray-50 border border-gray-200 rounded">
         <div class="mt-4 p-2 flex space-x-6"><a href="/students_database/{{$student->id}}/edit_student"><x-primary-button class="ml-3">
             <i class="fa-solid fa-pencil">  {{ __('Edit') }} </i>
@@ -94,6 +96,7 @@
 
 
         </div>
+        @endcan
 
     </div>
     

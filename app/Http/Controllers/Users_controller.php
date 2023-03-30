@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,17 +25,12 @@ public function edit($id){
     return view('edit_user', compact('user'));
 }
 
-// Edit Student
+// Edit User
 public function update(UserUpdateRequest $request, $id){
         
     $data = $request->validated();
 
-    $user = User::where('id', $id)->update([
-        'name'=>$data['name'],
-        'username'=>$data['username'],
-        'role'=>$data['role'],
-        'email'=>$data['email'],
-    ]);
+    $user = User::where('id', $id)->update($data);
 
     return redirect('/users_database')->with('message', 'Maa Shaa Allaah! User Updated Successfully! Jazaakumul Laahu Khaira!');;
 }

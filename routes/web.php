@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
@@ -48,58 +49,58 @@ require __DIR__.'/auth.php';
 
 
 //CRUD for Students Details
-Route::middleware('can:isExecutive')->controller(App\Http\Controllers\StudentsController::class)->group(function () {
+Route::controller(App\Http\Controllers\StudentsController::class)->group(function () {
 // Show Students Registration Form
-Route::get('/students_registration_form', 'create');
+Route::get('/students_registration_form', 'create')->middleware('can:isAdmin');
 // Store Students Data in Database
-Route::post('/students_registration_form', 'store');
+Route::post('/students_registration_form', 'store')->middleware('can:isAdmin');
 // Show Student Data in Database
-Route::get('/students_database', 'show');
+Route::get('/students_database', 'show')->middleware('can:isAdmin');
 // View Single Student Data
 Route::get('/students_database/{id}', 'view');
 // Show Student Edit Data Form
-Route::get('/students_database/{id}/edit_student', 'edit');
+Route::get('/students_database/{id}/edit_student', 'edit')->middleware('can:isAdmin');
 // Update Student
-Route::put('/students_database/{id}', 'update');
+Route::put('/students_database/{id}', 'update')->middleware('can:isAdmin');
 // Delete Student
-Route::delete('students_database/{id}', 'delete');
+Route::delete('students_database/{id}', 'delete')->middleware('can:isAdmin');
 });
 
 
 //CRUD for Teachers Details
-Route::middleware('can:isExecutive')->controller(TeachersController::class)->group(function () {
+Route::controller(TeachersController::class)->group(function () {
     // Show Teachers Registration Form
-    Route::get('/teachers_reg_form', 'create');
+    Route::get('/teachers_reg_form', 'create')->middleware('can:isAdmin');
     // Store Teachers Data in Database
-   Route::post('/teachers_reg_form', 'store');
+   Route::post('/teachers_reg_form', 'store')->middleware('can:isAdmin');
     // Show Teacher Data in Database
-    Route::get('/teachers_database', 'show');
+    Route::get('/teachers_database', 'show')->middleware('can:isAdmin');
     // View Single Teacher Data
-    Route::get('/teachers_database/{id}', 'view');
+    Route::get('/teachers_database/{id}', 'view')->middleware('can:isAssistant');
     // Edit Teacher Data
-    Route::get('/teachers_database/{id}/edit_teacher', 'edit');
+    Route::get('/teachers_database/{id}/edit_teacher', 'edit')->middleware('can:isAdmin');
     // Update Teacher
-    Route::put('/teachers_database/{id}', 'update');
+    Route::put('/teachers_database/{id}', 'update')->middleware('can:isAdmin');
     // Delete Teacher
-    Route::delete('teachers_database/{id}', 'delete');
+    Route::delete('teachers_database/{id}', 'delete')->middleware('can:isAdmin');
     });
 
     //CRUD for Guardians Details
-    Route::middleware('can:isExecutive')->controller(GuardiansController::class)->group(function () {
+    Route::controller(GuardiansController::class)->group(function () {
         // Show Guardian Registration Form
-        Route::get('/guardians_reg_form', 'create');
+        Route::get('/guardians_reg_form', 'create')->middleware('can:isExecutive');
         // Store Guardian Data in Database
-        Route::post('/guardians_reg_form', 'store');
+        Route::post('/guardians_reg_form', 'store')->middleware('can:isExecutive');
         // Show Guardian Data in Database
-        Route::get('/guardians_database', 'show');
+        Route::get('/guardians_database', 'show')->middleware('can:isExecutive');
         // View Single Guardian Data
         Route::get('/guardians_database/{id}', 'view');
         // Edit Guardian Data
-        Route::get('/guardians_database/{id}/edit_guardian', 'edit');
+        Route::get('/guardians_database/{id}/edit_guardian', 'edit')->middleware('can:isExecutive');
         // Update Guardian
-        Route::put('/guardians_database/{id}', 'update');
+        Route::put('/guardians_database/{id}', 'update')->middleware('can:isExecutive');
         // Delete Guardian
-        Route::delete('guardians_database/{id}', 'delete');
+        Route::delete('guardians_database/{id}', 'delete')->middleware('can:isExecutive');
         });
 
 
@@ -114,4 +115,16 @@ Route::middleware('can:isExecutive')->controller(TeachersController::class)->gro
         // Delete user
         Route::delete('users_database/{id}', 'delete');
         });
-    
+
+        // CRUD for Attendance
+    Route::middleware('can:isAssistant')->controller(AttendanceController::class)->group(function () {
+        // Show Attendance form
+        Route::get('/attendance', 'create');
+        // Save Attendance information
+        Route::post('/attendance', 'store');
+        // Show Attendance Report
+        Route::get('/attendance/{id}', 'show')->name('attendance.show');
+        });  
+
+
+   
