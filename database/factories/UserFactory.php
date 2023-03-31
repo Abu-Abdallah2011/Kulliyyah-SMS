@@ -18,11 +18,11 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'username' => '',
-            'email' => '',
-            'role' => '',
+            'username' => 'ABU ABDALLAH',
+            'email' => 'sadiqmustaphaahmad@gmail.com',
+            'role' => 'ADMIN',
             'email_verified_at' => now(),
-            'password' => '', // password
+            'password' => '$2y$10$Rag5QHXoYF9NKdE8rQm2tOjrFdR59.1.lBPxRAyW8VUIWT8DaAV8e', // password
             'remember_token' => Str::random(10),
         ];
     }
