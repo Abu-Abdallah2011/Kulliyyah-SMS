@@ -117,14 +117,14 @@ Route::controller(TeachersController::class)->group(function () {
         });
 
         // CRUD for Attendance
-    Route::middleware('can:isAssistant')->controller(AttendanceController::class)->group(function () {
-        // Show Attendance form
-        Route::get('/attendance', 'create');
-        // Save Attendance information
-        Route::post('/attendance', 'store');
-        // Show Attendance Report
-        Route::get('/attendance/{id}', 'show')->name('attendance.show');
-        });  
+    // Route::middleware('can:isAssistant')->controller(AttendanceController::class)->group(function () {
+    //     // Show Attendance form
+    //     Route::get('/attendance', 'create');
+    //     // Save Attendance information
+    //     Route::post('/attendance', 'store');
+    //     // Show Attendance Report
+    //     Route::get('/attendance/{id}', 'show')->name('attendance.show');
+    //     });  
 
 
    
