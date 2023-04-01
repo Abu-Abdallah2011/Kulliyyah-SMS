@@ -25,7 +25,7 @@ class DashboardController extends Controller
         
         $guardians = register_guardian::where('user_id', Auth::user()->id)->with('students')->get();
 
-        return view('dashboard', ['teachers' => $teachers, 'guardians' => $guardians]);
+        return view('/dashboard', ['teachers' => $teachers, 'guardians' => $guardians]);
     }
 
 
