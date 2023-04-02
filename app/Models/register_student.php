@@ -22,7 +22,7 @@ class register_student extends Model
          return $this->belongsTo(register_guardian::class);
      }
 
-    protected $table = 'students_details';
+    protected $table = 'students_details_tables';
 
     protected $fillable = [
         'fullname',
