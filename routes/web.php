@@ -33,7 +33,7 @@ Route::get('/register', function () {
 });
 
 //Show Dashboard after Authentication
-Route::get('/', [DashboardController::class, 'view'])
+Route::get('/dashboard', [DashboardController::class, 'view'])
 ->middleware(['auth', 'verified'])->name('dashboard');
 
 //Profile Manipulation
@@ -51,7 +51,7 @@ require __DIR__.'/auth.php';
 //CRUD for Students Details
 Route::controller(App\Http\Controllers\StudentsController::class)->group(function () {
 // Show Students Registration Form
-Route::get('/students_registration_form', 'create')->middleware('can:isAdmin');
+Route::get('/', 'create');
 // Store Students Data in Database
 Route::post('/students_registration_form', 'store')->middleware('can:isAdmin');
 // Show Student Data in Database
