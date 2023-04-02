@@ -51,7 +51,7 @@ require __DIR__.'/auth.php';
 //CRUD for Students Details
 Route::controller(App\Http\Controllers\StudentsController::class)->group(function () {
 // Show Students Registration Form
-Route::get('/', 'create');
+Route::get('/', 'create')->middleware('guest');
 // Store Students Data in Database
 Route::post('/students_registration_form', 'store')->middleware('can:isAdmin');
 // Show Student Data in Database
