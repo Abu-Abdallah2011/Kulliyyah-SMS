@@ -22,7 +22,7 @@
                     {{-- <div class="max-w-7x mx-auto sm:px-6 lg:px-8">
                     <x-sura-select id="sura-select" class="block mt-1 w-25" type="text" name="sura-select" :value="old('sura-select')" required autofocus autocomplete="sura-select" /> --}}
                   
-                <x-guardian-view :guardians="$guardians" />
+                {{-- <x-guardian-view :guardians="$guardians" /> --}}
 
                     
                
