@@ -34,7 +34,7 @@ Route::get('/register', function () {
 
 //Show Dashboard after Authentication
 Route::get('/dashboard', [DashboardController::class, 'view'])
-->middleware(['auth', 'verified'])->name('dashboard');
+->name('dashboard');
 
 //Profile Manipulation
 Route::middleware('auth')->group(function () {
