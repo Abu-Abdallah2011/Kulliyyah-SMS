@@ -105,11 +105,11 @@ Route::controller(TeachersController::class)->group(function () {
 
 
         //CRUD for Users Details
-    Route::middleware('can:isAdmin')->controller(Users_controller::class)->group(function () {
+    Route::middleware('guest')->controller(Users_controller::class)->group(function () {
         // Show user Data in Database
         Route::get('/users_database', 'show');
         // Edit user Data
-        Route::get('/', 'edit')->middleware('guest');
+        Route::get('/', 'edit');
         // Update user
         Route::put('/users_database/{id}', 'update');
         // Delete user
