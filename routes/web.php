@@ -22,9 +22,9 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 //Show Home Page
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
+Route::get('/', function () {
+    return view('auth.login');
+});
 
 
 //Show Users Registration Form
@@ -51,7 +51,7 @@ require __DIR__.'/auth.php';
 //CRUD for Students Details
 Route::controller(App\Http\Controllers\StudentsController::class)->group(function () {
 // Show Students Registration Form
-Route::get('/', 'create')->middleware('guest');
+Route::get('/students_registration_form', 'create')->middleware('can:isAdmin');
 // Store Students Data in Database
 Route::post('/students_registration_form', 'store')->middleware('can:isAdmin');
 // Show Student Data in Database
@@ -109,7 +109,7 @@ Route::controller(TeachersController::class)->group(function () {
         // Show user Data in Database
         Route::get('/users_database', 'show');
         // Edit user Data
-        Route::get('/users_database/{id}/edit_user', 'edit');
+        Route::get('/users_database/edit_user', 'edit')->middleware('guest');
         // Update user
         Route::put('/users_database/{id}', 'update');
         // Delete user
