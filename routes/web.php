@@ -23,7 +23,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 //Show Home Page
 Route::get('/', function () {
-    return view('auth.register');
+    return view('dashboard');
 });
 
 
@@ -33,8 +33,8 @@ Route::get('/register', function () {
 });
 
 //Show Dashboard after Authentication
-Route::get('/dashboard', [DashboardController::class, 'view'])
-->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', [DashboardController::class, 'view'])
+// ->middleware(['auth', 'verified'])->name('dashboard');
 
 //Profile Manipulation
 Route::middleware('auth')->group(function () {
