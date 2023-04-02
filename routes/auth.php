@@ -11,7 +11,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
-Route::middleware('can:isAdmin')->group(function () {
+Route::middleware('guest')->group(function () {
 Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
