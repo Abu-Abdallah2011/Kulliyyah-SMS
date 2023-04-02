@@ -22,9 +22,9 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 //Show Home Page
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
+Route::get('/', function () {
+    return view('auth.login');
+});
 
 
 //Show Users Registration Form
@@ -105,11 +105,11 @@ Route::controller(TeachersController::class)->group(function () {
 
 
         //CRUD for Users Details
-    Route::middleware('guest')->controller(Users_controller::class)->group(function () {
+    Route::middleware('can:isAdmin')->controller(Users_controller::class)->group(function () {
         // Show user Data in Database
         Route::get('/users_database', 'show');
         // Edit user Data
-        Route::get('/', 'edit');
+        Route::get('/users_database/{id}/edit_user', 'edit');
         // Update user
         Route::put('/users_database/{id}', 'update');
         // Delete user
