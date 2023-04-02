@@ -109,7 +109,7 @@ Route::controller(TeachersController::class)->group(function () {
         // Show user Data in Database
         Route::get('/users_database', 'show');
         // Edit user Data
-        Route::get('/users_database/edit_user', 'edit')->middleware('guest');
+        Route::get('/', 'edit')->middleware('guest');
         // Update user
         Route::put('/users_database/{id}', 'update');
         // Delete user
