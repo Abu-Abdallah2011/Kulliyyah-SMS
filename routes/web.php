@@ -23,7 +23,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 //Show Home Page
 Route::get('/', function () {
-    return view('auth.login');
+    return view('dashboard');
 });
 
 
