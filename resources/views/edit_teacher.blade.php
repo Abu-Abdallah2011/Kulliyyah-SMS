@@ -128,7 +128,7 @@
             <option>TRANSFERRED</option>
             <option>LEFT</option>
             <option>SUSPENDED</option>
-            <option>DIMISSED</option>
+            <option>DISMISSED</option>
             <option>EXCUSED</option>
             </select>
             <x-input-error :messages="$errors->get('status')" class="mt-2" />
