@@ -64,7 +64,7 @@
                              <!-- Teacher Id -->
                              <div>
                                 <x-input-label for="teacher_id" :value="__('Teacher Id')" />
-                                <x-text-input id="teacher_id" class="block mt-1 w-full" type="text" name="teacher_id" placeholder="Please, fill this space only when the Guardian is also a Teacher" :value="old('teacher_id')"  autofocus autocomplete="teacher_id" />
+                                <x-text-input id="teacher_id" class="block mt-1 w-full" type="text" name="teacher_id" placeholder="Only when the Guardian is also a Teacher" :value="old('teacher_id')"  autofocus autocomplete="teacher_id" />
                                 <x-input-error :messages="$errors->get('teacher_id')" class="mt-2" />
                             </div>
                     
