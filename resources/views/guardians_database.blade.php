@@ -4,9 +4,7 @@
             {{ __('Guardians Database') }}
             <a href="guardians_reg_form">
                 <x-primary-button class="absolute top-15 right-9 bg-green-500">
-                    <i class="fa-solid fa-user-plus"> 
-                         {{ __('Add New Guardian') }}
-                         </i>
+                    <i class="fa-solid fa-user-plus"> </i>
                 </x-primary-button> 
                 </a>
         </h2>
