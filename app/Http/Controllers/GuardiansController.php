@@ -19,14 +19,7 @@ class GuardiansController extends Controller
         
     $data = $request->validated();
 
-    $guardian = register_guardian::create([
-        'user_id'=>$data['user_id'],
-        'teacher_id'=>$data['teacher_id'],
-        'fullname'=>$data['fullname'],
-        'address'=>$data['address'],
-        'phone'=>$data['phone'],
-        'relationship'=>$data['relationship'],
-    ]);
+    $guardian = register_guardian::create($data);
 
     return redirect('/guardians_database')->with('message', 'Maa Shaa Allaah! Guardian Added Successfully! Jazaakumul Laahu Khaira!');
 }
@@ -59,14 +52,7 @@ public function update(GuardianFormRequest $request, $id){
         
     $data = $request->validated();
 
-    $guardian = register_guardian::where('id', $id)->update([
-        'user_id'=>$data['user_id'],
-        'teacher_id'=>$data['teacher_id'],
-        'fullname'=>$data['fullname'],
-        'address'=>$data['address'],
-        'phone'=>$data['phone'],
-        'relationship'=>$data['relationship'],
-    ]);
+    $guardian = register_guardian::where('id', $id)->update($data);
 
     return redirect('/guardians_database')->with('message', 'Maa Shaa Allaah! Guardian Updated Successfully! Jazaakumul Laahu Khaira!');
 }

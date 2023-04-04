@@ -79,6 +79,9 @@ class StudentFormRequest extends FormRequest
             'photo' => [
                 'max:255'
             ],
+            'relationship' => [
+                'max:255'
+            ],
 
         ];
     }

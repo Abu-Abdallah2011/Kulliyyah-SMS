@@ -54,13 +54,6 @@
                             <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" value="{{ $guardian->phone }}" required autofocus autocomplete="phone" />
                             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                         </div>
-                    
-                            <!-- Relationship -->
-                            <div>
-                                <x-input-label for="relationship" :value="__('Relationship')" />
-                                <x-text-input id="relationship" class="block mt-1 w-full" type="text" name="relationship" value="{{ $guardian->relationship }}" autofocus autocomplete="relationship" />
-                                <x-input-error :messages="$errors->get('grad_type')" class="mt-2" />
-                            </div>
 
                             <!-- Teacher Id -->
                             <div>

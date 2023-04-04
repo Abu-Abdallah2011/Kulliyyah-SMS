@@ -42,21 +42,16 @@
                                 <h3 class="text-2xl">
                             EMAIL ADDRESS: {{$user->email}}
                                 </h3>
-                                <div class="text-xl mb-4">
-                                    <h3 class="text-2xl">
-                                RELATIONSHIP: {{$guardian->relationship}}
-                                    </h3>
-                                    <div class="text-xl mb-4">
-                                        <h3 class="text-2xl">
-                                    TEACHER ID (if any): {{$guardian->teacher_id}}
-                                        </h3>
+                            <div class="text-xl mb-4">
+                                <h3 class="text-2xl">
+                            TEACHER ID (if any): {{$guardian->teacher_id}}
+                                </h3>
                                                 
                             <div class="text-lg mt-4">
                                 <i class="fa-solid fa-location-dot"></i>
                                 {{$guardian->address}}
                             </div>
                             </div>
-                                </div>
                         </div>  
             </div>
             </div>

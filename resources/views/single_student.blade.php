@@ -52,7 +52,9 @@
                                 <h3 class="text-2xl">
                                     GUARDIAN ID: {{$student->guardian_id}}
                                         </h3>
-                                                        
+                                <h3 class="text-2xl">
+                                    RELATIONSHIP: {{$student->relationship}}
+                                        </h3>
                             <div class="text-lg mt-4">
                                 <i class="fa-solid fa-location-dot"></i>
                                 {{$student->address}}

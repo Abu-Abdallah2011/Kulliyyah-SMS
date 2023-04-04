@@ -40,6 +40,7 @@ class register_student extends Model
         // 'grad_date',
         // 'grad_yr',
         'photo',
+        'relationship',
     ];
 
     public function scopeFilter($query, array $filters){
@@ -57,7 +58,8 @@ class register_student extends Model
             ->orWhere('mock_fee', 'like', '%' . request('search') . '%')
             ->orWhere('grad_fee', 'like', '%' . request('search') . '%')
             ->orWhere('grad_date', 'like', '%' . request('search') . '%')
-            ->orWhere('grad_yr', 'like', '%' . request('search') . '%');
+            ->orWhere('grad_yr', 'like', '%' . request('search') . '%')
+            ->orWhere('relationship', 'like', '%' . request('search') . '%');
         }
     }
 }

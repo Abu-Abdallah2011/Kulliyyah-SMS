@@ -43,10 +43,6 @@ class GuardianFormRequest extends FormRequest
                 'required',
                 'max:255'
             ],
-            'relationship' => [
-                'required',
-                'max:255'
-            ],
         ];
     }
 }

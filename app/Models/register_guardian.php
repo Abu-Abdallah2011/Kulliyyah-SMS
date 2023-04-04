@@ -33,7 +33,6 @@ class register_guardian extends Model
         'fullname',
         'address',
         'phone',
-        'relationship',
         'teacher_id',
         'user_id',
         
@@ -46,7 +45,6 @@ class register_guardian extends Model
             ->orWhere('address', 'like', '%' . request('search') . '%')
             ->orWhere('phone', 'like', '%' . request('search') . '%')
             ->orWhere('username', 'like', '%' . request('search') . '%')
-            ->orWhere('relationship', 'like', '%' . request('search') . '%')
             ;
         }
     }

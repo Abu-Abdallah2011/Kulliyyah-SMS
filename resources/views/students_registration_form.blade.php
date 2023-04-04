@@ -114,7 +114,13 @@
                                 <x-text-input id="guardian_id" class="block mt-1 w-full" type="text" name="guardian_id" :value="old('guardian_id')" required autofocus autocomplete="guardian_id" />
                                 <x-input-error :messages="$errors->get('guardian_id')" class="mt-2" />
                             </div>
-                    
+                            
+                             <!-- Relationship -->
+                             <div>
+                                <x-input-label for="relationship" :value="__('Relationship')" />
+                                <x-text-input id="relationship" class="block mt-1 w-full" type="text" name="relationship" :value="old('relationship')" required autofocus autocomplete="relationship" />
+                                <x-input-error :messages="$errors->get('relationship')" class="mt-2" />
+                            </div>
                     
                             <!-- Graduation Type -->
                             {{-- <div>
