@@ -44,7 +44,7 @@ class register_guardian extends Model
             ->orWhere('fullname', 'like', '%' . request('search') . '%')
             ->orWhere('address', 'like', '%' . request('search') . '%')
             ->orWhere('phone', 'like', '%' . request('search') . '%')
-            ->orWhere('username', 'like', '%' . request('search') . '%')
+            ->orWhere('user_id', 'like', '%' . request('search') . '%')
             ;
         }
     }
