@@ -12,9 +12,9 @@
             <div class="bg-gray-50 border border-gray-200 rounded p-6">
                 <div class="flex">
                     <div class="font-bold">
-                        <div class="grid grid-flow-col grid-col-2 gap-12">
+                        <div class="col-md-6 text-right">
                             <img class="w-48 mr-6 md:block" src="{{ asset('storage/' . $teacher->photo) }}" alt="" />
-                        
+                        </div>
                             <div>
                                 <h3 class="text-2xl">
                                    ID: {{$teacher->id}}
@@ -60,6 +60,9 @@
                                         PHONE NUMBER: {{$teacher->contact_no}}
                                             </h3>
                                     <h3 class="text-2xl">
+                                        EMAIL: {{$user->email}}
+                                            </h3>
+                                    <h3 class="text-2xl">
                                         BANK BRANCH: {{$teacher->bank_branch}}
                                             </h3>
                                     <h3 class="text-2xl">
@@ -91,7 +94,7 @@
                             
                         </div>
                     </div>
-                                </div>
+                                
                 </div>
             </div>
             </div>
@@ -109,7 +112,7 @@
             <i class="fa-solid fa-pencil">  {{ __('Edit') }} </i>
         </x-primary-button></a>
     
-        {{-- <form method="POST" action="/teachers_database/{{$teacher->id}}">
+        <form method="POST" action="/teachers_database/{{$teacher->id}}">
             @csrf
             @method('DELETE')
             <x-primary-button class="ml-3 bg-red-500">
@@ -117,7 +120,7 @@
                  {{ __('Delete') }}
                  </i>
         </x-primary-button> 
-</form> --}}
+</form>
 
 <x-primary-button class="ml-3" onclick="window.print()">
     <i class="fa-solid fa-download">  {{ __('Download') }} </i>
