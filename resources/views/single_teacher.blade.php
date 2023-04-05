@@ -112,7 +112,7 @@
             <i class="fa-solid fa-pencil">  {{ __('Edit') }} </i>
         </x-primary-button></a>
     
-        <form method="POST" action="/teachers_database/{{$teacher->id}}">
+        {{-- <form method="POST" action="/teachers_database/{{$teacher->id}}">
             @csrf
             @method('DELETE')
             <x-primary-button class="ml-3 bg-red-500">
@@ -120,7 +120,7 @@
                  {{ __('Delete') }}
                  </i>
         </x-primary-button> 
-</form>
+</form> --}}
 
 <x-primary-button class="ml-3" onclick="window.print()">
     <i class="fa-solid fa-download">  {{ __('Download') }} </i>
