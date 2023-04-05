@@ -54,11 +54,6 @@ class register_student extends Model
             ->orWhere('status', 'like', '%' . request('search') . '%')
             ->orWhere('guardian_id', 'like', '%' . request('search') . '%')
             ->orWhere('gender', 'like', '%' . request('search') . '%')
-            ->orWhere('grad_type', 'like', '%' . request('search') . '%')
-            ->orWhere('mock_fee', 'like', '%' . request('search') . '%')
-            ->orWhere('grad_fee', 'like', '%' . request('search') . '%')
-            ->orWhere('grad_date', 'like', '%' . request('search') . '%')
-            ->orWhere('grad_yr', 'like', '%' . request('search') . '%')
             ->orWhere('relationship', 'like', '%' . request('search') . '%');
         }
     }
