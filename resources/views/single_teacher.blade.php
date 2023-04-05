@@ -11,81 +11,81 @@
             
             <div class="bg-gray-50 border border-gray-200 rounded p-6">
                 <div class="flex">
-                    <div class="font-bold">
+                    <div class="font-serif">
                         <div class="col-md-6 text-right">
                             <img class="w-48 mr-6 md:block" src="{{ asset('storage/' . $teacher->photo) }}" alt="" />
                         </div>
                             <div>
-                                <h3 class="text-2xl">
-                                   ID: {{$teacher->id}}
-                                </h3>
+                                <h5 class="text-base">
+                                   Id: {{$teacher->id}}
+                                </h5>
                        
                         <div>
-                        <h3 class="text-2xl">
+                        <h5 class="text-base">
                            NAME: {{$teacher->fullname}}
-                        </h3>
+                        </h5>
                     
                         <div class="text-xl mb-4">
-                            <h3 class="text-2xl">
+                            <h5 class="text-base">
                            GENDER: {{$teacher->gender}}
-                            </h3>
+                            </h5>
                             
                         <div class="text-xl mb-4">
-                            <h3 class="text-2xl">
+                            <h5 class="text-base">
                            CLASS: {{$teacher->class}}
-                            </h3>
+                            </h5>
                             <div class="text-xl mb-4">
-                                <h3 class="text-2xl">
+                                <h5 class="text-base">
                             DATE OF BIRTH: {{$teacher->dob}}
-                                </h3>
+                                </h5>
                                 <div class="text-xl mb-4">
-                                    <h3 class="text-2xl">
+                                    <h5 class="text-base">
                                 MARITAL STATUS: {{$teacher->marital_status}}
-                                    </h3>
+                                    </h5>
                                 <div class="text-xl mb-4">
-                                    <h3 class="text-2xl">
+                                    <h5 class="text-base">
                                 DATE OF FIRST APPOINTMENT: {{$teacher->dofa}}
-                                    </h3>
+                                    </h5>
                                     <div class="text-xl mb-4">
-                                        <h3 class="text-2xl">
+                                        <h5 class="text-base">
                                     STATUS: {{$teacher->status}}
-                                        </h3>
-                                    <h3 class="text-2xl">
+                                        </h5>
+                                    <h5 class="text-base">
                                         RANK: {{$teacher->rank}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         YEAR OF PROMOTION: {{$teacher->promotion_yr}}
-                                    </h3>
-                                    <h3 class="text-2xl">
+                                    </h5>
+                                    <h5 class="text-base">
                                         PHONE NUMBER: {{$teacher->contact_no}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         EMAIL: {{$user->email}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         BANK BRANCH: {{$teacher->bank_branch}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         ACCOUNT NAME: {{$teacher->acct_name}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         ACCOUNT NUMBER: {{$teacher->acct_no}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         MONTHLY ALLOWANCE: {{$teacher->allowance}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         HOMETOWN: {{$teacher->hometown}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         NEXT OF KIN: {{$teacher->nok}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         RELATIONSHIP: {{$teacher->relationship}}
-                                            </h3>
-                                    <h3 class="text-2xl">
+                                            </h5>
+                                    <h5 class="text-base">
                                         NEXT OF KIN PHONE NUMBER: {{$teacher->contact}}
-                                            </h3>
+                                            </h5>
                             <div class="text-lg mt-4">
                                 <i class="fa-solid fa-location-dot"></i>
                                 {{$teacher->address}}
