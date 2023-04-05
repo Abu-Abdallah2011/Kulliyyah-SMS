@@ -12,12 +12,12 @@
             <div class="bg-gray-50 border border-gray-200 rounded p-6">
                 <div class="flex">
                     <div class="font-serif">
-                        <div class="col-md-6 text-right">
+                        <div class="grid grid-flow-col col-md-6 text-right">
                             <img class="w-48 mr-6 md:block" src="{{ asset('storage/' . $teacher->photo) }}" alt="" />
                         </div>
                             <div>
                                 <h5 class="text-base">
-                                   Id: {{$teacher->id}}
+                                   ID: {{$teacher->id}}
                                 </h5>
                        
                         <div>
