@@ -43,8 +43,9 @@
                                 <option>PRE-HADDA THREE FEMALE</option>
                                 <option>PRE-HADDA TWO MALE</option>
                                 <option>PRE-HADDA TWO FEMALE</option>
-                                <option>PRE-HADDA ONE MALE</option>
-                                <option>PRE-HADDA ONE FEMALE</option>
+                                <option>PRE-HADDA ONE</option>
+                                {{-- <option>PRE-HADDA ONE MALE</option>
+                                <option>PRE-HADDA ONE FEMALE</option> --}}
                                 </select>
                                 <x-input-error :messages="$errors->get('class')" class="mt-2" />
                             </div>
