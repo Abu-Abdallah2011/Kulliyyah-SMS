@@ -12,9 +12,9 @@
             <div class="bg-gray-50 border border-gray-200 rounded p-6">
                 <div class="flex">
                     <div class="font-bold">
-                        <div class="grid grid-flow-col grid-col-2 gap-12">
+                        <div class="grid grid-flow-col col-md-6 text-right">
                             <img class="w-48 mr-6 md:block" src="{{ asset('storage/' . $student->photo) }}" alt="" />
-                        
+                        </div>
                             <div>
                                 <h3 class="text-2xl">
                                    ID: {{$student->id}}
@@ -60,7 +60,7 @@
                                 {{$student->address}}
                                 
                             </div>
-                                </div>
+                                
                         </div>
                     </div>
                     
