@@ -12,7 +12,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                 
                     @can('isAssistant')
-                    <x-teacher-view :teachers="$teachers" />
+                    <x-teacher-view :teachers="$teachers" :allteachers="$allteachers" />
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
                     {{-- <div class="max-w-7x mx-auto sm:px-6 lg:px-8">
                     <x-sura-select id="sura-select" class="block mt-1 w-25" type="text" name="sura-select" :value="old('sura-select')" required autofocus autocomplete="sura-select" /> --}}
                   
-                <x-guardian-view :guardians="$guardians" />
+                <x-guardian-view :guardians="$guardians" user_id="{{ $user->id }}" />
 
                     
                

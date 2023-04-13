@@ -50,7 +50,8 @@
                                     REGISTRATION FEE: {{$student->reg_fee}}
                                         </h3>
                                 <h3 class="text-2xl">
-                                    GUARDIAN ID: {{$student->guardian_id}}
+                                    GUARDIAN ID:@can('isAdmin') <a href="{{ url('/guardians_database/' . $student->guardian->id) }}">@endcan{{ $student->guardian->id }}@can('isAdmin')</a>@endcan
+
                                         </h3>
                                 <h3 class="text-2xl">
                                     RELATIONSHIP: {{$student->relationship}}

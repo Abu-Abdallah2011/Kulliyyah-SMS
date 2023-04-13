@@ -16,6 +16,8 @@ class DashboardController extends Controller
     public function view()
      {
 
+        $allteachers = register_teacher::distinct('class')->pluck('class');
+
         $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) 
         {
@@ -25,8 +27,34 @@ class DashboardController extends Controller
         
         $guardians = register_guardian::where('user_id', Auth::user()->id)->with('students')->get();
 
-        return view('dashboard', ['teachers' => $teachers, 'guardians' => $guardians]);
+        return view('dashboard', ['teachers' => $teachers, 'guardians' => $guardians, 'allteachers' => $allteachers]);
     }
 
+    // show the dashboard of selected user for Admin
+    public function show($id = null)
+    {
+        // if ($id) {
+        //     $user = User::findOrFail($id);
+        // } else {
+        //     $user = Auth::user();
+        // }
+
+        $user = User::whereHas('guardian', function($query) use ($id) {
+            $query->where('id', $id);
+        })->firstOrFail();
+
+        $allteachers = register_teacher::distinct('class')->pluck('class');
+
+        $teachers = register_teacher::where('user_id', Auth::user()->id)
+        ->with(['students' => function ($query) 
+        {
+            $query->orderBy('fullname');
+        }])->with('user')
+        ->get();
+
+        $guardians = register_guardian::where('user_id', Auth::user()->id)->with('students')->get();
+    
+        return view('dashboard', ['user' => $user, 'teachers' => $teachers, 'guardians' => $guardians, 'allteachers' => $allteachers]);
+    }
 
 }

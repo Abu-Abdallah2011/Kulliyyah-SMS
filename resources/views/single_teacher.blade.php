@@ -19,6 +19,8 @@
                                 <h5 class="text-base">
                                    ID: {{$teacher->id}}
                                 </h5>
+
+                                @can('isAdmin') TEACHERS' USER ID:<a href="/users_database/{{$teacher->user->id}}/edit_user"> {{$teacher->user->id}}</a>@endcan
                        
                         <div>
                         <h5 class="text-base">

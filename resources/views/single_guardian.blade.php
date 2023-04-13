@@ -21,7 +21,7 @@
 
                         <div>
                             <h3 class="text-2xl">
-                              GUARDIANS' USER ID: {{$guardian->user_id}}
+                                @can('isAdmin') GUARDIANS' USER ID:<a href="/users_database/{{$guardian->user->id}}/edit_user"> {{$guardian->user->id}}</a>@endcan
                             </h3>
                             
                        <div>
@@ -42,11 +42,12 @@
                                 <h3 class="text-2xl">
                             EMAIL ADDRESS: {{$user->email}}
                                 </h3>
+                                @can('isAssistant')
                             <div class="text-xl mb-4">
                                 <h3 class="text-2xl">
-                            TEACHER ID (if any): {{$guardian->teacher_id}}
+                            TEACHER ID: {{$guardian->teacher_id}}
                                 </h3>
-                                                
+                                     @endcan           
                             <div class="text-lg mt-4">
                                 <i class="fa-solid fa-location-dot"></i>
                                 {{$guardian->address}}
@@ -81,6 +82,12 @@
 <x-primary-button class="ml-3" onclick="window.print()">
     <i class="fa-solid fa-download">  {{ __('Download') }} </i>
 </x-primary-button>
+
+{{-- <x-primary-button class="ml-3">
+    <a href="{{ route('dashboard', ['user_id' => $guardian->user->id]) }}">
+        <i class="fa-solid fa-lock-open">{{ __('Dashboard') }}</i>
+    </a>
+</x-primary-button> --}}
     
     </div>
 
