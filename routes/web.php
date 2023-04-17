@@ -23,8 +23,9 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
 // THIS APPLICATION WAS LAUNCHED IN APRIL 2023, BUT I CAN'T REMEMBER THE PRECISE DATE AS WE WERE SO
-// BUSY TRYING DEPLOY THEN TESTS THEN CORRECTIONS AND ADJUSTMENTS AND I FORGOT TO NOTE THE PRECISE DATE
+// BUSY TRYING TO DEPLOY THEN TESTS THEN CORRECTIONS AND ADJUSTMENTS AND I FORGOT TO NOTE THE PRECISE DATE
 // BUT I WILL TRY TO RETRACE MY STEPS TO SEE IF I CAN FIND OUT AND IF I DO I WILL NOTE IT DOWN HERE IN SHAA ALLAAH.
+// -Sadiq Mustapha Ahmad April, 2023
 
 //Show Home Page
 Route::get('/', function () {
@@ -42,7 +43,7 @@ Route::get('/dashboard', [DashboardController::class, 'view'])
 ->middleware(['auth', 'verified'])->name('dashboard');
 
 //Show Dashboard of selected user
-Route::get('/dashboard/{id}', [DashboardController::class, 'show'])
+Route::get('/dashboard/{guardian_id}', [DashboardController::class, 'show'])
 ->middleware(['can:isAdmin'])->name('dashboard.show');
 
 //Profile Manipulation

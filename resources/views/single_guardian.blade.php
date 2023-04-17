@@ -66,7 +66,7 @@
         @can('isExecutive')
         <div class="bg-gray-50 border border-gray-200 rounded">
         <div class="mt-4 p-2 flex space-x-6"><a href="/guardians_database/{{$guardian->id}}/edit_guardian"><x-primary-button class="ml-3">
-            <i class="fa-solid fa-pencil">  {{ __('Edit') }} </i>
+            <i class="fa-solid fa-pencil">  {{ __('') }} </i>
         </x-primary-button></a>
     
         {{-- <form method="POST" action="/guardians_database/{{$guardian->id}}">
@@ -80,14 +80,16 @@
 </form> --}}
 
 <x-primary-button class="ml-3" onclick="window.print()">
-    <i class="fa-solid fa-download">  {{ __('Download') }} </i>
+    <i class="fa-solid fa-download">  {{ __('') }} </i>
 </x-primary-button>
 
-{{-- <x-primary-button class="ml-3">
-    <a href="{{ route('dashboard', ['user_id' => $guardian->user->id]) }}">
-        <i class="fa-solid fa-lock-open">{{ __('Dashboard') }}</i>
+<x-primary-button class="ml-3">
+    <a href="{{ url('/dashboard/' . $guardian->id) }}">
+        <i class="fa-solid fa-computer">{{ __('') }}</i>
     </a>
-</x-primary-button> --}}
+</x-primary-button>
+
+
     
     </div>
 
