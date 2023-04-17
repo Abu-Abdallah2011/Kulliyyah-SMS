@@ -8,15 +8,18 @@ class TeacherView extends Component
 {
     public $allteachers;
     public $teachers;
+    public $malams;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($teachers, $allteachers = null)
+    public function __construct($teachers, $allteachers = null, $malams)
     {
         $this->teachers = $teachers;
         $this->allteachers = $allteachers;
+        $this->malams = $malams;
+
     }
 
     /**

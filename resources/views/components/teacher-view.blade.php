@@ -6,22 +6,25 @@
 
 
   
-{{-- @if (!is_null($allteachers))
+@if (!is_null($allteachers))
     @foreach ($allteachers as $class)
-    <h1 class="font-bold">
-    NAMES OF TEACHERS IN THE CLASS:
-</h1>
+        <h1 class="font-bold">
+            NAMES OF TEACHERS IN THE CLASS: {{ $class }}
+        </h1>
         <ol>
-            @foreach ($teachers->where('class', $class) as $teacher)
-                <li>NAME: {{ $teacher->fullname }} -> {{ $teacher->rank }}</li>
+            @foreach ($malams->where('class', $class) as $teacher)
+                <li> {{ $teacher->fullname }} -> {{ $teacher->rank }}</li>
             @endforeach
         </ol>
     @endforeach
-@endif --}}
+@endif
+
+
+
 
  @foreach ($teachers as $teacher)
                     
- <a href="{{ url('/teachers_database/' . $teacher->id) }}"> <h1 class="font-bold text-center">{{ $teacher->class }}: {{ $teacher->students->count() }}</h1></a>
+ <a href="{{ url('/teachers_database/' . $teacher->id) }}"> <h1 class="font-bold text-center">Students: {{ $teacher->students->count() }}</h1></a>
                     
                     <table class="border-collapse w-full">
                         <thead>

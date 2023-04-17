@@ -18,6 +18,13 @@ class DashboardController extends Controller
 
         $allteachers = register_teacher::distinct('class')->pluck('class');
 
+        $malams = register_teacher::with(['students' => function ($query) {
+            $query->orderBy('fullname');
+        }])
+        ->with('user')
+        ->get();
+        
+
         $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) 
         {
@@ -27,7 +34,12 @@ class DashboardController extends Controller
         
         $guardians = register_guardian::where('user_id', Auth::user()->id)->with('students')->get();
 
-        return view('dashboard', ['teachers' => $teachers, 'guardians' => $guardians, 'allteachers' => $allteachers]);
+        return view('dashboard', [
+        'teachers' => $teachers,
+        'guardians' => $guardians,
+        'allteachers' => $allteachers,
+        'malams' => $malams
+    ]);
     }
 
     // show the dashboard of selected user for Admin
