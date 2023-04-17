@@ -15,7 +15,7 @@ class Users_controller extends Controller
     public function show()
     {
         return view('users_database', ['users' => User::latest()
-        ->filter(request(['search']))->paginate(6)
+        ->filter(request(['search']))->paginate(10)
         ]);
     }
 

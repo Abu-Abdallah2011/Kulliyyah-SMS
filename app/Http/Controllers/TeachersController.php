@@ -28,7 +28,7 @@ class TeachersController extends Controller
      //Show/Display Teacher in Database
      public function show(){
         return view('teachers_database', ['teachers' => register_teacher::latest()
-        ->filter(request(['search']))->paginate(6)]);
+        ->filter(request(['search']))->paginate(10)]);
     }
 
 

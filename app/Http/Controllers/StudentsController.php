@@ -36,7 +36,7 @@ class StudentsController extends Controller
     public function show(){
 
         return view('students_database', ['students' => register_student::latest()
-        ->filter(request(['search']))->paginate(6)]);
+        ->filter(request(['search']))->paginate(10)]);
     }
 
 

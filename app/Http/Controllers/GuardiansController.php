@@ -29,7 +29,7 @@ class GuardiansController extends Controller
 public function show(){
 
     return view('guardians_database', ['guardians' => register_guardian::latest()
-    ->filter(request(['search']))->paginate(6)]);
+    ->filter(request(['search']))->paginate(10)]);
 }
 
 
