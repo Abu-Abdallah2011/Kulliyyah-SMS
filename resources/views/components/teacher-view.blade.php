@@ -6,7 +6,7 @@
 
 
   
-@if (!is_null($allteachers))
+{{-- @if (!is_null($allteachers))
     @foreach ($allteachers as $class)
         <h1 class="font-bold">
             NAMES OF TEACHERS IN THE CLASS: {{ $class }}
@@ -17,7 +17,7 @@
             @endforeach
         </ol>
     @endforeach
-@endif
+@endif --}}
 
 
 
