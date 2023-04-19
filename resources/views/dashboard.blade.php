@@ -7,32 +7,34 @@
 
     <div class="py-6">
 
-        @if(!Request::is('dashboard/*'))
+        
 
         @can('isAssistant')
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                 
-                    
-                    <x-teacher-view :teachers="$teachers" :allteachers="$allteachers" :malams="$malams"/>
-                    
-
+                    {{-- TEACHER DASHBOARD VIEW --}}
+                    @if(!Request::is('dashboard/*'))
+                    <x-teacher-view :teachers="$teachers" :class="$class" :malams="$malams"/>
+                    @endif
+                    {{-- SINGLE CLASS DASHBOARD VIEW FOR ADMIN --}}
+                    @if(Auth::user()->can('isAdmin') && Request::is('dashboard/classes/*'))
+                    <x-single-teacher-view :teacher="$teacher" :class="$class" :malams="$malams" />
+                    @endif
                     
             </div>
         </div>
         @endcan
-
-        @endif
     </div>
 
     {{-- GUARDIAN VIEW COMPONENT --}}
-    @can('isGuardian')
+    @if(!Request::is('dashboard/*'))
     <x-guardian-view :guardians="$guardians" />
-    @endcan
+    @endif
 
 
         {{-- SINGLE GUARDIAN DASHBOARD VIEW FOR ADMIN --}}
-@if(Auth::user()->can('isAdmin') && Request::is('dashboard/*'))
+@if(Auth::user()->can('isAdmin') && Request::is('dashboard/guardians/*'))
     <x-single-guardian-view :guardian="$guardian" />
 @endif
 

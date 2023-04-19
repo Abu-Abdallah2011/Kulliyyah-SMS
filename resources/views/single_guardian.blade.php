@@ -84,7 +84,7 @@
 </x-primary-button>
 
 <x-primary-button class="ml-3">
-    <a href="{{ url('/dashboard/' . $guardian->id) }}">
+    <a href="{{ url('/dashboard/guardians/' . $guardian->id) }}">
         <i class="fa-solid fa-computer">{{ __('') }}</i>
     </a>
 </x-primary-button>

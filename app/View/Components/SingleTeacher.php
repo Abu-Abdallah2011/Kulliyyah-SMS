@@ -4,9 +4,9 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class TeacherView extends Component
+class SingleTeacher extends Component
 {
-    public $teachers;
+    public $teacher;
     public $class;
     public $malams;
     /**
@@ -14,12 +14,11 @@ class TeacherView extends Component
      *
      * @return void
      */
-    public function __construct($teachers, $class, $malams)
+    public function __construct($teacher, $class, $malams)
     {
-        $this->teachers = $teachers;
+        $this->teacher = $teacher;
         $this->class = $class;
         $this->malams = $malams;
-
     }
 
     /**
@@ -29,6 +28,6 @@ class TeacherView extends Component
      */
     public function render()
     {
-        return view('components.teacher-view');
+        return view('components.single-teacher-view');
     }
 }

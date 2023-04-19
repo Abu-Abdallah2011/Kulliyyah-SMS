@@ -34,6 +34,10 @@
                     <x-nav-link :href="url('users_database')" :active="request()->routeIs('users_database')">
                         {{ __('Users') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="url('classes')" :active="request()->routeIs('classes')">
+                        {{ __('Classes') }}
+                    </x-nav-link>
                     @endcan 
                     
                 </div>
@@ -110,6 +114,10 @@
             @can('isAdmin')
             <x-nav-link :href="url('users_database')" :active="request()->routeIs('users_database')">
                 {{ __('Users') }}
+            </x-nav-link>
+
+            <x-nav-link :href="url('classes')" :active="request()->routeIs('classes')">
+                {{ __('Classes') }}
             </x-nav-link>
             @endcan
         </div>

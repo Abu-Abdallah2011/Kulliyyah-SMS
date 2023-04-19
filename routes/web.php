@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Users_controller;
+use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TeachersController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuardiansController;
-use App\Http\Controllers\Users_controller;
+use App\Http\Controllers\AttendanceController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -43,7 +44,7 @@ Route::get('/dashboard', [DashboardController::class, 'view'])
 ->middleware(['auth', 'verified'])->name('dashboard');
 
 //Show Dashboard of selected user
-Route::get('/dashboard/{guardian_id}', [DashboardController::class, 'show'])
+Route::get('/dashboard/guardians/{guardian_id}', [DashboardController::class, 'show'])
 ->middleware(['can:isAdmin'])->name('dashboard.show');
 
 //Profile Manipulation
@@ -125,6 +126,17 @@ Route::controller(TeachersController::class)->group(function () {
         // Delete user
         Route::delete('users_database/{id}', 'delete');
         });
+
+
+        // Route for Classes
+        Route::middleware('can:isAdmin')->controller(ClassesController::class)->group(function()
+        {
+            // Show Classes Page
+        Route::get('/classes', 'index');
+        // Show Any selected Teachers' Dashboard
+        Route::get('/dashboard/classes/{teacher_id}', 'display')->name('dashboard.display');
+        });
+    
 
         // CRUD for Attendance
     // Route::middleware('can:isAssistant')->controller(AttendanceController::class)->group(function () {
