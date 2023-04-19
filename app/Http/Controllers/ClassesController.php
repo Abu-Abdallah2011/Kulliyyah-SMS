@@ -42,7 +42,7 @@ class ClassesController extends Controller
             $query->orderBy('fullname');
         }])
         ->with('user')
-        ->where('teacher_id', $teacher_id)
+        ->where('id', $teacher_id)
         ->firstOrFail();
 
         $class = $teacher->class;
