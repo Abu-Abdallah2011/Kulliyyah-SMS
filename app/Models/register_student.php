@@ -22,6 +22,18 @@ class register_student extends Model
          return $this->belongsTo(register_guardian::class);
      }
 
+    //  Surrender this model to curriculum model
+    public function curriculum()
+     {
+        return $this->hasMany(curriculum::class, 'set', 'set');
+     }
+
+     //  Surrender this model to Hadda model
+    public function Hadda()
+    {
+       return $this->hasMany(Hadda::class, 'student_id', 'student_id');
+    }
+
     protected $table = 'students_details_tables';
 
     protected $fillable = [
@@ -41,6 +53,7 @@ class register_student extends Model
         // 'grad_yr',
         'photo',
         'relationship',
+        'set',
     ];
 
     public function scopeFilter($query, array $filters){
@@ -55,7 +68,8 @@ class register_student extends Model
             ->orWhere('guardian_id', 'like', '%' . request('search') . '%')
             ->orWhere('gender', 'like', '%' . request('search') . '%')
             ->orWhere('relationship', 'like', '%' . request('search') . '%')
-            ->orWhere('id', 'like', '%' . request('search') . '%');
+            ->orWhere('id', 'like', '%' . request('search') . '%')
+            ->orWhere('set', 'like', '%' . request('search') . '%');
         }
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudentFormRequest extends FormRequest
+class CurriculumFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,68 +24,45 @@ class StudentFormRequest extends FormRequest
     public function rules()
     {
         return [
-            
-            'fullname' => [
+            'date' => [
                 'required',
                 'max:255'
             ],
             'class' => [
+                'max:255'
+            ],
+            'sura' => [
+                'max:255'
+            ],
+            'from' => [
+                'max:255'
+            ],
+            'to' => [
+                'max:255'
+            ],
+            'times' => [
+                'max:255'
+            ],
+            'bita' => [
+                'max:255'
+            ],
+            'grade' => [
+                'max:255'
+            ],
+            'hadda' => [
                 'required',
                 'max:255'
             ],
-            'gender' => [
-                'required',
-                'max:255'
+            'comment' => [
+                'min:0'
             ],
-            'dob' => [
-                'required',
-                'max:255'
-            ],
-            'doa' => [
-                'required',
-                'max:255'
-            ],
-            'reg_fee' => [
-                'required',
-                'max:255'
-            ],
-            'address' => [
-                'required',
-                'max:255'
-            ],
-            'status' => [
-                'required',
-                'max:255'
-            ],
-            'guardian_id' => [
-                'required',
-                'max:255'
-            ],
-            // 'grad_type' => [
+            // 'teacher' => [
+            //     'required',
             //     'max:255'
             // ],
-            // 'mock_fee' => [
-            //     'max:255'
-            // ],
-            // 'grad_fee' => [
-            //     'max:255'
-            // ],
-            // 'grad_date' => [
-            //     'max:255'
-            // ],
-            // 'grad_yr' => [
-            //     'max:255'
-            // ],
-            'photo' => [
-                'max:255'
-            ],
-            'relationship' => [
-                'max:255'
-            ],
             'set' => [
                 'max:255'
             ],
-
         ];
     }
 }

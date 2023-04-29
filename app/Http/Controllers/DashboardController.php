@@ -44,7 +44,7 @@ class DashboardController extends Controller
     }
     
 
-    // show the dashboard of selected user for Admin
+    // show the dashboard of selected Guardian for Admin
 public function show($guardian_id)
 {
     $guardian = register_guardian::findOrFail($guardian_id);

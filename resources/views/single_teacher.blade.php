@@ -38,6 +38,10 @@
                             </h5>
                             <div class="text-xl mb-4">
                                 <h5 class="text-base">
+                               SET: {{$teacher->set}}
+                                </h5>
+                            <div class="text-xl mb-4">
+                                <h5 class="text-base">
                             DATE OF BIRTH: {{$teacher->dob}}
                                 </h5>
                                 <div class="text-xl mb-4">

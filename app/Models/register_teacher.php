@@ -27,6 +27,13 @@ class register_teacher extends Model
     return $this->hasOne(register_guardian::class, 'teacher_id', 'teacher_id');
 }
 
+    // Linking this model to Curriculum Model
+    public function curriculum()
+    {
+        return $this->hasMany(curriculum::class, 'set', 'set');
+    }
+
+
     protected $table = 'teachers_details';
 
     protected $fillable = [
@@ -51,6 +58,7 @@ class register_teacher extends Model
         'relationship',
         'contact',
         'photo',
+        'set',
     ];
 
     public function scopeFilter($query, array $filters){
@@ -75,7 +83,8 @@ class register_teacher extends Model
             ->orWhere('hometown', 'like', '%' . request('search') . '%')
             ->orWhere('nok', 'like', '%' . request('search') . '%')
             ->orWhere('relationship', 'like', '%' . request('search') . '%')
-            ->orWhere('contact', 'like', '%' . request('search') . '%');
+            ->orWhere('contact', 'like', '%' . request('search') . '%')
+            ->orWhere('set', 'like', '%' . request('search') . '%');
         }
     }
 }

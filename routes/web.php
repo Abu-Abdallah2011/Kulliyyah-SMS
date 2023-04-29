@@ -1,14 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HaddaController;
 use App\Http\Controllers\Users_controller;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TeachersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuardiansController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CurriculumController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -136,7 +139,51 @@ Route::controller(TeachersController::class)->group(function () {
         // Show Any selected Teachers' Dashboard
         Route::get('/dashboard/classes/{teacher_id}', 'display')->name('dashboard.display');
         });
+
+         //CRUD for Curriculum Details
+    Route::controller(CurriculumController::class)->group(function () {
+        // Show Curriculum Registration Form
+        Route::get('/curriculum_form', 'create')->middleware('can:isAssistant');
+        // Store Curriculum Data in Database
+        Route::post('/curriculum_scale', 'store')->middleware('can:isAssistant');
+        // Show Curriculum Data in Database
+        Route::get('/curriculum_scale', 'show')->middleware('can:isAssistant');
+        // Edit Curriculum Data
+        Route::get('/curriculum_scale/{id}/edit_curriculum', 'edit')->middleware('can:isAssistant');
+        // Update Curriculum
+        Route::put('/curriculum_scale/{id}', 'update')->middleware('can:isAssistant');
+        // Delete Guardian
+        Route::delete('curriculum_scale/{id}', 'delete')->middleware('can:isAssistant');
+        // Show Curriculum Scale of any selected class to Admin
+        Route::get('curriculum_scale/{teacher_id}', 'display')->middleware('can:isAdmin');
+        // Show curriculum Scale of student to whoever clicks the button
+        Route::get('curriculum_scale/guardianview/{student_id}', 'displayForGuardian');
+        });
+
+        // SESSIONS ROUTES
+        Route::middleware('can:isExecutive')->controller(SessionsController::class)->group(function () {
+            // show page with edit form
+            Route::get('/sessions/{id}/editform', 'edit')->name('EditSession');
+            // update sessions data
+            Route::put('/sessions/{id}', 'update');
+        });
     
+         //CRUD for Hadda Details
+    Route::controller(HaddaController::class)->group(function () {
+        // Show Hadda Entry Form
+        Route::get('/hadda_page/{student_id}/HaddaForm', 'create')->middleware('can:isAssistant');
+        // Store Hadda Entry Data in Database
+        Route::post('/hadda_page/{student_id}/HaddaForm', 'store')->middleware('can:isAssistant')->name('hadda_page.store');
+        // Show Hadda Data in Hadda book page
+        Route::get('/hadda_page/{student_id}', 'show')->name('hadda_page.show');
+        // Edit Curriculum Data
+        Route::get('/hadda_page/{id}/edit_hadda', 'edit')->middleware('can:isAssistant');
+        // Update Curriculum
+        Route::put('/hadda_page/{id}', 'update')->middleware('can:isAssistant');
+        // Delete Guardian
+        Route::delete('hadda_page/{id}', 'delete')->middleware('can:isAssistant')->name('hadda.delete');
+        });
+
 
         // CRUD for Attendance
     // Route::middleware('can:isAssistant')->controller(AttendanceController::class)->group(function () {

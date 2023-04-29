@@ -55,11 +55,11 @@
         <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static"><a href="{{ url('/teachers_database/' . $teacher->id) }}">{{ $teacher->fullname }}</a></td>
         <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $teacher->rank }}</td>
         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static font-bold">
+            <a href="{{ url('/dashboard/classes/' . $teacher->id) }}">
             <x-primary-button class="ml-3">
-                <a href="{{ url('/dashboard/classes/' . $teacher->id) }}">
                     <i class="fa-solid fa-computer">{{ __('') }}</i>
-                </a>
             </x-primary-button>
+        </a>
         </td>
     </tr>
     @endforeach

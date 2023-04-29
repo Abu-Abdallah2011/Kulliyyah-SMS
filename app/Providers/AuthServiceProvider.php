@@ -44,6 +44,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('isGuardian', function($user){
             return $user->role == 'GUARDIAN';
-        }); 
+        });
+        
+        Gate::define('isAdGuardian', function($user){
+            return $user->role == 'GUARDIAN' || $user->role == 'ADMIN';
+        });
     }
 }
