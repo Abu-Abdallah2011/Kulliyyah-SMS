@@ -74,7 +74,7 @@
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">HADDA</th>
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">TEACHER</th>
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">COMMENT</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">DELETE</th>
+                        {{-- <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">DELETE</th> --}}
                     </tr>
                     
                     </thead>
@@ -100,7 +100,7 @@
                         <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $curriculum->hadda }}</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $curriculum->teacher }}</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">{{ $curriculum->comment }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">
+                        {{-- <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">
                             <form method="POST" action="/curriculum_scale/{{$curriculum->id}}">
                                 @csrf
                                 @method('DELETE')
@@ -110,7 +110,7 @@
                                      </i>
                             </x-primary-button> 
                     </form> 
-                        </td>
+                        </td> --}}
                     </tr>
                     {{-- <x-edit-curriculum-modal :curriculum="$curriculum"/> --}}
                     @endforeach

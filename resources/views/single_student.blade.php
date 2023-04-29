@@ -117,13 +117,13 @@
     @endcan
 
     <a href="{{ url('/curriculum_scale/guardianview/' . $student->id) }}">
-        <x-primary-button class="ml-3 bg-blue-500">
+        <x-primary-button class="">
             <i class="fa-solid fa-book">  {{ __('') }} </i>
         </x-primary-button></a>
     
 
     <a href="{{ url('/hadda_page/' . $student->id) }}">
-        <x-primary-button class="ml-3 bg-blue-500">
+        <x-primary-button class="">
             <i class="fa-solid fa-book-open">  {{ __('') }} </i>
         </x-primary-button></a>
     </div>
