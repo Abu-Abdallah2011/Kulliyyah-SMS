@@ -13,10 +13,10 @@ use App\Http\Requests\CurriculumFormRequest;
 class CurriculumController extends Controller
 {
 
-    // Show Curriculum Scale Page
+    // Show Curriculum Scale Data Entry Form
     public function create()
     {
-        return view('curriculum_form');
+        return view('CurriculumScale.curriculum_form');
     }
     //Store Curriculum Information
  public function store(CurriculumFormRequest $request){

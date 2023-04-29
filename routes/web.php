@@ -145,7 +145,7 @@ Route::controller(TeachersController::class)->group(function () {
         // Show Curriculum Registration Form
         Route::get('/curriculum_form', 'create')->middleware('can:isAssistant');
         // Store Curriculum Data in Database
-        Route::post('/curriculum_scale', 'store')->middleware('can:isAssistant');
+        Route::post('/curriculum_form', 'store')->middleware('can:isAssistant');
         // Show Curriculum Data in Database
         Route::get('/curriculum_scale', 'show')->middleware('can:isAssistant');
         // Edit Curriculum Data

@@ -16,6 +16,7 @@
 
                         <form method="POST" action="{{ url('curriculum_form') }}" enctype="multipart/form-data">
                             @csrf
+                        <div class="modal-body">
                             
                             {{-- Select Date --}}
                             <div>
@@ -49,20 +50,20 @@
                             </div>
                             {{-- Bita --}}
                             <div>
-                                <x-input-label class="font-bold" for="bita" :value="__('Izu nawa aka Bita?')" />
+                                <x-input-label class="font-bold" for="bita" :value="__('Izu nawa aka Bita Yau?')" />
                                 <x-text-input id="bita" class="block mt-1 w-full" type="text" name="bita"/>
                                 <x-input-error :messages="$errors->get('bita')" class="mt-2" />
                             </div>
                             {{-- Grade --}}
                             <div>
-                                <x-input-label class="font-bold" for="sura" :value="__('Select a Grade')" />
-                                <x-text-select id="sura" class="block mt-1 w-full" type="text" name="grade"/>
+                                <x-input-label class="font-bold" for="grade" :value="__('Select a Grade')" />
+                                <x-text-select id="grade" class="block mt-1 w-full" type="text" name="grade"/>
                                 
-                                <x-input-error :messages="$errors->get('sura')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('grade')" class="mt-2" />
                             </div>
                             {{-- An Karbi Hadda? --}}
                             <div>
-                                <x-input-label class="font-bold" for="hadda" :value="__('An Karbi Hadda?')" />
+                                <x-input-label class="font-bold" for="hadda" :value="__('An Karbi Hadda Yau?')" />
                                 <select id="hadda" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" type="text" name="hadda" required>
                                 <option>Yes</option>
                                 <option>No</option>

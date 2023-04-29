@@ -2,18 +2,17 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Curriculum Scale') }}
-            {{-- <a href="curriculum_form"> --}}
+            
                 @can('isAssistant')
-                <x-primary-button class="absolute top-15 right-9 bg-green-500" data-bs-toggle="modal" data-bs-target="#UpdateQuran" data-bs-whatever="Quran">
+                <a href="curriculum_form">
+                <x-primary-button class="absolute top-15 right-9 bg-green-500">
                     <i class="fa-solid fa-plus"> </i>
                 </x-primary-button> 
+                </a>
                 @endcan
-                {{-- </a> --}}
+                
         </h2>
     </x-slot>
-          
-    {{-- <button type="button" class="btn editScore btn-primary" data-bs-toggle="modal" data-bs-target="#UpdateQuran" data-bs-whatever="Quran" subjectID ="2" ><i class="bi bi-pencil-square">kjn</i></button>  --}}
-    <x-modal-window />
     <x-search-curriculum />
     <x-success-status class="mb-4" :status="session('message')" />
     <div class="py-6">
