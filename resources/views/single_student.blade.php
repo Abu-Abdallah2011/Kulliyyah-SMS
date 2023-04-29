@@ -95,7 +95,7 @@
             @can('isAdmin')
             <a href="/students_database/{{$student->id}}/edit_student">
         <x-primary-button class="ml-3">
-            <i class="fa-solid fa-pencil">  {{ __('Edit') }} </i>
+            <i class="fa-solid fa-pencil">  {{ __('') }} </i>
         </x-primary-button>
     </a>
     @endcan
@@ -112,7 +112,7 @@
 @endcan
 @can('isAdmin')
 <x-primary-button class="ml-3" onclick="window.print()">
-    <i class="fa-solid fa-download">  {{ __('Download') }} </i>
+    <i class="fa-solid fa-download">  {{ __('') }} </i>
 </x-primary-button>
     @endcan
 
