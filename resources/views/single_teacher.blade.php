@@ -115,12 +115,12 @@
         @can('isAdmin')
         <div class="bg-gray-50 border border-gray-200 rounded">
         <div class="mt-4 p-2 flex space-x-6"><a href="/teachers_database/{{$teacher->id}}/edit_teacher"><x-primary-button class="ml-3">
-            <i class="fa-solid fa-pencil">  {{ __('Edit') }} </i>
+            <i class="fa-solid fa-pencil">  {{ __('') }} </i>
         </x-primary-button></a>
     
         {{-- <form method="POST" action="/teachers_database/{{$teacher->id}}">
             @csrf
-            @method('DELETE')
+            @method('')
             <x-primary-button class="ml-3 bg-red-500">
             <i class="fa-solid fa-trash"> 
                  {{ __('Delete') }}
@@ -129,7 +129,7 @@
 </form> --}}
 
 <x-primary-button class="ml-3" onclick="window.print()">
-    <i class="fa-solid fa-download">  {{ __('Download') }} </i>
+    <i class="fa-solid fa-download">  {{ __('') }} </i>
 </x-primary-button>
     
     </div>

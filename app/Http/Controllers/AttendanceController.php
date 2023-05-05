@@ -39,7 +39,7 @@ class AttendanceController extends Controller
     }
 
     // Redirect back to the attendance form with a success message
-    return view('attendance.show')->with('message', 'Maa Shaa Allaah, Attendance records saved successfully. Jazaakumul Laahu khaira');
+    return view('attendance.show')->with('message', 'Attendance records saved successfully!');
 }
 
 // Show Attendance Report

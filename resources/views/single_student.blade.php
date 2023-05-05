@@ -100,15 +100,15 @@
     </a>
     @endcan
     @can('isAdmin')
-        {{-- <form method="POST" action="/students_database/{{$student->id}}">
+        <form method="POST" action="/students_database/{{$student->id}}">
             @csrf
             @method('DELETE')
             <x-danger-button class="ml-3">
             <i class="fa-solid fa-trash"> 
-                 {{ __('Delete') }}
+                 {{ __('') }}
                  </i>
         </x-danger-button> 
-</form> --}}
+</form>
 @endcan
 @can('isAdmin')
 <x-primary-button class="ml-3" onclick="window.print()">
