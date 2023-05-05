@@ -71,10 +71,10 @@
     
         {{-- <form method="POST" action="/guardians_database/{{$guardian->id}}">
             @csrf
-            @method('DELETE')
+            @method('')
             <x-primary-button class="ml-3 bg-red-500">
             <i class="fa-solid fa-trash"> 
-                 {{ __('Delete') }}
+                 {{ __('') }}
                  </i>
         </x-primary-button> 
 </form> --}}
@@ -83,12 +83,11 @@
     <i class="fa-solid fa-download">  {{ __('') }} </i>
 </x-primary-button>
 
+<a href="{{ url('/dashboard/guardians/' . $guardian->id) }}">
 <x-primary-button class="ml-3">
-    <a href="{{ url('/dashboard/guardians/' . $guardian->id) }}">
         <i class="fa-solid fa-computer">{{ __('') }}</i>
-    </a>
 </x-primary-button>
-
+</a>
 
     
     </div>

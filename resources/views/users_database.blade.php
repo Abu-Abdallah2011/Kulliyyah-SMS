@@ -37,7 +37,7 @@
             EMAIL: {{$user->email}}
 
             <div class="text-xl mb-4">
-                <form method="POST" action="/users_database/{{$user->id}}">
+                {{-- <form method="POST" action="/users_database/{{$user->id}}">
                     @csrf
                     @method('DELETE')
                 <x-danger-button>
@@ -45,7 +45,7 @@
                          {{ __('Delete') }}
                          </i>
                 </x-danger-button>
-                </form>
+                </form> --}}
            
 
             </div>

@@ -123,7 +123,7 @@
             @method('')
             <x-primary-button class="ml-3 bg-red-500">
             <i class="fa-solid fa-trash"> 
-                 {{ __('Delete') }}
+                 {{ __('') }}
                  </i>
         </x-primary-button> 
 </form> --}}
