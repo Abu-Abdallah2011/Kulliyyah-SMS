@@ -12,7 +12,7 @@
                     <form action="{{ url('/attendance') }}" method="POST">
                         @csrf
                         <label for="date">Date: </label>
-                        <input name="date" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Input Date...">
+                        <x-date-picker class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Input Date..."/>
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr>

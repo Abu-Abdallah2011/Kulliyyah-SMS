@@ -36,16 +36,17 @@
             <div class="text-xl mb-4">
             EMAIL: {{$user->email}}
 
+
             <div class="text-xl mb-4">
-                {{-- <form method="POST" action="/users_database/{{$user->id}}">
+                <form method="POST" action="/users_database/{{$user->id}}">
                     @csrf
                     @method('DELETE')
-                <x-danger-button>
+                <x-danger-button  onclick="return confirm('Are you sure you want to delete this record?')">
                     <i class="fa-solid fa-trash"> 
                          {{ __('Delete') }}
                          </i>
                 </x-danger-button>
-                </form> --}}
+                </form>
            
 
             </div>

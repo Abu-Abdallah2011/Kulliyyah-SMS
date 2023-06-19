@@ -118,15 +118,15 @@
             <i class="fa-solid fa-pencil">  {{ __('') }} </i>
         </x-primary-button></a>
     
-        {{-- <form method="POST" action="/teachers_database/{{$teacher->id}}">
+        <form method="POST" action="/teachers_database/{{$teacher->id}}">
             @csrf
-            @method('')
-            <x-primary-button class="ml-3 bg-red-500">
+            @method('DELETE')
+            <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')">
             <i class="fa-solid fa-trash"> 
                  {{ __('') }}
                  </i>
-        </x-primary-button> 
-</form> --}}
+        </x-danger-button> 
+</form>
 
 <x-primary-button class="ml-3" onclick="window.print()">
     <i class="fa-solid fa-download">  {{ __('') }} </i>

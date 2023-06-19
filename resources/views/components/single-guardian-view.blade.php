@@ -8,7 +8,7 @@
 
     <div class="bg-gray-50 border border-gray-200 rounded p-6">
         <div class="flex">
-            <img class="hidden w-48 mr-6 md:block" src="{{ asset('storage/' . $student->photo) }}" alt="" />
+           @can('isAdGuardian') <img class="hidden w-48 mr-6 md:block" src="{{ asset('storage/' . $student->photo) }}" alt="" />@endcan
             <div class="font-bold">
                 <h3 class="text-2xl">
                     {{$student->id}}
@@ -19,15 +19,19 @@
                 </h3>
                 <div class="text-xl mb-4">
                     {{$student->class}}
-                    <div class="text-xl mb-4">
+                    @can('isAdGuardian') 
+                     <div class="text-xl mb-4">
                     Born On: {{$student->dob}}
+                    @endcan
                         <div class="text-xl mb-4">
                         Gender: {{$student->gender}}
                             <div class="text-xl mb-4">
                             Status: {{$student->status}}
+                            @can('isAdGuardian')
                     <div class="text-lg mt-4">
                         <i class="fa-solid fa-location-dot"></i>
                         {{$student->address}}
+                        @endcan
                     </div>
                 </div>
             </div>

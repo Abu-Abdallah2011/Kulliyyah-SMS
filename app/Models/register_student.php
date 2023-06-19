@@ -22,16 +22,22 @@ class register_student extends Model
          return $this->belongsTo(register_guardian::class);
      }
 
-    //  Surrender this model to curriculum model
+    //  Link this model to curriculum model
     public function curriculum()
      {
         return $this->hasMany(curriculum::class, 'set', 'set');
      }
 
-     //  Surrender this model to Hadda model
+     //  Link this model to Hadda model
     public function Hadda()
     {
        return $this->hasMany(Hadda::class, 'student_id', 'student_id');
+    }
+
+    //  Link this model to Attendance model
+    public function attendance()
+    {
+       return $this->hasMany(AttendanceModel::class, 'student_id', 'student_id');
     }
 
     protected $table = 'students_details_tables';

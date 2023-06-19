@@ -68,26 +68,28 @@
         <div class="mt-4 p-2 flex space-x-6"><a href="/guardians_database/{{$guardian->id}}/edit_guardian"><x-primary-button class="ml-3">
             <i class="fa-solid fa-pencil">  {{ __('') }} </i>
         </x-primary-button></a>
-    
-        {{-- <form method="POST" action="/guardians_database/{{$guardian->id}}">
+
+        <form method="POST" action="/guardians_database/{{$guardian->id}}">
             @csrf
-            @method('')
-            <x-primary-button class="ml-3 bg-red-500">
+            @method('DELETE')
+            <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')">
             <i class="fa-solid fa-trash"> 
                  {{ __('') }}
                  </i>
-        </x-primary-button> 
-</form> --}}
+        </x-danger-button> 
+</form>
 
 <x-primary-button class="ml-3" onclick="window.print()">
     <i class="fa-solid fa-download">  {{ __('') }} </i>
 </x-primary-button>
 
+@can('isExecutive')
 <a href="{{ url('/dashboard/guardians/' . $guardian->id) }}">
-<x-primary-button class="ml-3">
+<x-primary-button>
         <i class="fa-solid fa-computer">{{ __('') }}</i>
 </x-primary-button>
 </a>
+@endcan
 
     
     </div>

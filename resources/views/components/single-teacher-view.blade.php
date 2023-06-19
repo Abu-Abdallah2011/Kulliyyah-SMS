@@ -10,7 +10,8 @@
     </h1>
     <ol>
         @foreach ($malams as $teacher)
-            <li><a href="{{ url('/teachers_database/' . $teacher->id) }}"> {{ $teacher->fullname }}</a> -> <a href="{{ url('/curriculum_scale/' . $teacher->id) }}">{{ $teacher->set }}</a></li>
+            <li>
+                @can('isAdmin')<a href="{{ url('/teachers_database/' . $teacher->id) }}">@endcan {{ $teacher->fullname }}@can('isAdmin')</a>@endcan -> <a href="{{ url('/curriculum_scale/' . $teacher->id) }}">{{ $teacher->set }}</a></li>
         @endforeach
     </ol>
 @endif

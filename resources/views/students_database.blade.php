@@ -2,11 +2,13 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Students Database') }}
+            @can('isAdmin')
             <a href="students_registration_form">
                 <x-primary-button class="absolute top-15 right-9 bg-green-500">
                     <i class="fa-solid fa-user-plus"></i>
                 </x-primary-button> 
                 </a>
+                @endcan
         </h2>
     </x-slot>
             <!-- Session Status -->
@@ -20,8 +22,10 @@
 
             <div class="bg-blue-100 border border-gray-200 rounded p-6">
                 <div class="flex">
+                    @can('isAdmin')
                     <img class="hidden w-48 mr-6 md:block" src="{{asset('storage/' . $student->photo) }}" alt="" />
-                    
+                    @endcan
+
                     <div class="font-bold">
                         <h3 class="text-2xl">
                             {{$student->id}}
@@ -33,17 +37,21 @@
                         </h3>
                         <div class="text-xl mb-4">
                             {{$student->class}}
+                            @can('isAdmin')
                             <div class="text-xl mb-4">
                             Born On: {{$student->dob}}
+                                @endcan
                                 <div class="text-xl mb-4">
                                 Gender: {{$student->gender}}
                                     <div class="text-xl mb-4">
                                     Status: {{$student->status}}
+                                    @can('isAdmin')
                             <div class="text-lg mt-4">
                                 <i class="fa-solid fa-location-dot"></i>
                                 {{$student->address}}
                             </div>
                         </div>
+                        @endcan
                     </div>
                             </div>
                 </div>

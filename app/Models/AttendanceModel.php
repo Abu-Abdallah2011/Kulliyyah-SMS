@@ -9,6 +9,12 @@ class AttendanceModel extends Model
 {
     use HasFactory;
 
+    // Surrender Details to Students Model
+    public function students()
+    {
+        return $this->belongsTo(register_student::class);
+    }
+
 
     protected $table = 'attendance';
 

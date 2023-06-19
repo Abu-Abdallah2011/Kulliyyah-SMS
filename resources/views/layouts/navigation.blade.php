@@ -16,11 +16,13 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     
-                    @can('isAdmin')
+                    @can('isExecutive')
                     <x-nav-link :href="url('students_database')" :active="request()->routeIs('students_database')">
                         {{ __('Students') }}
                     </x-nav-link>
+                    @endcan
         
+                    @can('isAdmin')
                     <x-nav-link :href="url('teachers_database')" :active="request()->routeIs('teachers_database')">
                         {{ __('Teachers') }}
                     </x-nav-link>
@@ -34,7 +36,9 @@
                     <x-nav-link :href="url('users_database')" :active="request()->routeIs('users_database')">
                         {{ __('Users') }}
                     </x-nav-link>
+                    @endcan
 
+                    @can('isExecutive')
                     <x-nav-link :href="url('classes')" :active="request()->routeIs('classes')">
                         {{ __('Classes') }}
                     </x-nav-link>

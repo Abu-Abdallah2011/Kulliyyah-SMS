@@ -92,25 +92,24 @@
         
         <div class="bg-gray-50 border border-gray-200 rounded">
         <div class="mt-4 p-2 flex space-x-6">
+            
             @can('isAdmin')
             <a href="/students_database/{{$student->id}}/edit_student">
         <x-primary-button class="ml-3">
             <i class="fa-solid fa-pencil">  {{ __('') }} </i>
         </x-primary-button>
     </a>
-    @endcan
-    @can('isAdmin')
-        {{-- <form method="POST" action="/students_database/{{$student->id}}">
+
+        <form method="POST" action="/students_database/{{$student->id}}">
             @csrf
             @method('DELETE')
-            <x-danger-button class="ml-3">
+            <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')">
             <i class="fa-solid fa-trash"> 
                  {{ __('') }}
                  </i>
         </x-danger-button> 
-</form> --}}
-@endcan
-@can('isAdmin')
+</form>
+
 <x-primary-button class="ml-3" onclick="window.print()">
     <i class="fa-solid fa-download">  {{ __('') }} </i>
 </x-primary-button>

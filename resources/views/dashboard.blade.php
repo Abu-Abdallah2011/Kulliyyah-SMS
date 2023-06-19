@@ -17,8 +17,8 @@
                     @if(!Request::is('dashboard/*'))
                     <x-teacher-view :teachers="$teachers" :class="$class" :malams="$malams"/>
                     @endif
-                    {{-- SINGLE CLASS DASHBOARD VIEW FOR ADMIN --}}
-                    @if(Auth::user()->can('isAdmin') && Request::is('dashboard/classes/*'))
+                    {{-- SINGLE CLASS DASHBOARD VIEW FOR EXECUTIVE --}}
+                    @if(Auth::user()->can('isExecutive') && Request::is('dashboard/classes/*'))
                     <x-single-teacher-view :teacher="$teacher" :class="$class" :malams="$malams" />
                     @endif
                     
@@ -33,8 +33,8 @@
     @endif
 
 
-        {{-- SINGLE GUARDIAN DASHBOARD VIEW FOR ADMIN --}}
-@if(Auth::user()->can('isAdmin') && Request::is('dashboard/guardians/*'))
+        {{-- SINGLE GUARDIAN DASHBOARD VIEW FOR EXCO --}}
+@if(Auth::user()->can('isExecutive') && Request::is('dashboard/guardians/*'))
     <x-single-guardian-view :guardian="$guardian" />
 @endif
 

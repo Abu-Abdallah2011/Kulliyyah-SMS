@@ -30,7 +30,7 @@
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">GRADE</th>
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">TEACHER</th>
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">COMMENT</th>
-                        {{-- <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">DELETE</th> --}}
+                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">DELETE</th>
                     </tr>
                     
                     </thead>
@@ -54,17 +54,17 @@
                         <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->grade }}</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->teacher }}</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">{{ $item->comment }}</td>
-                        {{-- <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">
+                        <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">
                             <form method="POST" action="/hadda_page/{{$item->id}}">
                                 @csrf
                                 @method('DELETE')
-                                <x-primary-button class="ml-3 bg-red-500">
+                                <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')">
                                 <i class="fa-solid fa-trash"> 
                                      {{ __('') }}
                                      </i>
-                            </x-primary-button> 
+                            </x-danger-button> 
                     </form> 
-                        </td> --}}
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

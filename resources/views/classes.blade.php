@@ -38,7 +38,7 @@
     <thead>
     <tr>
         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">NAME</th>
-        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">RANK</th>
+        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">SET</th>
         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">DASHBOARD</th>
     </tr>
     
@@ -52,8 +52,12 @@
     </tr>
         @foreach ($malams->where('class', $class) as $teacher)
     <tr  class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap mb-10 lg:mb-0">
-        <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static"><a href="{{ url('/teachers_database/' . $teacher->id) }}">{{ $teacher->fullname }}</a></td>
-        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $teacher->rank }}</td>
+        <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">
+            @can('isAdmin')<a href="{{ url('/teachers_database/' . $teacher->id) }}">@endcan
+                {{ $teacher->fullname }}
+            @can('isAdmin')</a>@endcan
+        </td>
+        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $teacher->set }}</td>
         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static font-bold">
             <a href="{{ url('/dashboard/classes/' . $teacher->id) }}">
             <x-primary-button class="ml-3">

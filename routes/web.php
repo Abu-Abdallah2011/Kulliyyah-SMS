@@ -46,9 +46,9 @@ Route::get('/register', function () {
 Route::get('/dashboard', [DashboardController::class, 'view'])
 ->middleware(['auth', 'verified'])->name('dashboard');
 
-//Show Dashboard of selected user
+//Show Dashboard of selected user/Guardian
 Route::get('/dashboard/guardians/{guardian_id}', [DashboardController::class, 'show'])
-->middleware(['can:isAdmin'])->name('dashboard.show');
+->middleware(['can:isExecutive'])->name('dashboard.show');
 
 //Profile Manipulation
 Route::middleware('auth')->group(function () {
@@ -69,7 +69,7 @@ Route::get('/students_registration_form', 'create')->middleware('can:isAdmin');
 // Store Students Data in Database
 Route::post('/students_registration_form', 'store')->middleware('can:isAdmin');
 // Show Student Data in Database
-Route::get('/students_database', 'show')->middleware('can:isAdmin');
+Route::get('/students_database', 'show')->middleware('can:isExecutive');
 // View Single Student Data
 Route::get('/students_database/{id}', 'view');
 // Show Student Edit Data Form
@@ -132,7 +132,7 @@ Route::controller(TeachersController::class)->group(function () {
 
 
         // Route for Classes
-        Route::middleware('can:isAdmin')->controller(ClassesController::class)->group(function()
+        Route::middleware('can:isExecutive')->controller(ClassesController::class)->group(function()
         {
             // Show Classes Page
         Route::get('/classes', 'index');
@@ -154,8 +154,8 @@ Route::controller(TeachersController::class)->group(function () {
         Route::put('/curriculum_scale/{id}', 'update')->middleware('can:isAssistant');
         // Delete Guardian
         Route::delete('curriculum_scale/{id}', 'delete')->middleware('can:isAssistant');
-        // Show Curriculum Scale of any selected class to Admin
-        Route::get('curriculum_scale/{teacher_id}', 'display')->middleware('can:isAdmin');
+        // Show Curriculum Scale of any selected class to Executive
+        Route::get('curriculum_scale/{teacher_id}', 'display')->middleware('can:isExecutive');
         // Show curriculum Scale of student to whoever clicks the button
         Route::get('curriculum_scale/guardianview/{student_id}', 'displayForGuardian');
         });
@@ -186,14 +186,14 @@ Route::controller(TeachersController::class)->group(function () {
 
 
         // CRUD for Attendance
-    // Route::middleware('can:isAssistant')->controller(AttendanceController::class)->group(function () {
+    Route::middleware('can:isAssistant')->controller(AttendanceController::class)->group(function () {
     //     // Show Attendance form
-    //     Route::get('/attendance', 'create');
+        Route::get('/attendance', 'create')->name('attendance.create');
     //     // Save Attendance information
-    //     Route::post('/attendance', 'store');
+        Route::post('/attendance', 'store');
     //     // Show Attendance Report
-    //     Route::get('/attendance/{id}', 'show')->name('attendance.show');
-    //     });  
+        Route::get('/attendance/show', 'show')->name('attendance.show');
+        });  
 
 
    
