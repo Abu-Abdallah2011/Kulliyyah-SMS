@@ -100,16 +100,19 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            @can('isAdmin')
-                
+
+            @can('isExecutive')
             <x-nav-link :href="url('students_database')" :active="request()->routeIs('students_database')">
                 {{ __('Students') }}
             </x-nav-link>
+            @endcan
 
+            @can('isAdmin')
             <x-nav-link :href="url('teachers_database')" :active="request()->routeIs('tachers_database')">
                 {{ __('Teachers') }}
             </x-nav-link>
             @endcan
+
             @can('isExecutive')
             <x-nav-link :href="url('guardians_database')" :active="request()->routeIs('guardians_database')">
                 {{ __('Guardians') }}
@@ -119,7 +122,9 @@
             <x-nav-link :href="url('users_database')" :active="request()->routeIs('users_database')">
                 {{ __('Users') }}
             </x-nav-link>
+            @endcan
 
+            @can('isExecutive')
             <x-nav-link :href="url('classes')" :active="request()->routeIs('classes')">
                 {{ __('Classes') }}
             </x-nav-link>
