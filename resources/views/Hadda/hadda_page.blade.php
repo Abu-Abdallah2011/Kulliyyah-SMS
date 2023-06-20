@@ -30,7 +30,9 @@
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">GRADE</th>
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">TEACHER</th>
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">COMMENT</th>
+                        @can('isAssistant')
                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">DELETE</th>
+                        @endcan
                     </tr>
                     
                     </thead>
@@ -54,6 +56,7 @@
                         <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->grade }}</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->teacher }}</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">{{ $item->comment }}</td>
+                        @can('isAssistant')
                         <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">
                             <form method="POST" action="/hadda_page/{{$item->id}}">
                                 @csrf
@@ -65,6 +68,7 @@
                             </x-danger-button> 
                     </form> 
                         </td>
+                        @endcan
                     </tr>
                     @endforeach
                 </tbody>
