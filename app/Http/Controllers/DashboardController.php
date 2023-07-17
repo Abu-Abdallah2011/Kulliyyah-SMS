@@ -29,7 +29,7 @@ class DashboardController extends Controller
         $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) 
         {
-            $query->orderBy('fullname');
+            $query->where('status', 'IN SCHOOL')->orderBy('fullname');
         }])->with('user')
         ->get();
         
