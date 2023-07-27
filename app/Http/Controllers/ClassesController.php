@@ -83,7 +83,7 @@ public function classTeacher()
    ->get();
    
 
-   return view('Attendance.class_teachers', [
+   return view('attendance.class_teachers', [
    'teachers' => $teachers,
    'class' => $class,
    'malams' => $malams
