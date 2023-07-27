@@ -25,35 +25,29 @@
                             </div>
                     
                             <!-- Class -->
+                            
                             <div>
                                 <x-input-label for="class" :value="__('Class')" />
-                                <x-select-classes id="class" class="block mt-1 w-full" type="text" name="class" :value="old('class')" autofocus autocomplete="class" />
-                                <x-input-error :messages="$errors->get('class')" class="mt-2" />
+                                <select name="dynamic_select" id="dynamic_select" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" type="text">
+                                    <option></option>
+                                @foreach ($classes as $class)
+                                <option value="{{ $class->id }}">{{ $class->class }}</option>
+                                @endforeach
+                                </select>
                             </div>
+
                             {{-- Set --}}
+
                             <div>
                                 <x-input-label for="set" :value="__('Set')" />
-                                <select id="set" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" type="text" name="set" required>
-                                <option></option>
-                                <option>H11M</option>
-                                <option>H11F</option>
-                                <option>H12M</option>
-                                <option>H12F</option>
-                                <option>H13M</option>
-                                <option>H13F</option>
-                                <option>H14M</option>
-                                <option>H14F</option>
-                                <option>T3M</option>
-                                <option>T3F</option>
-                                <option>P1M</option>
-                                <option>P1F</option>
-                                <option>P2M</option>
-                                <option>P2F</option>
-                                <option>P3M</option>
-                                <option>P3F</option>
+                                <select name="dynamic_select" id="dynamic_select" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" type="text">
+                                    <option></option>
+                                @foreach ($sets as $set)
+                                <option value="{{ $set->id }}">{{ $set->set }}</option>
+                                @endforeach
                                 </select>
-                                <x-input-error :messages="$errors->get('set')" class="mt-2" />
                             </div>
+
                            <!-- Gender -->
                            <div>
                             <x-input-label for="gender" :value="__('Gender')" />

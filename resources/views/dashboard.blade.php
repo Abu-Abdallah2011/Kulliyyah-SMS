@@ -15,11 +15,11 @@
                 
                     {{-- TEACHER DASHBOARD VIEW --}}
                     @if(!Request::is('dashboard/*'))
-                    <x-teacher-view :teachers="$teachers" :class="$class" :malams="$malams"/>
+                    <x-teacher-view :teachers="$teachers" :class="$class" :teacher="$teacher" />
                     @endif
                     {{-- SINGLE CLASS DASHBOARD VIEW FOR EXECUTIVE --}}
                     @if(Auth::user()->can('isExecutive') && Request::is('dashboard/classes/*'))
-                    <x-single-teacher-view :teacher="$teacher" :class="$class" :malams="$malams" />
+                    <x-single-teacher-view :teacher="$teacher" :class="$class" :teachers="$teachers" />
                     @endif
                     
             </div>
@@ -38,14 +38,6 @@
     <x-single-guardian-view :guardian="$guardian" />
 @endif
 
-</div>
-                    
-
-                    {{-- <div class="max-w-7x mx-auto sm:px-6 lg:px-8">
-                    <x-sura-select id="sura-select" class="block mt-1 w-25" type="text" name="sura-select" :value="old('sura-select')" required autofocus autocomplete="sura-select" /> --}}
-                  
-                
-
-                    
+</div>              
                
 </x-app-layout>

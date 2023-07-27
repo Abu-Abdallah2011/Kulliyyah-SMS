@@ -13,24 +13,23 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    // Show the Dashboard of User after Authentication
     public function view()
      {
-        $user = Auth::user();
         $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
 
-        $malams = register_teacher::with(['students' => function ($query) {
-            $query->orderBy('fullname');
-        }])
-        ->with('user')
-        ->where('class', $class)
-        ->get();
-        
-
-        $teachers = register_teacher::where('user_id', Auth::user()->id)
+        $teachers = register_teacher::where('class', $class)
         ->with(['students' => function ($query) 
         {
             $query->where('status', 'IN SCHOOL')->orderBy('fullname');
         }])->with('user')
+        ->get();
+
+        $teacher = register_teacher::with(['students' => function ($query) {
+            $query->orderBy('fullname');
+        }])
+        ->with('user')
+        ->where('id', Auth::user()->id)
         ->get();
         
         $guardians = register_guardian::where('user_id', Auth::user()->id)->with('students')->get();
@@ -39,7 +38,7 @@ class DashboardController extends Controller
         'teachers' => $teachers,
         'guardians' => $guardians,
         'class' => $class,
-        'malams' => $malams
+        'teacher' => $teacher,
     ]);
     }
     
@@ -49,12 +48,12 @@ public function show($guardian_id)
 {
     $guardian = register_guardian::findOrFail($guardian_id);
     $students = $guardian->students;
-
     
     return view('dashboard', [
         'guardian' => $guardian,
         'students' => $students,
     ]);
 }
+
 
 }

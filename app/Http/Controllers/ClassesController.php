@@ -9,6 +9,7 @@ use App\Models\register_guardian;
 
 class ClassesController extends Controller
 {
+    // Show Classes page to Admin
     public function index() 
     {
         $allteachers = register_teacher::distinct('class')->pluck('class');
@@ -47,18 +48,146 @@ class ClassesController extends Controller
 
         $class = $teacher->class;
 
-            $malams = register_teacher::with(['students' => function ($query) {
-                $query->where('status', 'IN SCHOOL')->orderBy('fullname');
-            }])
-            ->with('user')
-            ->where('class', $class)
-            ->get();
+            $teachers = register_teacher::where('class', $class)
+        ->with(['students' => function ($query) 
+        {
+            $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+        }])->with('user')
+        ->get();
     
             return view('dashboard', [
             'teacher' => $teacher,
             'class' => $class,
-            'malams' => $malams
+            'teachers' => $teachers,
         ]);
     }
+
+    // Show Class Teachers Names
+public function classTeacher()
+{
+   $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
+
+   $malams = register_teacher::with(['students' => function ($query) {
+       $query->orderBy('fullname');
+   }])
+   ->with('user')
+   ->where('class', $class)
+   ->get();
+   
+
+   $teachers = register_teacher::where('user_id', Auth::user()->id)
+   ->with(['students' => function ($query) 
+   {
+       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+   }])->with('user')
+   ->get();
+   
+
+   return view('Attendance.class_teachers', [
+   'teachers' => $teachers,
+   'class' => $class,
+   'malams' => $malams
+]);
+}
+
+
+// Show Class Students Names
+public function classStudent()
+{
+
+   $teachers = register_teacher::where('user_id', Auth::user()->id)
+   ->with(['students' => function ($query) 
+   {
+       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+   }])->with('user')
+   ->get();
+   
+
+   return view('class_students', [
+   'teachers' => $teachers,
+]);
+}
+
+// Show Class Students Names for Hadda
+public function studentsHadda()
+{
+
+   $teachers = register_teacher::where('user_id', Auth::user()->id)
+   ->with(['students' => function ($query) 
+   {
+       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+   }])->with('user')
+   ->get();
+   
+
+   return view('Hadda.studentsHadda', [
+   'teachers' => $teachers,
+]);
+
+}
+
+// Show Selected Class Teachers Names to Exco
+public function selectedClassTeacher($teacher_id)
+{
+   $class = register_teacher::where('user_id', $teacher_id)->value('class');
+
+   $malams = register_teacher::with(['students' => function ($query) {
+       $query->orderBy('fullname');
+   }])
+   ->with('user')
+   ->where('class', $class)
+   ->get();
+   
+
+   $teachers = register_teacher::where('user_id', $teacher_id)
+   ->with(['students' => function ($query) 
+   {
+       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+   }])->with('user')
+   ->get();
+   
+
+   return view('Attendance.class_teachers', [
+   'teachers' => $teachers,
+   'class' => $class,
+   'malams' => $malams
+]);
+}
+
+// Show Selected Class Students Names to Exco
+public function selectedClassStudent($teacher_id)
+{
+
+   $teachers = register_teacher::where('user_id', $teacher_id)
+   ->with(['students' => function ($query) 
+   {
+       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+   }])->with('user')
+   ->get();
+   
+
+   return view('class_students', [
+   'teachers' => $teachers,
+]);
+}
+
+// Show Selected Class Students Names for Hadda to Exco
+public function selectedStudentsHadda($teacher_id)
+{
+
+   $teachers = register_teacher::where('user_id', $teacher_id)
+   ->with(['students' => function ($query) 
+   {
+       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+   }])->with('user')
+   ->get();
+   
+
+   return view('Hadda.studentsHadda', [
+   'teachers' => $teachers,
+]);
+
+}
+
 }
 

@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\sets;
+use App\Models\classes;
 use Illuminate\Http\Request;
-use App\Http\Requests\TeacherFormRequest;
 use App\Models\register_teacher;
+use App\Http\Requests\TeacherFormRequest;
 
 class TeachersController extends Controller
 {
      //Display Teachers Registration Form
      public function create() {
-        return view('teachers_reg_form');
+
+        $classes = classes::all();
+        $sets = sets::all();
+        return view('teachers_reg_form', ['classes' => $classes, 'sets' => $sets]);
     }
 
 
@@ -42,8 +47,11 @@ class TeachersController extends Controller
 
     // Show Edit Form
 public function edit($id){
+
+    $classes = classes::all();
+    $sets = sets::all();
     $teacher = register_teacher::find($id);
-    return view('edit_teacher', compact('teacher'));
+    return view('edit_teacher', compact('teacher', 'classes', 'sets'));
 }
 
 

@@ -102,7 +102,7 @@ class TeacherFormRequest extends FormRequest
                 'max:255'
             ],
             'photo' => [
-                'max:255'
+                'max:5000'
             ],
             'set' => [
                 'max:255'

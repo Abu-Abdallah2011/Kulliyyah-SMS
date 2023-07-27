@@ -91,7 +91,7 @@
 
         
         <div class="bg-gray-50 border border-gray-200 rounded">
-        <div class="mt-4 p-2 flex space-x-6">
+        <div class="mt-4 p-2 flex flex-wrap space-x-6">
             
             @can('isAdmin')
             <a href="/students_database/{{$student->id}}/edit_student">

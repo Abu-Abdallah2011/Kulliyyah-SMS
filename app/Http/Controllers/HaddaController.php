@@ -9,6 +9,7 @@ use App\Models\register_student;
 use App\Models\register_teacher;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\HaddaFormRequest;
+use App\Models\surasModel;
 
 class HaddaController extends Controller
 {
@@ -17,6 +18,7 @@ class HaddaController extends Controller
     {
         $id = register_student::where('id', $student_id)
         ->value('id');
+
 
         $hadda = Hadda::latest()
         ->filter(request(['search']))
@@ -34,9 +36,10 @@ class HaddaController extends Controller
     // Show Hadda Entry Form Page
     public function create($student_id)
     {
+        $sura = surasModel::all();
         $student = register_student::where('id', $student_id)->first();
         return view('Hadda.HaddaForm',[
-            'student' => $student,    
+            'student' => $student, 'sura' => $sura   
             ]);
     }
 
@@ -79,8 +82,9 @@ $hadda = Hadda::where('student_id', $student_id)->get();
 
  // Show Edit Form
 public function edit($id){
+    $sura = surasModel::all();
     $hadda = Hadda::find($id);
-    return view('Hadda.edit_hadda', compact('hadda'));
+    return view('Hadda.edit_hadda', compact('hadda', 'sura'));
 }
 
       //update Hadda Information

@@ -1,48 +1,87 @@
+<h1 class="font-bold text-center">{{$class}}</h1>
+<div class="flex flex-wrap justify-center">
+        <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+            <a href="curriculum_scale">
+            <img src="/images/icon.png" alt="" class="">
+            <span class="text-base">Curriculum Scale</span>
+        </a>
+        </div>
+        
+            @foreach ($teachers as $teacher)
+            @endforeach
+            <div class="h-30 w-25 bg-rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                <a href="class_teachers">
+                <img src="/images/blue_book.png" alt="Icon" class="">
+                <span class="text-base">Teachers: {{$teachers->count()}}</span>
+                </a>
+            </div>
+            
+                <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                    <a href="class_students">
+                    <img src="/images/book_icon.png" alt="Icon" class="">
+                    <span class="text">Students: {{$teacher->students->count()}}</span>
+                </a>
+                </div>
 
-<!-- Button to Navigate to Attendance form -->
-{{-- <a href="{{ url('/attendance') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-  Take Attendance
-</a> --}}
 
-<a href="curriculum_scale">
-    <x-primary-button class="ml-3 bg-green-500">
-        <i class="fa-solid fa-book">  {{ __('') }} </i>
-    </x-primary-button></a> 
+                    <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                        <a href="{{ url('/teachers_database/' . $teacher->id) }}">
+                        <img src="/images/icon.png" alt="Icon" class="">
+                        <span class="text-base">Profile</span>
+                    </a>
+                    </div>
+                
+                    <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                        <a href="studentsHadda">
+                        <img src="/images/blue_book.png" alt="Icon" class="">
+                        <span class="text-base">Hadda</span>
+                    </a>
+                    </div>
 
-@if (!is_null($class))
-    <h1 class="font-bold">
-        NAMES OF TEACHERS IN {{ $class }}:
-    </h1>
-    <ol>
-        @foreach ($malams as $teacher)
-            <li> {{ $teacher->fullname }} -> {{ $teacher->set }}</li>
-        @endforeach
-    </ol>
-@endif
+                    <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                        <a href="attendance">
+                        <img src="/images/book_icon.png" alt="Icon" class="">
+                        <span class="text-base ">Attendance</span>
+                    </a>
+                    </div>
+
+                    @can('isExecutive')
+
+                        <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                        <a href="sets">
+                        <img src="/images/book_icon.png" alt="Icon" class="">
+                        <span class="text-base ">Sets</span>
+                    </a>
+                    </div>
+
+                    <div class="h-30 w-25 bg-rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                        <a href="classes_database">
+                        <img src="/images/blue_book.png" alt="Icon" class="">
+                        <span class="text-base">Classes</span>
+                        </a>
+                    </div>
+
+                    <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                        <a href="suras_database">
+                        <img src="/images/icon.png" alt="Icon" class="">
+                        <span class="text-base">Surahs</span>
+                    </a>
+                    </div>
+
+                    {{-- <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                        <a href="'sessions/' . {{$session->id}} . '/editform'">
+                        <img src="/images/book_icon.png" alt="Icon" class="">
+                        <span class="text-base ">Session/Term</span>
+                    </a>
+                    </div> --}}
+                        
+                    @endcan
+
+        </div>
+        
+</div>
 
 
- @foreach ($teachers as $teacher)
                     
- <a href="{{ url('/teachers_database/' . $teacher->id) }}"> <h1 class="font-bold text-center">Students: {{ $teacher->students->count() }}</h1></a>
-                    
-                    <table class="border-collapse w-full">
-                        <thead>
-                        <tr>
-                            <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">SET</th>
-                            <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">NAME</th>
-                            <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">STATUS</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($teacher->students as $student)
-                       
-                        <tr  class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap mb-10 lg:mb-0">
-                            <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static font-bold">{{ $student->set }}</td>
-                            <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static font-bold"><a href="{{ url('/students_database/' . $student->id) }}">{{ $student->fullname }}</a></td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    </table>
-                @endforeach
 
                 

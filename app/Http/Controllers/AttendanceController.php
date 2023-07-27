@@ -82,5 +82,17 @@ public function show()
     // }
 }
 
+ // Show Attendance Form for selected class to admin
+ public function selectedCreate($teacher_id)
+ {
+     $teachers = register_teacher::where('user_id', $teacher_id)
+     ->with(['students' => function ($query) 
+     {
+         $query->orderBy('fullname');
+     }])->with('user')
+     ->get();
+     return view('attendance.create', ['teachers' => $teachers]);
+ }
+
 
 }

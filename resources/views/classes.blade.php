@@ -10,25 +10,6 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-{{-- @if (!is_null($allteachers))
-    @foreach ($allteachers as $class)
-        <h1 class="font-bold">
-            NAMES OF TEACHERS IN {{ $class }}:
-        </h1>
-        <ul>
-            @foreach ($malams->where('class', $class) as $teacher)
-            <a href="{{ url('/teachers_database/' . $teacher->id) }}">
-                 <li> {{ $teacher->fullname }} -> {{ $teacher->rank }}</li>
-            </a>
-            <x-primary-button class="ml-3">
-                <a href="{{ url('/dashboard/classes/' . $teacher->id) }}">
-                    <i class="fa-solid fa-computer">{{ __('') }}</i>
-                </a>
-            </x-primary-button>
-            @endforeach
-        </ul>
-    @endforeach
-@endif --}}
 
 @if (!is_null($allteachers))
 

@@ -31,9 +31,13 @@
         
                 <!-- Surah -->
                 <div>
-                    <x-input-label for="sura" :value="__('Surah')" />
-                    <x-sura-select id="sura" class="block mt-1 w-full" type="text" name="sura" value="{{ $hadda->sura }}" autofocus autocomplete="sura" />
-                    <x-input-error :messages="$errors->get('sura')" class="mt-2" />
+                    <x-input-label for="sura" :value="__('Select a Surah')" />
+                    <select name="dynamic_select" id="dynamic_select" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" type="text">
+                        <option>{{$hadda->sura}}</option>
+                    @foreach ($sura as $sura)
+                    <option value="{{ $sura->id }}">{{ $sura->sura }}</option>
+                    @endforeach
+                    </select>
                 </div>
                
                <!-- From -->

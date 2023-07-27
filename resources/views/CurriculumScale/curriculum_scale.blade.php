@@ -18,44 +18,6 @@
     <div class="py-6">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
-
-                {{-- <table class="border-collapse w-full">
-                    @php
-                        $prevSession = '';
-                        $prevTerm = '';
-                    @endphp
-                    
-                            <tr>
-                                @foreach($sets as $set)
-                        @if ($set->session !== $prevSession)
-                                <td class="w-full font-bold lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">SESSION:</td>
-                                <td class="w-full font-bold lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">
-                                    @foreach($sessions as $session)
-                                    @can('isExecutive')
-                                    <a href="/sessions/{{$session->id}}/editform">
-                                        @endcan
-                                    {{ $set->session }} 
-                                    @can('isExecutive')
-                                </a>
-                                @endcan
-                                @endforeach
-                                </td>
-                            
-                            @php $prevSession = $set->session; @endphp
-                        @endif
-                        @if ($set->term !== $prevTerm)
-                            
-                                <td class="w-full font-bold lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">TERM:</td>
-                                <td class="w-full font-bold lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $set->term }}</td>
-                            
-                            @php $prevTerm = $set->term; @endphp
-                        @endif
-                        @endforeach
-                            <td class="w-full font-bold lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">ENTRIES:</td>
-                            <td class="w-full font-bold lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $sets->count() }}</td>
-                        </tr>
-                    
-                </table> --}}
                 
 
                 <table class="border-collapse w-full">

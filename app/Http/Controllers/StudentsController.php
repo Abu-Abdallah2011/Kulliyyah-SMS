@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\sets;
+use App\Models\classes;
 use Illuminate\Http\Request;
 use App\Models\register_student;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StudentFormRequest;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Illuminate\Support\Facades\Storage;
 
 class StudentsController extends Controller
 {
 
     //Display Student Registration Form
     public function create() {
-        return view('students_registration_form');
+        $classes = classes::all();
+        $sets = sets::all();
+        return view('students_registration_form', ['classes' => $classes, 'sets' => $sets]);
     }
 
 
@@ -49,8 +53,12 @@ public function view($id) {
 
 // Show Edit Form
 public function edit($id){
+
+    $classes = classes::all();
+        $sets = sets::all();
+
     $student = register_student::find($id);
-    return view('edit_student', compact('student'));
+    return view('edit_student', compact('student', 'classes', 'sets'));
 }
 
 

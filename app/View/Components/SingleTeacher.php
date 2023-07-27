@@ -8,17 +8,17 @@ class SingleTeacher extends Component
 {
     public $teacher;
     public $class;
-    public $malams;
+    public $teachers;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($teacher, $class, $malams)
+    public function __construct($teacher, $class, $teachers)
     {
         $this->teacher = $teacher;
         $this->class = $class;
-        $this->malams = $malams;
+        $this->teachers = $teachers;
     }
 
     /**

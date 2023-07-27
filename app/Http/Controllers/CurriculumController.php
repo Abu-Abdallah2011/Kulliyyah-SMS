@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\sets;
+use App\Models\classes;
 use App\Models\sessions;
 use App\Models\curriculum;
 use Illuminate\Http\Request;
@@ -9,6 +11,7 @@ use App\Models\register_student;
 use App\Models\register_teacher;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CurriculumFormRequest;
+use App\Models\surasModel;
 
 class CurriculumController extends Controller
 {
@@ -16,7 +19,8 @@ class CurriculumController extends Controller
     // Show Curriculum Scale Data Entry Form
     public function create()
     {
-        return view('CurriculumScale.curriculum_form');
+        $sura = surasModel::all();
+        return view('CurriculumScale.curriculum_form', ['sura' => $sura]);
     }
     //Store Curriculum Information
  public function store(CurriculumFormRequest $request){
@@ -64,16 +68,15 @@ public function show(){
         // 'sessions' => $sessions,
         'set' => $set,
         'sets' => $sets,
-    //     'curriculums' => curriculum::latest()
-    // ->filter(request(['search']))->paginate(10)]);
     ]);
     
 }
 
 // Show Edit Form
 public function edit($id){
+    $sura = surasModel::all();
     $curriculum = curriculum::find($id);
-    return view('CurriculumScale.edit_curriculum', compact('curriculum'));
+    return view('CurriculumScale.edit_curriculum', compact('curriculum', 'sura'));
 }
 
 // Update Curriculum

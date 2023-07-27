@@ -77,7 +77,7 @@ class StudentFormRequest extends FormRequest
             //     'max:255'
             // ],
             'photo' => [
-                'max:255'
+                'max:5000'
             ],
             'relationship' => [
                 'max:255'
