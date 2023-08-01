@@ -47,27 +47,30 @@ class HaddaController extends Controller
  public function store(HaddaFormRequest $request, $student_id){
 
     $data = $request->validated();
+
+    $selectedOptionId = $request->input('dynamic_select');
     
     $student = register_student::where('id', $student_id)->first();
     $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
     $sessions = sessions::first();
+    $selectedOption = surasModel::find($selectedOptionId);
     
     $formData = $request->only([
         'date',
-        'sura',
         'from',
         'to',
         'grade',
         'comment'
     ]);
         
-    $data = array_merge($formData, [
+    $data = array_merge($formData, [ 
         'class' => $student->class,
         'name' => $student->fullname,
         'teacher' => $teacher->fullname,
         'session' => $sessions->session,
         'term' => $sessions->term,
-        'student_id' => $student->id
+        'student_id' => $student->id,
+        'sura' => $selectedOption->sura,
     ]);
     
     $save = Hadda::create($data);
@@ -91,16 +94,18 @@ public function edit($id){
       public function update(HaddaFormRequest $request, $id){
 
         $data = $request->validated();
+        $selectedOptionId = $request->input('dynamic_select');
         
         $entry = Hadda::find($id);
         $student = register_student::where('id', $entry->student_id)->first();
 
         $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
         $sessions = sessions::first();
+
+        $selectedOption = surasModel::find($selectedOptionId);
         
         $formData = $request->only([
             'date',
-            'sura',
             'from',
             'to',
             'grade',
@@ -113,7 +118,8 @@ public function edit($id){
             'teacher' => $teacher->fullname,
             'session' => $sessions->session,
             'term' => $sessions->term,
-            'student_id' => $student->id
+            'student_id' => $student->id,
+            'sura' => $selectedOption->sura,
         ]);
         
         $save = Hadda::where('id', $id)->update($data);

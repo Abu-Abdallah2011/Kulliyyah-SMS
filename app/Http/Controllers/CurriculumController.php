@@ -26,12 +26,14 @@ class CurriculumController extends Controller
  public function store(CurriculumFormRequest $request){
 
     $data = $request->validated();
+    $selectedOptionId = $request->input('dynamic_select');
 
     $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
     $sessions = sessions::first();
+    $selectedOption = surasModel::find($selectedOptionId);
+
     $formData = $request->only([
         'date',
-        'sura',
         'from',
         'to',
         'times',
@@ -46,7 +48,8 @@ class CurriculumController extends Controller
         'teacher' => $teacher->fullname,
         'set' => $teacher->set,
         'session' => $sessions->session,
-        'term' => $sessions->term
+        'term' => $sessions->term,
+        'sura' => $selectedOption->sura,
     ]);
 
     $curriculum = curriculum::create($data);
@@ -83,11 +86,14 @@ public function edit($id){
 public function update(CurriculumFormRequest $request, $id){
         
     $data = $request->validated();
+    $selectedOptionId = $request->input('dynamic_select');
+
     $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
     $sessions = sessions::first();
+    $selectedOption = surasModel::find($selectedOptionId);
+
     $formData = $request->only([
         'date',
-        'sura',
         'from',
         'to',
         'times',
@@ -102,7 +108,8 @@ public function update(CurriculumFormRequest $request, $id){
         'teacher' => $teacher->fullname,
         'set' => $teacher->set,
         'session' => $sessions->session,
-        'term' => $sessions->term
+        'term' => $sessions->term,
+        'sura' => $selectedOption->sura,
 
     ]);
 
