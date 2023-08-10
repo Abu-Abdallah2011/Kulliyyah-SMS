@@ -25,10 +25,21 @@ class StudentsController extends Controller
     public function store(StudentFormRequest $request){
         
         $data = $request->validated();
+
+    $selectedOptionId = $request->input('dynamic_select');
+    $selectedOption = sets::find($selectedOptionId);
+
+    $selectedClassId = $request->input('select_class');
+    $selectedClass = classes::find($selectedClassId);
         
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('StudentsPhoto', 'public');
         }
+
+        $formData = array_merge($data, [ 
+            'set' => $selectedOption->set,
+            'class' => $selectedClass->class,
+        ]);
 
         $student = register_student::create($data);
 
@@ -67,9 +78,20 @@ public function update(StudentFormRequest $request, $id){
         
     $data = $request->validated();
 
+    $selectedOptionId = $request->input('dynamic_select');
+    $selectedOption = sets::find($selectedOptionId);
+
+    $selectedClassId = $request->input('select_class');
+    $selectedClass = classes::find($selectedClassId);
+
     if ($request->hasFile('photo')) {
         $data['photo'] = $request->file('photo')->store('StudentsPhoto', 'public');
     }
+
+    $formData = array_merge($data, [ 
+        'set' => $selectedOption->set,
+        'class' => $selectedClass->class,
+    ]);
 
     $student = register_student::where('id', $id)->update($data);
     

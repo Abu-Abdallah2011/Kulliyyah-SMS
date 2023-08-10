@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\sets;
 use App\Models\classes;
+use App\Models\surasModel;
 use Illuminate\Http\Request;
 use App\Models\register_teacher;
 use App\Http\Requests\TeacherFormRequest;
@@ -22,9 +23,22 @@ class TeachersController extends Controller
     //Store Teachers Registration Information
     public function store(TeacherFormRequest $request){ 
         $data = $request->validated();
+
+    $selectedOptionId = $request->input('dynamic_select');
+    $selectedOption = sets::find($selectedOptionId);
+
+    $selectedClassId = $request->input('select_class');
+    $selectedClass = classes::find($selectedClassId);
+
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('TeachersPhoto', 'public');
         }
+
+        $formData = array_merge($data, [ 
+            'set' => $selectedOption->set,
+            'class' => $selectedClass->class,
+        ]);
+
         $teacher = register_teacher::create($data);
         return redirect('/teachers_database')->with('message', 'Maa Shaa Allaah! Teacher Added Successfully! Jazaakumul Laahu Khaira!');
     }
@@ -58,9 +72,21 @@ public function edit($id){
 // Update Teacher
 public function update(TeacherFormRequest $request, $id){
     $data = $request->validated();
+
+    $selectedOptionId = $request->input('dynamic_select');
+    $selectedOption = sets::find($selectedOptionId);
+
+    $selectedClassId = $request->input('select_class');
+    $selectedClass = classes::find($selectedClassId);
+
     if ($request->hasFile('photo')) {
         $data['photo'] = $request->file('photo')->store('TeachersPhoto', 'public');
     }
+
+    $formData = array_merge($data, [ 
+        'set' => $selectedOption->set,
+        'class' => $selectedClass->class,
+    ]);
 
     $teacher = register_teacher::where('id', $id)->update($data);
 
