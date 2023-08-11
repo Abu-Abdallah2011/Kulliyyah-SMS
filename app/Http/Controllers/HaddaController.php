@@ -119,8 +119,13 @@ public function edit($id){
             'session' => $sessions->session,
             'term' => $sessions->term,
             'student_id' => $student->id,
-            'sura' => $selectedOption->sura,
         ]);
+
+        if ($selectedOption) {
+
+            $data['sura'] = $selectedOption->sura;
+    
+            }
         
         $save = Hadda::where('id', $id)->update($data);
     $hadda = Hadda::where('student_id', $id)->get();

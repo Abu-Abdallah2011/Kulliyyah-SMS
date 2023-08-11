@@ -30,7 +30,6 @@ class StudentFormRequest extends FormRequest
                 'max:255'
             ],
             'class' => [
-                'required',
                 'max:255'
             ],
             'gender' => [

@@ -83,10 +83,16 @@ public function update(TeacherFormRequest $request, $id){
         $data['photo'] = $request->file('photo')->store('TeachersPhoto', 'public');
     }
 
-    $formData = array_merge($data, [ 
-        'set' => $selectedOption->set,
-        'class' => $selectedClass->class,
-    ]);
+        if ($selectedOption) {
+
+        $data['class'] = $selectedClass->class;
+
+        }
+        if ($selectedClass) {
+
+        $data['set'] = $selectedOption->set;
+
+        }
 
     $teacher = register_teacher::where('id', $id)->update($data);
 

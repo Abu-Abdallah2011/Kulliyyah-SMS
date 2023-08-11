@@ -109,9 +109,13 @@ public function update(CurriculumFormRequest $request, $id){
         'set' => $teacher->set,
         'session' => $sessions->session,
         'term' => $sessions->term,
-        'sura' => $selectedOption->sura,
-
     ]);
+
+    if ($selectedOption) {
+
+        $data['sura'] = $selectedOption->sura;
+
+        }
 
     $curriculum = curriculum::where('id', $id)->update($data);
 

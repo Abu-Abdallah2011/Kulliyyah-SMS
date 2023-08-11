@@ -60,7 +60,8 @@
                 @endforeach
                 </select>
             </div>
-                <!-- Gender -->
+
+            <!-- Gender -->
         <div>
             <x-input-label for="gender" :value="__('Gender')" />
             <x-select-input id="gender" class="block mt-1 w-full" type="text" name="gender" value="{{ $teacher->gender }}" required autofocus autocomplete="gender" />
