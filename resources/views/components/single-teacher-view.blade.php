@@ -1,7 +1,7 @@
     <h1 class="font-bold text-center">{{$class}}</h1>
     <div class="flex flex-wrap justify-center">
             <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
-                <a href="{{ url('/curriculum_scale/guardianview/' . $teacher->id) }}">
+                <a href="{{ url('/curriculum_scale/' . $teacher->id) }}">
                 <img src="/images/icon.png" alt="" class="">
                 <span class="text-base">Curriculum Scale</span>
             </a>

@@ -34,10 +34,16 @@ class TeachersController extends Controller
             $data['photo'] = $request->file('photo')->store('TeachersPhoto', 'public');
         }
 
-        $formData = array_merge($data, [ 
-            'set' => $selectedOption->set,
-            'class' => $selectedClass->class,
-        ]);
+        if ($selectedOption) {
+
+            $data['class'] = $selectedClass->class;
+    
+            }
+            if ($selectedClass) {
+    
+            $data['set'] = $selectedOption->set;
+    
+            }
 
         $teacher = register_teacher::create($data);
         return redirect('/teachers_database')->with('message', 'Maa Shaa Allaah! Teacher Added Successfully! Jazaakumul Laahu Khaira!');

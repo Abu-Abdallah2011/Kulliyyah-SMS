@@ -129,7 +129,7 @@ public function studentsHadda()
 // Show Selected Class Teachers Names to Exco
 public function selectedClassTeacher($teacher_id)
 {
-   $class = register_teacher::where('user_id', $teacher_id)->value('class');
+   $class = register_teacher::where('id', $teacher_id)->value('class');
 
    $malams = register_teacher::with(['students' => function ($query) {
        $query->orderBy('fullname');
@@ -147,7 +147,7 @@ public function selectedClassTeacher($teacher_id)
    ->get();
    
 
-   return view('Attendance.class_teachers', [
+   return view('attendance.class_teachers', [
    'teachers' => $teachers,
    'class' => $class,
    'malams' => $malams
@@ -158,7 +158,7 @@ public function selectedClassTeacher($teacher_id)
 public function selectedClassStudent($teacher_id)
 {
 
-   $teachers = register_teacher::where('user_id', $teacher_id)
+   $teachers = register_teacher::where('id', $teacher_id)
    ->with(['students' => function ($query) 
    {
        $query->where('status', 'IN SCHOOL')->orderBy('fullname');
@@ -175,7 +175,7 @@ public function selectedClassStudent($teacher_id)
 public function selectedStudentsHadda($teacher_id)
 {
 
-   $teachers = register_teacher::where('user_id', $teacher_id)
+   $teachers = register_teacher::where('id', $teacher_id)
    ->with(['students' => function ($query) 
    {
        $query->where('status', 'IN SCHOOL')->orderBy('fullname');

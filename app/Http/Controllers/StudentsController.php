@@ -36,10 +36,16 @@ class StudentsController extends Controller
             $data['photo'] = $request->file('photo')->store('StudentsPhoto', 'public');
         }
 
-        $formData = array_merge($data, [ 
-            'set' => $selectedOption->set,
-            'class' => $selectedClass->class,
-        ]);
+        if ($selectedOption) {
+
+            $data['class'] = $selectedClass->class;
+    
+            }
+            if ($selectedClass) {
+    
+            $data['set'] = $selectedOption->set;
+    
+            }
 
         $student = register_student::create($data);
 

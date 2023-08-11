@@ -8,7 +8,7 @@
                   
             
             <div class="bg-gray-50 border border-gray-200 rounded p-6">
-                <div class="flex">
+                <div class="">
                     <div class="font-bold">
                         @can('isAdGuardian')
                         <div class="grid grid-flow-col col-md-6 text-right">
@@ -48,13 +48,36 @@
                                     <h3 class="text-2xl">
                                 DATE OF ADMISSION: {{$student->doa}}
                                     </h3>
+                            <h3 class="text-2xl">
+                                REGISTRATION FEE: {{$student->reg_fee}}
+                                    </h3>
                                 <div class="text-xl mb-4">
                                     <h3 class="text-2xl">
                                 STATUS: {{$student->status}}
                                     </h3>
-                                <h3 class="text-2xl">
-                                    REGISTRATION FEE: {{$student->reg_fee}}
-                                        </h3>
+
+                                @if ($student->status === 'GRADUATE')
+                                <div class="text-xl mb-4">
+                                    <h3 class="text-2xl">
+                                TYPE OF GRADUATION: {{$student->grad_type}}
+                                    </h3>
+
+                                <div class="text-xl mb-4">
+                                    <h3 class="text-2xl">
+                                MOCK FEE: {{$student->mock_fee}}
+                                    </h3>
+
+                                <div class="text-xl mb-4">
+                                    <h3 class="text-2xl">
+                                GRADUATION DATE: {{$student->grad_date}}
+                                    </h3>
+
+                                <div class="text-xl mb-4">
+                                    <h3 class="text-2xl">
+                                GRADUATION YEAR: {{$student->grad_yr}}
+                                    </h3>
+                                    @endif
+
                                         @if($student->guardian)
                                 <h3 class="text-2xl">
                                     GUARDIAN ID:@can('isAdmin') <a href="{{ url('/guardians_database/' . $student->guardian->id) }}">@endcan{{ $student->guardian->id }}@can('isAdmin')</a>@endcan

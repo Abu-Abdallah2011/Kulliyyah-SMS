@@ -60,21 +60,21 @@ class StudentFormRequest extends FormRequest
                 'required',
                 'max:255'
             ],
-            // 'grad_type' => [
-            //     'max:255'
-            // ],
-            // 'mock_fee' => [
-            //     'max:255'
-            // ],
-            // 'grad_fee' => [
-            //     'max:255'
-            // ],
-            // 'grad_date' => [
-            //     'max:255'
-            // ],
-            // 'grad_yr' => [
-            //     'max:255'
-            // ],
+            'grad_type' => [
+                'max:255'
+            ],
+            'mock_fee' => [
+                'max:255'
+            ],
+            'grad_fee' => [
+                'max:255'
+            ],
+            'grad_date' => [
+                'max:255'
+            ],
+            'grad_yr' => [
+                'max:255'
+            ],
             'photo' => [
                 'max:5000'
             ],
