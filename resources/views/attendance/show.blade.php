@@ -32,22 +32,21 @@
                   <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static font-bold">{{ $student->fullname }}</td>
                   <td class="px-6 py-4 whitespace-nowrap">
                      @if ($record = $student->attendance()->where('date', $date)->first())
-                       
                      @switch($record->status)
-                           @case('present')
-                              <i class="fas fa-check text-green-500"></i>
-                              @break
-                           @case('absent')
-                              <i class="fas fa-times text-red-500"></i>
-                              @break
-                           @case('late')
-                              <i class="fas fa-clock text-orange-500"></i>
-                              @break
-                           @case('excused')
-                              <i class="fas fa-question-circle text-purple-500"></i>
-                              @break
-                        @endswitch
-                     @endif
+                         @case('present')
+                             {!! '<i class="fas fa-check text-green-500"></i>' !!}
+                             @break
+                         @case('absent')
+                             {!! '<i class="fas fa-times text-red-500"></i>' !!}
+                             @break
+                         @case('late')
+                             {!! '<i class="fas fa-clock text-orange-500"></i>' !!}
+                             @break
+                         @case('excused')
+                             {!! '<i class="fas fa-question-circle text-purple-500"></i>' !!}
+                             @break
+                     @endswitch
+                 @endif
                   </td>
                </tr>
             @endforeach
