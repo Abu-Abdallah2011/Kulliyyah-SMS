@@ -60,7 +60,7 @@ return [
             'driver' => 's3',
             'key' => env('AKIA2ZT7HHQLTFOFXLHD'),
             'secret' => env('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'),
-            'region' => env('US East (Ohio) us-east-2'),
+            'region' => env('us-east-2'),
             'bucket' => env('Kulliyyahsms'),
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
