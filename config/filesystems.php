@@ -44,24 +44,12 @@ return [
             'throw' => false,
         ],
 
-        // 's3' => [
-        //     'driver' => 's3',
-        //     'key' => env('AWS_ACCESS_KEY_ID'),
-        //     'secret' => env('AWS_SECRET_ACCESS_KEY'),
-        //     'region' => env('AWS_DEFAULT_REGION'),
-        //     'bucket' => env('AWS_BUCKET'),
-        //     'url' => env('AWS_URL'),
-        //     'endpoint' => env('AWS_ENDPOINT'),
-        //     'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-        //     'throw' => false,
-        // ],
-
         's3' => [
             'driver' => 's3',
-            'key' => env('AKIA2ZT7HHQLTFOFXLHD'),
-            'secret' => env('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'),
-            'region' => env('us-east-2'),
-            'bucket' => env('Kulliyyahsms'),
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
