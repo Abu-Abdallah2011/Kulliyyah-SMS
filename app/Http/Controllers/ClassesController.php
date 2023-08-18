@@ -98,7 +98,7 @@ public function classStudent()
    $teachers = register_teacher::where('user_id', Auth::user()->id)
    ->with(['students' => function ($query) 
    {
-       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+       $query->where('status', 'IN SCHOOL')->orWhere('grad_type', 'TARTEEL ZALLA')->orderBy('fullname');
    }])->with('user')
    ->get();
    
@@ -115,7 +115,7 @@ public function studentsHadda()
    $teachers = register_teacher::where('user_id', Auth::user()->id)
    ->with(['students' => function ($query) 
    {
-       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+       $query->where('status', 'IN SCHOOL')->orWhere('grad_type', 'TARTEEL ZALLA')->orderBy('fullname');
    }])->with('user')
    ->get();
    
@@ -161,7 +161,7 @@ public function selectedClassStudent($teacher_id)
    $teachers = register_teacher::where('id', $teacher_id)
    ->with(['students' => function ($query) 
    {
-       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+       $query->where('status', 'IN SCHOOL')->orWhere('grad_type', 'TARTEEL ZALLA')->orderBy('fullname');
    }])->with('user')
    ->get();
    
@@ -178,7 +178,7 @@ public function selectedStudentsHadda($teacher_id)
    $teachers = register_teacher::where('id', $teacher_id)
    ->with(['students' => function ($query) 
    {
-       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+       $query->where('status', 'IN SCHOOL')->orWhere('grad_type', 'TARTEEL ZALLA')->orderBy('fullname');
    }])->with('user')
    ->get();
    

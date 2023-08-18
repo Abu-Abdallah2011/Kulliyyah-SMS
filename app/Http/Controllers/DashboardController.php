@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use App\Models\register_teacher;
+use App\Models\register_student;
 use App\Models\register_guardian;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Foundation\Auth\User;
@@ -34,11 +35,14 @@ class DashboardController extends Controller
         
         $guardians = register_guardian::where('user_id', Auth::user()->id)->with('students')->get();
 
+        $graduates = register_student::where('status', 'GRADUATE');
+
         return view('dashboard', [
         'teachers' => $teachers,
         'guardians' => $guardians,
         'class' => $class,
         'teacher' => $teacher,
+        'graduates' => $graduates,
     ]);
     }
     

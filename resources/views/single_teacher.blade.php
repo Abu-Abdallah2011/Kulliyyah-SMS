@@ -20,7 +20,9 @@
                                    ID: {{$teacher->id}}
                                 </h5>
 
+                                @if($teacher->user->id)
                                 @can('isAdmin') TEACHERS' USER ID:<a href="/users_database/{{$teacher->user->id}}/edit_user"> {{$teacher->user->id}}</a>@endcan
+                                @endif
                        
                         <div>
                         <h5 class="text-base">

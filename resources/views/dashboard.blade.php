@@ -15,7 +15,7 @@
                 
                     {{-- TEACHER DASHBOARD VIEW --}}
                     @if(!Request::is('dashboard/*'))
-                    <x-teacher-view :teachers="$teachers" :class="$class" :teacher="$teacher" />
+                    <x-teacher-view :teachers="$teachers" :class="$class" :teacher="$teacher" :graduates="$graduates" />
                     @endif
                     {{-- SINGLE CLASS DASHBOARD VIEW FOR EXECUTIVE --}}
                     @if(Auth::user()->can('isExecutive') && Request::is('dashboard/classes/*'))

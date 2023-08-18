@@ -88,6 +88,8 @@ require __DIR__.'/auth.php';
         Route::put('/students_database/{id}', 'update')->middleware('can:isAdmin');
         // Delete Student
         Route::delete('students_database/{id}', 'delete')->middleware('can:isAdmin');
+        // Show Graduate Data in Database
+        Route::get('/graduates_database', 'showGraduates')->middleware('can:isExecutive');
         });
 
 
