@@ -19,7 +19,7 @@
                 <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
                     <a href="class_students">
                     <img src="/images/book_icon.png" alt="Icon" class="">
-                    <span class="text">Students: {{$teacher->students->count()}}</span>
+                    <span class="text">Students</span>
                 </a>
                 </div>
 
