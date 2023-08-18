@@ -67,9 +67,11 @@
                                     <h5 class="text-base">
                                         PHONE NUMBER: {{$teacher->contact_no}}
                                             </h5>
+                                    @if($teacher->user)
                                     <h5 class="text-base">
                                         EMAIL: {{$user->email}}
                                             </h5>
+                                    @endif
                                     <h5 class="text-base">
                                         BANK BRANCH: {{$teacher->bank_branch}}
                                             </h5>
