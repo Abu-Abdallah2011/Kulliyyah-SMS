@@ -20,6 +20,6 @@ public function edit($id){
     {
         $data = $request->validated();
         $sessions = sessions::where('id', $id)->update($data);
-        return view('curriculum_scale');
+        return back()->with('message', 'Session/Term Updated Successfully!');
     }
 }

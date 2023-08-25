@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Auth\LoginRequest;
+use App\Models\sessions;
 use Illuminate\Http\Request;
-use App\Models\register_teacher;
 use App\Models\register_student;
+use App\Models\register_teacher;
 use App\Models\register_guardian;
-use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Foundation\Http\FormRequest;
 
 class DashboardController extends Controller
 {
@@ -22,27 +23,49 @@ class DashboardController extends Controller
         $teachers = register_teacher::where('class', $class)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+            $query->where('status', 'IN SCHOOL')
+            ->orWhere('grad_type', 'TARTEEL ZALLA')
+            ->orderBy('fullname');
         }])->with('user')
         ->get();
 
-        $teacher = register_teacher::with(['students' => function ($query) {
-            $query->orderBy('fullname');
+
+        $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
+        ->with(['students' => function ($query) 
+        {
+            $query->where('status', 'IN SCHOOL')
+            ->orWhere('grad_type', 'TARTEEL ZALLA')
+            ->orderBy('fullname');
         }])
-        ->with('user')
-        ->where('id', Auth::user()->id)
-        ->get();
+        ->first();
+
+        $teacher->students;
+
+        // dd($teacher);
+
+        // ->with(['students' => function ($query) 
+        // {
+        //     $query->where('status', 'IN SCHOOL')
+        //     ->orWhere('grad_type', 'TARTEEL ZALLA')
+        //     ->orderBy('fullname');
+        // }])
+        // ->with('user')
+        // ->where('user_id', Auth::user()->id)
+        // ->get();
         
         $guardians = register_guardian::where('user_id', Auth::user()->id)->with('students')->get();
 
         $graduates = register_student::where('status', 'GRADUATE');
 
+        $session = sessions::first();
+
         return view('dashboard', [
+        'teacher' => $teacher,
         'teachers' => $teachers,
         'guardians' => $guardians,
         'class' => $class,
-        'teacher' => $teacher,
         'graduates' => $graduates,
+        'session' => $session,
     ]);
     }
     

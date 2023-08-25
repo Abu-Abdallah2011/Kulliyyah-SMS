@@ -6,21 +6,23 @@ use Illuminate\View\Component;
 
 class TeacherView extends Component
 {
-    public $teachers;
-    public $class;
     public $teacher;
+    public $class;
+    public $teachers;
     public $graduates;
+    public $session;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($teachers, $class, $teacher, $graduates)
+    public function __construct($teacher, $class, $teachers, $graduates, $session)
     {
-        $this->teachers = $teachers;
-        $this->class = $class;
         $this->teacher = $teacher;
+        $this->class = $class;
+        $this->teachers = $teachers;
         $this->graduates = $graduates;
+        $this->session = $session;
 
     }
 

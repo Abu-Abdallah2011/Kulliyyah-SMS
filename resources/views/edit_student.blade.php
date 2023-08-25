@@ -170,9 +170,9 @@
                             <!-- Photo Upload -->
                             <div>
                                 <x-input-label for="photo" :value="__('Photo')" />
-                                <x-text-input id="file" class="block mt-1 w-full" type="file" name="photo" value="{{ asset('storage/' . $student->photo)}}" autofocus autocomplete="photo" />
+                                <x-text-input id="file" class="block mt-1 w-full" type="file" name="photo" autofocus autocomplete="photo" />
                                 <x-input-error :messages="$errors->get('photo')" class="mt-2" />
-                                    <img class="hidden w-48 mr-6 md:block" src="{{ asset('storage/' . $student->photo) }}" alt="" />
+                                <img class="hidden w-48 mr-6 md:block" src="{{ asset('storage/' . $student->photo) }}" alt="" />
                             </div>
                             <br/>
                         <div>

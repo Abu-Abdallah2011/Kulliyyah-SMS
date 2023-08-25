@@ -7,8 +7,6 @@
         </a>
         </div>
         
-            @foreach ($teachers as $teacher)
-            @endforeach
             <div class="h-30 w-25 bg-rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
                 <a href="class_teachers">
                 <img src="/images/blue_book.png" alt="Icon" class="">
@@ -16,19 +14,20 @@
                 </a>
             </div>
             
+
                 <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
                     <a href="class_students">
                     <img src="/images/book_icon.png" alt="Icon" class="">
-                    <span class="text">Students</span>
+                    <span class="text">Students: {{$teacher->students->count()}} </span>
                 </a>
                 </div>
 
-                    {{-- <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                    <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
                         <a href="{{ url('/teachers_database/' . $teacher->id) }}">
                         <img src="/images/icon.png" alt="Icon" class="">
                         <span class="text-base">Profile</span>
                     </a>
-                    </div> --}}
+                    </div>
                 
                     <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
                         <a href="studentsHadda">
@@ -74,12 +73,12 @@
                     </a>
                     </div>
 
-                    {{-- <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
-                        <a href="'sessions/' . {{$session->id}} . '/editform'">
+                    <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                        <a href="{{ url('sessions/' . $session->id . '/editform') }}">
                         <img src="/images/book_icon.png" alt="Icon" class="">
                         <span class="text-base ">Session/Term</span>
                     </a>
-                    </div> --}}
+                    </div>
                         
                     @endcan
 

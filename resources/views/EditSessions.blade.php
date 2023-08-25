@@ -1,9 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Student Edit Form') }}
+            {{ __('Session/Term Edit Form') }}
         </h2>
     </x-slot>
+
+                <!-- Session Status -->
+                <x-success-status class="mb-4" :status="session('message')" />
 
     <div class="py-12">
 
