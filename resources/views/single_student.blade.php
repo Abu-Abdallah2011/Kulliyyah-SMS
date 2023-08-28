@@ -116,13 +116,15 @@
         <div class="bg-gray-50 border border-gray-200 rounded">
         <div class="mt-4 p-2 flex flex-wrap space-x-6">
             
-            @can('isAdmin')
+            @can('isAssistant')
             <a href="/students_database/{{$student->id}}/edit_student">
         <x-primary-button class="ml-3">
             <i class="fa-solid fa-pencil">  {{ __('') }} </i>
         </x-primary-button>
     </a>
+    @endcan
 
+    @can('isAdmin')
         <form method="POST" action="/students_database/{{$student->id}}">
             @csrf
             @method('DELETE')

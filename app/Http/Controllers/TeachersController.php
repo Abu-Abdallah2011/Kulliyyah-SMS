@@ -7,6 +7,7 @@ use App\Models\classes;
 use App\Models\surasModel;
 use Illuminate\Http\Request;
 use App\Models\register_teacher;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\TeacherFormRequest;
 
 class TeachersController extends Controller
@@ -102,7 +103,13 @@ public function update(TeacherFormRequest $request, $id){
 
     $teacher = register_teacher::where('id', $id)->update($data);
 
+    if (Gate::allows('isAdmin')) {
     return redirect('/teachers_database')->with('message', 'Maa Shaa Allaah! Teacher Updated Successfully! Jazaakumul Laahu Khaira!');
+    }
+    else
+    {
+        return redirect('/dashboard')->with('message', 'Maa Shaa Allaah! You have been Transferred Successfully!'); 
+    }
 }
 
 

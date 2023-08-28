@@ -1,5 +1,9 @@
+<!-- Session Status -->
+<x-success-status class="mb-4" :status="session('message')" />
+
 <h1 class="font-bold text-center">{{$class}}</h1>
 <div class="flex flex-wrap justify-center">
+
         <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
             <a href="curriculum_scale">
             <img src="/images/icon.png" alt="" class="">
@@ -37,7 +41,7 @@
                     </div>
 
                     {{-- <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
-                        <a href="attendance">
+                        <a href="attendance/show">
                         <img src="/images/book_icon.png" alt="Icon" class="">
                         <span class="text-base ">Attendance</span>
                     </a>
@@ -58,6 +62,13 @@
                         <span class="text-base">Classes</span>
                         </a>
                     </div>
+
+                    {{-- <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
+                        <a href="subjects">
+                        <img src="/images/book_icon.png" alt="Icon" class="">
+                        <span class="text-base ">Subjects</span>
+                    </a>
+                    </div> --}}
 
                     <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
                         <a href="suras_database">

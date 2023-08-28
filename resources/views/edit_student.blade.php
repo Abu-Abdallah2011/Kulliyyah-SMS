@@ -13,10 +13,12 @@
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 
                     <section>
-
+                        
                         <form method="POST" action="/students_database/{{$student->id}}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
+
+                            @can('isAdmin')
 
                             <!-- Student Id -->
                             <div>
@@ -31,6 +33,8 @@
                                 <x-text-input id="fullname" class="block mt-1 w-full" type="text" name="fullname" value="{{$student->fullname}}" required autofocus autocomplete="fullname" />
                                 <x-input-error :messages="$errors->get('fullname')" class="mt-2" />
                             </div>
+
+                            @endcan
                     
                             <!-- Class -->
 
@@ -55,6 +59,8 @@
                                 @endforeach
                                 </select>
                             </div>
+
+                            @can('isAdmin')
                             
                            <!-- Gender -->
                            <div>
@@ -174,6 +180,9 @@
                                 <x-input-error :messages="$errors->get('photo')" class="mt-2" />
                                 <img class="hidden w-48 mr-6 md:block" src="{{ asset('storage/' . $student->photo) }}" alt="" />
                             </div>
+
+                            @endcan
+
                             <br/>
                         <div>
                             <x-primary-button class="ml-3">

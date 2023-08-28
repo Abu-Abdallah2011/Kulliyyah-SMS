@@ -48,15 +48,16 @@ class AttendanceController extends Controller
 public function show()
 {
 
-    // $student_id = register_student::get('id');
     $studentIds = register_student::pluck('id')->toArray();
     $date = AttendanceModel::pluck('date')->toArray();
     
-    $attendance = AttendanceModel::whereIn('student_id', $studentIds)
+    $attendance = AttendanceModel::latest()
+    ->whereIn('student_id', $studentIds)
     ->with(['students' => function ($query) {
         $query->orderBy('fullname');
     }])
-    ->get();
+    // ->where('date', $date)
+    ->paginate(12);
 
     $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) {
@@ -64,22 +65,10 @@ public function show()
         }])->with('user')
         ->get();
         
-    // if ($attendance) {
-    //     $attendanceDetails = $attendance->attendanceDetails;
-        $statuses = [
-            'present' => '<i class="fas fa-check text-green-500"></i>',
-            'absent' => '<i class="fas fa-times text-red-500"></i>',
-            'late' => '<i class="fas fa-clock text-orange-500"></i>',
-            //'excused' => '<i class="YOUR ICON CLASS HERE" style="color: YOUR COLOR HERE;"></i>',
-            'excused' => '<i class="fas fa-clock text-orange-500"></i>',
-        ];
-        //dd($statuses);
-        $teacherClass = $teachers->first()->class; // Get the class of the first teacher in the collection
+        // Get the class of the first teacher in the collection
+        $teacherClass = $teachers->first()->class; 
         
-        return view('attendance.show', compact('attendance', 'statuses', 'teachers', 'teacherClass', 'date'));
-    // } else {
-    //     return redirect()->route('attendance.create')->with('error', 'Attendance record not found.');
-    // }
+        return view('attendance.show', compact('attendance', 'teachers', 'teacherClass', 'date'));
 }
 
  // Show Attendance Form for selected class to admin

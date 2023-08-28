@@ -116,12 +116,14 @@
                 </div>
         </div>
 
-        @can('isAdmin')
+        @can('isAssistant')
         <div class="bg-gray-50 border border-gray-200 rounded">
         <div class="mt-4 p-2 flex space-x-6"><a href="/teachers_database/{{$teacher->id}}/edit_teacher"><x-primary-button class="ml-3">
             <i class="fa-solid fa-pencil">  {{ __('') }} </i>
         </x-primary-button></a>
-    
+        @endcan
+
+        @can('isAdmin')
         <form method="POST" action="/teachers_database/{{$teacher->id}}">
             @csrf
             @method('DELETE')

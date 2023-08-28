@@ -26,38 +26,30 @@ class StudentFormRequest extends FormRequest
         return [
             
             'fullname' => [
-                'required',
                 'max:255'
             ],
             'class' => [
                 'max:255'
             ],
             'gender' => [
-                'required',
                 'max:255'
             ],
             'dob' => [
-                'required',
                 'max:255'
             ],
             'doa' => [
-                'required',
                 'max:255'
             ],
             'reg_fee' => [
-                'required',
                 'max:255'
             ],
             'address' => [
-                'required',
                 'max:255'
             ],
             'status' => [
-                'required',
                 'max:255'
             ],
             'guardian_id' => [
-                'required',
                 'max:255'
             ],
             'grad_type' => [

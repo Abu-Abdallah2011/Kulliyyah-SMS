@@ -1,0 +1,46 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Subjects Edit Form') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+
+
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                
+                    <section>
+
+                        <form method="POST" action="/subjects/{{$subject->id}}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                    
+                            <!-- Subject -->
+                            <div>
+                                <x-input-label for="subject" :value="__('Subject')" />
+                                <x-text-input id="subject" class="block mt-1 w-full" type="text" name="subject" value="{{$subject->subject}}" autofocus autocomplete="subject" />
+                                <x-input-error :messages="$errors->get('subject')" class="mt-2" />
+                            </div>
+
+                            <!-- category -->
+                            <div>
+                                <x-input-label for="category" :value="__('Category')" />
+                                <x-text-input id="category" class="block mt-1 w-full" type="text" name="category" value="{{$subject->category}}" autofocus autocomplete="category" />
+                                <x-input-error :messages="$errors->get('category')" class="mt-2" />
+                            </div>
+                           
+                            <br/>
+                        <div>
+                            <x-primary-button class="ml-3">
+                                {{ __('Update') }}
+                            </x-primary-button>
+                        </div>
+                        </form>
+                    </section>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

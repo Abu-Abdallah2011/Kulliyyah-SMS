@@ -5,6 +5,9 @@
            {{ __('Students') }}
        </h2>
    </x-slot>
+
+   <x-success-status class="mb-4" :status="session('message')" />
+
    <div class="py-6">
  
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

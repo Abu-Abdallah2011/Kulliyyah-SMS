@@ -6,6 +6,7 @@ use App\Models\sets;
 use App\Models\classes;
 use Illuminate\Http\Request;
 use App\Models\register_student;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StudentFormRequest;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -81,6 +82,18 @@ public function edit($id){
 
 // Edit Student
 public function update(StudentFormRequest $request, $id){
+
+    // dd([
+    //     'driver' => 's3',
+    //     'key' => env('AWS_ACCESS_KEY_ID'),
+    //     'secret' => env('AWS_SECRET_ACCESS_KEY'),
+    //     'region' => env('AWS_DEFAULT_REGION'),
+    //     'bucket' => env('AWS_BUCKET'),
+    //     'url' => env('AWS_URL'),
+    //     'endpoint' => env('AWS_ENDPOINT'),
+    //     'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+    //     'throw' => false,
+    // ],);
         
     $data = $request->validated();
 
@@ -106,8 +119,14 @@ public function update(StudentFormRequest $request, $id){
         }
 
     $student = register_student::where('id', $id)->update($data);
-    
+
+    if (Gate::allows('isAdmin')) {
     return redirect('/students_database')->with('message', 'Maa Shaa Allaah! Student Updated Successfully! Jazaakumul Laahu Khaira!');
+    }
+    else
+    {
+        return redirect('/class_students')->with('message', 'Maa Shaa Allaah! Student Transferred Successfully!');
+    }
 }
 
 

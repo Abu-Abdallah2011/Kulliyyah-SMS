@@ -14,6 +14,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\classesCrudController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\setsController;
+use App\Http\Controllers\subjectsController;
 use App\Http\Controllers\surasController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -83,9 +84,9 @@ require __DIR__.'/auth.php';
         // View Single Student Data
         Route::get('/students_database/{id}', 'view');
         // Show Student Edit Data Form
-        Route::get('/students_database/{id}/edit_student', 'edit')->middleware('can:isAdmin');
+        Route::get('/students_database/{id}/edit_student', 'edit')->middleware('can:isAssistant');
         // Update Student
-        Route::put('/students_database/{id}', 'update')->middleware('can:isAdmin');
+        Route::put('/students_database/{id}', 'update')->middleware('can:isAssistant');
         // Delete Student
         Route::delete('students_database/{id}', 'delete')->middleware('can:isAdmin');
         // Show Graduate Data in Database
@@ -104,9 +105,9 @@ require __DIR__.'/auth.php';
         // View Single Teacher Data
         Route::get('/teachers_database/{id}', 'view')->middleware('can:isAssistant');
         // Edit Teacher Data
-        Route::get('/teachers_database/{id}/edit_teacher', 'edit')->middleware('can:isAdmin');
+        Route::get('/teachers_database/{id}/edit_teacher', 'edit')->middleware('can:isAssistant');
         // Update Teacher
-        Route::put('/teachers_database/{id}', 'update')->middleware('can:isAdmin');
+        Route::put('/teachers_database/{id}', 'update')->middleware('can:isAssistant');
         // Delete Teacher
         Route::delete('teachers_database/{id}', 'delete')->middleware('can:isAdmin');
         });
@@ -295,5 +296,26 @@ require __DIR__.'/auth.php';
         // Delete Surah
         Route::delete('/sura/{id}', 'delete')->name('sura.delete');
         });
+
+    Route::middleware('can:isExecutive')->controller(subjectsController::class)->group(function () {
+       
+        // Show Subjects form
+        Route::get('/subjectsForm', 'create');
+
+        // Save Subject information
+        Route::post('/subjectsForm', 'store')->name('subjects.save');
+
+        // Show Subject Database
+        Route::get('/subjects', 'show')->name('subjects.show');
+
+        // Edit Subject Data
+        Route::get('/subjects/{id}/subjectsEdit', 'edit');
+
+        // Update Subject
+        Route::put('/subjects/{id}', 'update');
+
+        // Delete Set
+        Route::delete('/subjects/{id}', 'delete')->name('subject.delete');
+            });
     
    
