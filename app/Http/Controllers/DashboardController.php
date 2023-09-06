@@ -39,7 +39,7 @@ class DashboardController extends Controller
         }])
         ->first();
 
-        $teacher->students;
+        // $teacher->students;
 
         // dd($teacher);
 

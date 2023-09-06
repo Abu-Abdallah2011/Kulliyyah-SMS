@@ -228,6 +228,15 @@ require __DIR__.'/auth.php';
             // Show Attendance Report
             Route::get('/attendance/show', 'show')->name('attendance.show');
 
+            // Show Attendance Edit Form
+            Route::get('/attendance/{date}/edit_attendance', 'edit');
+
+            // Update Attendance
+            Route::put('/attendance/{date}', 'update');
+
+            // Delete Attendance
+            Route::delete('/attendance/{date}', 'delete');
+
             // Show Attendance form
             Route::get('dashboard/attendance/{teacher_id}', 'selectedCreate');
         });  
