@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\sessions;
 use Illuminate\Http\Request;
 use App\Models\AttendanceModel;
 use App\Models\register_student;
@@ -30,6 +31,10 @@ class AttendanceController extends Controller
     $date = $request->input('date');
     $attendance = $request->input('attendance');
     $studentIds = $request->input('student_ids');
+    $time = $request->input('time');
+
+    $session = sessions::pluck('session')->first();
+    $term = sessions::pluck('term')->first();
 
     // Loop through all students and save their attendance records
     foreach ($studentIds as $index => $studentId) {
@@ -37,18 +42,17 @@ class AttendanceController extends Controller
         $record->date = $date;
         $record->student_id = $studentId;
         $record->status = $attendance[$index];
+        $record->session = $session;
+        $record->term = $term;
+        $record->time = $time;
         $record->save();
     }
-
-
-    // Redirect back to the attendance form with a success message
     return redirect('/attendance/show')->with('message', 'Attendance records saved successfully!');
 }
 
 // Show Attendance Report
 public function show()
 {
-   
     $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) {
             $query->orderBy('fullname');
@@ -60,29 +64,20 @@ public function show()
     $studentIds = register_student::where('class', $teacherClass)
     ->pluck('id')
     ->toArray();
-    
-// Paginate the attendance records and retrieve the latest records based on date
+
 $attendance = AttendanceModel::whereIn('student_id', $studentIds)
 ->with(['students' => function ($query) {
     $query->orderBy('fullname');
 }])
-->latest('date') // Retrieve the latest records based on the 'date' column
-->paginate(16); // You can adjust the number of records per page as needed
-    
-    // $attendance = AttendanceModel::whereIn('student_id', $studentIds)
-    // ->with(['students' => function ($query) {
-    //     $query->orderBy('fullname');
-    // }])
-    // ->get();
+->latest()
+->paginate(200); 
 
     $statusIcons = [
         'present' => '<i class="fas fa-check text-green-500"></i>',
         'absent' => '<i class="fas fa-times text-red-500"></i>',
         'late' => '<i class="fas fa-clock text-yellow-500"></i>',
         'excused' => '<i class="fas fa-pencil text-purple-500"></i>',
-    ];
-    
-        
+    ];    
         return view('attendance.show', compact('attendance', 'teachers', 'teacherClass', 'statusIcons'));
 }
 
@@ -114,20 +109,29 @@ $attendance = AttendanceModel::whereIn('student_id', $studentIds)
   public function update(Request $request)
   {
       $date = $request->input('date');
-      $attendance = $request->input('attendance');
+      $attendanceData  = $request->input('attendance');
       $studentIds = $request->input('student_ids');
-  
-      // Loop through all students and update their attendance records
-    foreach ($studentIds as $index => $studentId) {
-        // Find the existing record to update
-        $existingRecord = AttendanceModel::where('date', $date)
-            ->where('student_id', $studentId)
-            ->first();
+      $times = $request->input('time');
 
-        if ($existingRecord) {
-            // Update the status
-            $existingRecord->status = $attendance[$index];
-            $existingRecord->update(); // Save the changes
+      $session = sessions::pluck('session')->first();
+    $term = sessions::pluck('term')->first();
+
+    foreach ($studentIds as $studentId) {
+        foreach ($attendanceData[$studentId] as $time => $status) {
+            // Find the existing record for the specific date, student ID, and time
+            $existingRecord = AttendanceModel::where([
+                ['date', '=', $date],
+                ['student_id', '=', $studentId],
+                ['time', '=', $time],
+            ])->first();
+
+            if ($existingRecord) {
+                // Update the attendance status and other data
+                $existingRecord->status = $status;
+                $existingRecord->session = $session;
+                $existingRecord->term = $term;
+                $existingRecord->update();
+            }
         }
     }
       return redirect('/attendance/show')->with('message', 'Attendance records Updated successfully!');
@@ -156,8 +160,51 @@ $attendance = AttendanceModel::where('date', $date)
          $query->orderBy('fullname');
      }])->with('user')
      ->get();
-     return view('attendance.create', ['teachers' => $teachers]);
+
+     $teacherClass = $teachers->first()->class;
+
+     $studentIds = register_student::where('class', $teacherClass)
+     ->pluck('id')
+     ->toArray();
+ 
+ $attendance = AttendanceModel::whereIn('student_id', $studentIds)
+ ->with(['students' => function ($query) {
+     $query->orderBy('fullname');
+ }])
+ ->latest()
+ ->paginate(200); 
+ 
+     $statusIcons = [
+         'present' => '<i class="fas fa-check text-green-500"></i>',
+         'absent' => '<i class="fas fa-times text-red-500"></i>',
+         'late' => '<i class="fas fa-clock text-yellow-500"></i>',
+         'excused' => '<i class="fas fa-pencil text-purple-500"></i>',
+     ];
+     return view('attendance.show', ['teachers' => $teachers, 'attendance' => $attendance, 'statusIcons' => $statusIcons]);
  }
 
+ // Show Attendance Report to Guardian
+public function attendanceGuardian($id)
+{
+   
+$student = register_student::where('id', $id)->first();
+    
+$attendance = AttendanceModel::where('student_id', $id)
+->with(['students' => function ($query) {
+    $query->orderBy('fullname');
+}])
+->latest()
+->paginate(12); 
+
+    $statusIcons = [
+        'present' => '<i class="fas fa-check text-green-500"></i>',
+        'absent' => '<i class="fas fa-times text-red-500"></i>',
+        'late' => '<i class="fas fa-clock text-yellow-500"></i>',
+        'excused' => '<i class="fas fa-pencil text-purple-500"></i>',
+    ];
+    
+        
+        return view('attendance.show', compact('attendance', 'statusIcons', 'student'));
+}
 
 }

@@ -115,7 +115,12 @@
         
         <div class="bg-gray-50 border border-gray-200 rounded">
         <div class="mt-4 p-2 flex flex-wrap space-x-6">
-            
+            @can('isAdGuardian')
+            <a href="{{ url('/attendance/guardian_view/' . $student->id) }}">
+                <x-primary-button class="">
+                    <i class="fa-solid fa-clock">  {{ __('') }} </i>
+                </x-primary-button></a>
+                @endcan
             @can('isAssistant')
             <a href="/students_database/{{$student->id}}/edit_student">
         <x-primary-button class="ml-3">
@@ -144,14 +149,12 @@
         <x-primary-button class="">
             <i class="fa-solid fa-book">  {{ __('') }} </i>
         </x-primary-button></a>
-    
 
     <a href="{{ url('/hadda_page/' . $student->id) }}">
         <x-primary-button class="">
             <i class="fa-solid fa-book-open">  {{ __('') }} </i>
         </x-primary-button></a>
     </div>
-
 
         </div>
         

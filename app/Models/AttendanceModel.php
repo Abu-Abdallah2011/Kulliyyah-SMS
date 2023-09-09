@@ -22,6 +22,10 @@ class AttendanceModel extends Model
         'student_id',
         'date',
         'status',
+        'term',
+        'session',
+        'time',
+
         
     ];
 }

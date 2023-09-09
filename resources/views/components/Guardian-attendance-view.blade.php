@@ -1,26 +1,7 @@
-<x-app-layout>
-
-   <x-slot name="header">
-      <h2 class="font-semibold lg-text-xl md-text-lg text-gray-800 dark:text-gray-200 leading-tight">
-          {{ __('Attendance Record') }}
-
-        @can('isAssistant')
-          <a href="{{ url('/attendance') }}" class="lg-text-xl md-text-lg bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute top-15 right-9">
-            <i class="fa-solid fa-pen"></i>
-        </a>
-        @endcan
-      </h2>
-  </x-slot>
-  @can('isAssistant')
-  <x-success-status class="mb-4" :status="session('message')" />
-
   <div class="py-6">
 
-@if (!$teachers->isEmpty())
-   @foreach ($teachers as $teacher)
-   <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-      <div class="p-3 text-gray-900 dark:text-gray-100">
-      <h1 class="font-bold text-center">{{ $teacher->class }}: {{ $teacher->students->count() }}</h1>
+    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="p-3 text-gray-900 dark:text-gray-100">
         
       <div class="table-responsive">
       <table class="border-collapse w-full">
@@ -43,7 +24,6 @@
              </tr>
          </thead>
          <tbody>
-             @foreach ($teacher->students as $student)
                  <tr class="bg-white lg:hover:bg-gray-100 lg:table-row mb-10 lg:mb-0">
                      <td class="w-full lg:w-auto p-2 md:p-3 lg:p-3 text-gray-800 border border-b lg:table-cell relative lg:static font-bold">{{ $student->id }}</td>
                      <td class="w-full lg:w-auto p-2 md:p-3 lg:p-3 text-gray-800 border border-b lg:table-cell relative lg:static font-bold">{{ $student->fullname }}</td>
@@ -56,33 +36,17 @@
                                                         //  echo "Student ID: $student->id, Date: $date, Statuses: " . implode(', ', $statusesForDate) . '<br>';
                          @endphp
                          <td class="text-center w-full lg:w-auto p-2 md:p-3 lg:p-3 text-gray-800 border border-b lg:table-cell relative lg:static font-bold">                           
-                             <a href="/attendance/{{$date}}/edit_attendance">
+                             
                               @foreach ($statusesForDate as $status)
                               {!! $statusIcons[strtolower($status)] !!}
                                  @endforeach
-                              </a>
+                              
                          </td>
                      @endforeach
                  </tr>
-             @endforeach
          </tbody>
      </table>
       </div>
-
+        </div>
+    </div>
       </div>
-   </div>
-   @endforeach
-@else
-   <p>No teachers found.</p>
-@endif
-  </div>
-  @endcan
-  @can('isGuardian')
-  <x-Guardian-attendance-view :attendance="$attendance" :statusIcons="$statusIcons" :student="$student" />
-  @endcan
-
-  <div class="mt-6 p-4">
-   {{$attendance->Links()}}
-</div>
-
-   </x-app-layout>

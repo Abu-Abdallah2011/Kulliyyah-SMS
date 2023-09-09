@@ -239,7 +239,9 @@ require __DIR__.'/auth.php';
 
             // Show Attendance form
             Route::get('dashboard/attendance/{teacher_id}', 'selectedCreate');
-        });  
+        }); 
+            // Show Attendance Page to Guardian
+            Route::get('/attendance/guardian_view/{id}', [AttendanceController::class, 'attendanceGuardian']); 
 
             // CRUD for Sets
     Route::middleware('can:isExecutive')->controller(setsController::class)->group(function () {
