@@ -19,7 +19,9 @@ class AttendanceController extends Controller
         $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) 
         {
-            $query->orderBy('fullname');
+            $query->where('status', 'IN SCHOOL')
+            ->orWhere('grad_type', 'TARTEEL ZALLA')
+            ->orderBy('fullname');
         }])->with('user')
         ->get();
         return view('attendance.create', ['teachers' => $teachers]);
@@ -55,7 +57,9 @@ public function show()
 {
     $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) {
-            $query->orderBy('fullname');
+            $query->where('status', 'IN SCHOOL')
+            ->orWhere('grad_type', 'TARTEEL ZALLA')
+            ->orderBy('fullname');
         }])->with('user')
         ->get(); 
     
@@ -87,7 +91,9 @@ $attendance = AttendanceModel::whereIn('student_id', $studentIds)
 
     $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) {
-            $query->orderBy('fullname');
+            $query->where('status', 'IN SCHOOL')
+            ->orWhere('grad_type', 'TARTEEL ZALLA')
+            ->orderBy('fullname');
         }])->with('user')
         ->get(); 
     
@@ -151,13 +157,15 @@ $attendance = AttendanceModel::where('date', $date)
     return redirect('/attendance/show')->with('message', 'Maa Shaa Allaah! Attendance Record Deleted Successfully!');
 }
 
- // Show Attendance Form for selected class to admin
+ // Show Attendance Record for selected class to admin
  public function selectedCreate($teacher_id)
  {
      $teachers = register_teacher::where('user_id', $teacher_id)
      ->with(['students' => function ($query) 
      {
-         $query->orderBy('fullname');
+        $query->where('status', 'IN SCHOOL')
+        ->orWhere('grad_type', 'TARTEEL ZALLA')
+         ->orderBy('fullname');
      }])->with('user')
      ->get();
 
