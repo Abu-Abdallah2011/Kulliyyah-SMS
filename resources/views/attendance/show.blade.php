@@ -11,7 +11,7 @@
         @endcan
       </h2>
   </x-slot>
-  @can('isAssistant')
+  @if(Auth::user()->can('isAssistant') && Request::is('attendance/show'))
   <x-success-status class="mb-4" :status="session('message')" />
 
   <div class="py-6">
@@ -76,10 +76,8 @@
    <p>No teachers found.</p>
 @endif
   </div>
-  @endcan
-  @can('isGuardian')
+  @endif
   <x-Guardian-attendance-view :attendance="$attendance" :statusIcons="$statusIcons" :student="$student" />
-  @endcan
 
   <div class="mt-6 p-4">
    {{$attendance->Links()}}
