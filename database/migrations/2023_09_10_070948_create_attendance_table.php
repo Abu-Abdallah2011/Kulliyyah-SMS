@@ -16,8 +16,11 @@ return new class extends Migration
         Schema::create('attendance', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id');
-            $table->date('date');
+            $table->string('date');
             $table->string('status');
+            $table->string('term')->nullable();
+            $table->string('session')->nullable();
+            $table->string('time')->nullable();
             $table->timestamps();
         });
     }
