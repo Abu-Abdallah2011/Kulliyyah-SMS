@@ -51,9 +51,9 @@
                     <x-text-input id="to" class="block mt-1 w-full" type="text" name="to" value="{{$curriculum->to}}"/>
                     <x-input-error :messages="$errors->get('to')" class="mt-2" />
                 </div>
-                 {{-- Times --}}
+                 {{-- Sau Nawa aka bita Karin? --}}
                  <div>
-                    <x-input-label class="font-bold" for="times" :value="__('Times')" />
+                    <x-input-label class="font-bold" for="times" :value="__('Sau Nawa aka bita Karin?')" />
                     <x-text-input id="times" class="block mt-1 w-full" type="text" name="times" value="{{$curriculum->times}}"/>
                     <x-input-error :messages="$errors->get('times')" class="mt-2" />
                 </div>

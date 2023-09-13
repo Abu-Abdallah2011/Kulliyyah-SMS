@@ -11,7 +11,7 @@
         @endcan
       </h2>
   </x-slot>
-  @if(Auth::user()->can('isAssistant') && Request::is('attendance/show'))
+  @if((Auth::user()->can('isAssistant') && Request::is('attendance/show')) || (Auth::user()->can('isAssistant') && Request::is('dashboard/attendance/*')))
   <x-success-status class="mb-4" :status="session('message')" />
 
   <div class="py-6">
@@ -77,7 +77,10 @@
 @endif
   </div>
   @endif
+
+  @if(Request::is('attendance/guardian_view/*'))
   <x-Guardian-attendance-view :attendance="$attendance" :statusIcons="$statusIcons" :student="$student" />
+  @endif
 
   <div class="mt-6 p-4">
    {{$attendance->Links()}}
