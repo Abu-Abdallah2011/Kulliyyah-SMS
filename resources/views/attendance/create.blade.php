@@ -12,14 +12,24 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form action="{{ url('/attendance') }}" method="POST">
                         @csrf
+                        <div class="flex">
                         <label for="date">Date: </label>
                         <x-date-picker class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Input Date..."/>
+                        <div class="relative w-64 flex ml-4">
+                        <label for="zango">Zango: </label>
+                        <select name="time" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option>Safiya</option>
+                            <option>Bayan Break</option>
+                            <option>Da Rana</option>
+                            <option>Yamma</option>
+                        </select>
+                        </div>
+                    </div>
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr>
                                     <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Name</th>
                                     <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attendance Status</th>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Zango</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -39,18 +49,7 @@
                                                 </select>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="inline-block relative w-64">
                                             <input type="hidden" name="student_ids[]" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{$student->id}}">
-                                            <select name="time" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                                <option></option>
-                                                <option>Safiya</option>
-                                                <option>Bayan Break</option>
-                                                <option>Da Rana</option>
-                                                <option>Yamma</option>
-                                            </select>
-                                            </div>
-                                        </td>
                                     </tr>
                                 @endforeach
                                 @endforeach
