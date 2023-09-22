@@ -39,12 +39,6 @@ class ClassesController extends Controller
     // SHOW SINGLE TEACHER DASHBOARD TO ADMIN
     public function display($teacher_id)
     {
-        // $teacher = register_teacher::with(['students' => function ($query) {
-        //     $query->orderBy('fullname');
-        // }])
-        // ->with('user')
-        // ->where('id', $teacher_id)
-        // ->firstOrFail();
 
         $teacher = register_teacher::
         with(['students' => function ($query) 

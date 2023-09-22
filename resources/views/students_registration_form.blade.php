@@ -121,46 +121,6 @@
                                 <x-input-error :messages="$errors->get('relationship')" class="mt-2" />
                             </div>
                     
-                            <!-- Graduation Type -->
-                            {{-- <div>
-                                <x-input-label for="grad_type" :value="__('Graduation Type')" />
-                                <x-select-input id="grad_type" class="block mt-1 w-full" type="text" name="grad_type" :value="old('grad_type')" autofocus autocomplete="grad_type" />
-                                <option></option>
-                                <option>HADDA ZALLA</option>
-                                <option>TARTEEL ZALLA</option>
-                                <option>HADDA DA TARTEEL</option>
-                                </select>
-                                <x-input-error :messages="$errors->get('grad_type')" class="mt-2" />
-                            </div> --}}
-                    
-                            <!-- Mock Fee -->
-                            {{-- <div>
-                                <x-input-label for="mock_fee" :value="__('Mock Fee')" />
-                                <x-text-input id="mock_fee" class="block mt-1 w-full" type="text" name="mock_fee" :value="old('mock_fee')" autofocus autocomplete="mock_fee" />
-                                <x-input-error :messages="$errors->get('mock_fee')" class="mt-2" />
-                            </div> --}}
-                    
-                            <!-- Graduation Fee -->
-                            {{-- <div>
-                                <x-input-label for="grad_fee" :value="__('Graduation Fee')" />
-                                <x-text-input id="grad_fee" class="block mt-1 w-full" type="text" name="grad_fee" :value="old('grad_fee')" autofocus autocomplete="grad_fee" />
-                                <x-input-error :messages="$errors->get('grad_fee')" class="mt-2" />
-                            </div> --}}
-                    
-                            <!-- Graduation Date -->
-                            {{-- <div>
-                                <x-input-label for="grad_date" :value="__('Graduation Date')" />
-                                <x-text-input id="grad_date" class="block mt-1 w-full" type="text" name="grad_date" :value="old('grad_date')" autofocus autocomplete="grad_date" />
-                                <x-input-error :messages="$errors->get('grad_date')" class="mt-2" />
-                            </div> --}}
-                    
-                            <!-- Year Of Graduation -->
-                            {{-- <div>
-                                <x-input-label for="grad_yr" :value="__('Year Of Graduation')" />
-                                <x-text-input id="grad_yr" class="block mt-1 w-full" type="text" name="grad_yr" :value="old('grad_yr')" autofocus autocomplete="grad_yr" />
-                                <x-input-error :messages="$errors->get('grad_yr')" class="mt-2" />
-                            </div> --}}
-                    
                             <!-- Photo Upload -->
                             <div>
                                 <x-input-label for="photo" :value="__('Photo')" />
