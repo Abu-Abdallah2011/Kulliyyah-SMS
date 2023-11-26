@@ -39,7 +39,7 @@
                             {{ $subject->subject }}
                             </a>
                         </td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $subject->marks_obtainable }}</td>
+                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $subject->category }}</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">
                             <form method="POST" action="/subjects/{{$subject->id}}">
                                 @csrf
