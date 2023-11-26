@@ -55,7 +55,7 @@
                 <td>{{ $examRecord->subject_id }}</td>
                 <td>
                     @foreach($subjects->where('subject', $examRecord->subject_id) as $subject)
-                {{ $subject->marks_obtainable }}
+                {{ $subject->category }}
                 @endforeach
             </td>
             
