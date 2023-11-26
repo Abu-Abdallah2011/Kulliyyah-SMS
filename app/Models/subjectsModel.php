@@ -19,7 +19,7 @@ class subjectsModel extends Model
 
     protected $fillable = [
         'subject',
-        'marks_obtainable',
+        'category',
     ];
 
     public function scopeFilter($query, array $filters){
