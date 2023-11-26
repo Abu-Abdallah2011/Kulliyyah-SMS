@@ -389,22 +389,9 @@ public function update(Request $request, $id){
 
     $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
 
-    // $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
-    //     ->with(['students' => function ($query) 
-    //     {
-    //         $query->where('status', 'IN SCHOOL')
-    //         ->orWhere('grad_type', 'TARTEEL ZALLA')
-    //         ->orderBy('fullname');
-    //     }])
-    //     ->first();
-
     $selectedSubject = $request->input('subjects');
     $studentIds = $request->input('student_ids');
     $scores = $request->input('scores');
-    // $firstCA = $scores[$student->id][$subject->subject_id]['1st_ca'];
-    // $secondCA = $request->input('2nd_ca');
-    // $thirdCA = $request->input('3rd_ca');
-    // $exams = $request->input('exams');
     $term = $request->input('term');
     $session = $request->input('session');
 
