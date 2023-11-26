@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('attendance', function (Blueprint $table) {
+        Schema::create('exams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id');
-            $table->string('date');
-            $table->string('status');
-            $table->string('term')->nullable();
-            $table->string('session')->nullable();
-            $table->string('time')->nullable();
+            $table->string('student_id');
+            $table->string('subject_id');
+            $table->string('1st_ca')->nullable();
+            $table->string('2nd_ca')->nullable();
+            $table->string('3rd_ca')->nullable();
+            $table->string('exams')->nullable();
+            $table->string('term');
+            $table->string('session');
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attendance');
+        Schema::dropIfExists('exams');
     }
 };

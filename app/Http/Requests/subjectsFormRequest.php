@@ -27,7 +27,7 @@ class subjectsFormRequest extends FormRequest
             'subject' => [
                 'max:255'
             ],
-            'category' => [
+            'marks_obtainable' => [
                 'max:255'
             ],
         ];

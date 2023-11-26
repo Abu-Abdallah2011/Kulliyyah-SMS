@@ -37,7 +37,13 @@ class register_student extends Model
     //  Link this model to Attendance model
     public function attendance()
     {
-       return $this->hasMany(AttendanceModel::class, 'student_id', 'student_id');
+       return $this->hasMany(AttendanceModel::class, 'student_id', 'id');
+    }
+
+    //  Link this model to Exams model
+    public function exams()
+    {
+       return $this->hasMany(ExamsModel::class, 'student_id', 'id');
     }
 
     protected $table = 'students_details_tables';

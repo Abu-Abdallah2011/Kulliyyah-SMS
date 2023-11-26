@@ -88,6 +88,19 @@
                         </div>
                     </div>
 
+                    <div class="bg-yellow-500 border border-gray-200 rounded p-6">
+                        <div class="flex">
+                            <a href="exams/show">
+                                <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon">
+                                <div class="font-bold">
+                                    <h3 class="text-2xl">
+                                        Exams
+                                    </h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                     @can('isExecutive')
 
                     <div class="bg-indigo-500 border border-gray-200 rounded p-6">
@@ -116,12 +129,18 @@
                         </div>
                     </div>
 
-                    {{-- <div class="h-30 w-25 bg- rounded-lg overflow-hidden border border-grey-500 flex flex-col items-center m-4">
-                        <a href="subjects">
-                        <img src="/images/book_icon.png" alt="Icon" class="">
-                        <span class="text-base ">Subjects</span>
-                    </a>
-                    </div> --}}
+                    <div class="bg-yellow-500 border border-gray-200 rounded p-6">
+                        <div class="flex">
+                            <a href="subjects">
+                                <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon">
+                                <div class="font-bold">
+                                    <h3 class="text-2xl">
+                                        Subjects
+                                    </h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="bg-orange-500 border border-gray-200 rounded p-6">
                         <div class="flex">

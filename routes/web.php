@@ -13,6 +13,7 @@ use App\Http\Controllers\GuardiansController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\classesCrudController;
 use App\Http\Controllers\CurriculumController;
+use App\Http\Controllers\ExamsController;
 use App\Http\Controllers\setsController;
 use App\Http\Controllers\subjectsController;
 use App\Http\Controllers\surasController;
@@ -325,8 +326,43 @@ require __DIR__.'/auth.php';
         // Update Subject
         Route::put('/subjects/{id}', 'update');
 
-        // Delete Set
+        // Delete Subject
         Route::delete('/subjects/{id}', 'delete')->name('subject.delete');
-            });
+        });
     
+    Route::controller(ExamsController::class)->group(function () {
+       
+        // Show Exams form
+        // Route::get('/examsForm', 'create');
+
+        // Save Exam information
+        // Route::post('/examsForm', 'store')->name('exams.save');
+
+        // Show Exam Database
+        Route::get('/exams/show', 'show')->name('exams.show');
+
+        // Edit Exam Data
+        Route::get('/exams/{id}/examsEdit', 'edit');
+
+        // Update Exam
+        Route::put('/exams/{id}', 'update');
+
+        // Delete Exam
+        Route::delete('/exams/{id}', 'delete')->name('exams.delete');
+
+        // Select Subjects
+        Route::get('/selectSubjects', 'selectSubjects');
+
+        // Store Subjects
+        Route::post('/subjectsCreate', 'subjectsCreate');
+
+        // Go To Report Sheet
+        Route::get('/reportSheet/{id}', 'reportSheet');
+
+        // Go To Comment
+        Route::get('/exams/commentEditView', 'examComment');
+
+        // Update Comment
+        Route::put('/exams/{id}/comment_update', 'updateComment');
+        });
    

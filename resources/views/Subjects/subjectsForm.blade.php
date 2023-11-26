@@ -24,11 +24,11 @@
                                 <x-input-error :messages="$errors->get('subject')" class="mt-2" />
                             </div>
 
-                            <!-- Category -->
+                            <!-- Marks Obtainable -->
                             <div>
-                                <x-input-label for="category" :value="__('Category')" />
-                                <x-text-input id="category" class="block mt-1 w-full" type="text" name="category" :value="old('category')" autofocus autocomplete="category" />
-                                <x-input-error :messages="$errors->get('category')" class="mt-2" />
+                                <x-input-label for="marks_obtainable" :value="__('Marks Obtainable')" />
+                                <x-text-input id="marks_obtainable" class="block mt-1 w-full" type="text" name="marks_obtainable" :value="old('marks_obtainable')" autofocus autocomplete="marks_obtainable" />
+                                <x-input-error :messages="$errors->get('marks_obtainable')" class="mt-2" />
                             </div>
                            
                             <br/>

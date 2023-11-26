@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
-            $table->id();
-            $table->string('subject');
-            $table->string('marks_obtainable')->nullable();
-            $table->timestamps();
+        Schema::table('exams', function (Blueprint $table) {
+            $table->string('comment')->nullable();
         });
     }
 
@@ -28,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::table('exams', function (Blueprint $table) {
+            //
+        });
     }
 };
