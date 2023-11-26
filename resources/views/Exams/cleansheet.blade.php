@@ -99,7 +99,11 @@
                                         {{ number_format($student->attendancePercentage) }}%
                                 </td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $student->position}}</td>
-                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $subject->comment }}</td>
+                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
+                                        @foreach($student->exams as $subject)
+                                        {{ $subject->comment }}
+                                    @endforeach
+                                </td>
                                     
                                   </tr>
 
