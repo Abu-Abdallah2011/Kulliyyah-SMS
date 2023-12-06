@@ -58,7 +58,12 @@ foreach ($teacher->students as $student) {
     
     foreach ($student->exams as $subject) {
         // Calculate the total CA score for this subject and student
-        $totalCa[$student->id][$subject->subject_id] = $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'];
+        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
+        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
+        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
+        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+
+        $totalCa[$student->id][$subject->subject_id] = $first_ca + $second_ca + $third_ca;
     }
 }
 
@@ -72,7 +77,12 @@ foreach ($teacher->students as $student) {
     
     foreach ($student->exams as $subject) {
 
-        $totalScores[$student->id] += $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
+        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
+        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
+        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
+        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+
+        $totalScores[$student->id] +=  $first_ca + $second_ca + $third_ca + $exams;
     }
 
     $averageTotal[$student->id] = count($student->exams) > 0 ? $totalScores[$student->id] / count($student->exams) : 0;
