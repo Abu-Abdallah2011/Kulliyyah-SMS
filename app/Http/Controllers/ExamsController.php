@@ -143,6 +143,138 @@ foreach ($orderedStudents as $student) {
 ]);
 }
 
+// Show Cleansheet for selected Teacher to Executive
+public function selectedTeacherExams($teacher_id){
+
+    $sessions = sessions::first();
+
+    $exam = ExamsModel::get();
+
+    $class = register_teacher::where('id', $teacher_id)->value('class');
+
+        // $teachers = register_teacher::where('class', $class)
+        // ->with(['students' => function ($query) 
+        // {
+        //     $query->where('status', 'IN SCHOOL')
+        //     ->orWhere('grad_type', 'TARTEEL ZALLA')
+        //     ->orderBy('fullname');
+        // }])->with('user')
+        // ->get();
+
+        $teacher = register_teacher::where('class', $class)->where('id', $teacher_id)
+        ->with(['students' => function ($query) 
+        {
+            $query->where('status', 'IN SCHOOL')
+            ->orWhere('grad_type', 'TARTEEL ZALLA')
+            // ->orderBy('fullname');
+            ;
+        }, 'students.attendance'])
+        ->first();
+
+        $totalCa = [];
+
+        $attendanceRecords = [];
+
+foreach ($teacher->students as $student) {
+    $totalCa[$student->id] = [];
+    
+    $attendanceRecords[$student->id] = $student->attendance->filter(function ($record) {
+        return in_array($record->status, ['Present', 'present', 'Late', 'late']);
+    });
+
+    $totalAttendanceRecords = $student->attendance->count();
+    $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
+    $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
+    $student->attendancePercentage = $percentage;
+    
+    foreach ($student->exams as $subject) {
+        // Calculate the total CA score for this subject and student
+        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
+        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
+        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
+        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+
+        $totalCa[$student->id][$subject->subject_id] = $first_ca + $second_ca + $third_ca;
+    }
+}
+
+// Initialize an array to store the total scores for each student
+$totalScores = [];
+$averageTotal = [];
+
+foreach ($teacher->students as $student) {
+    $totalScores[$student->id] = 0;
+    $averageTotal[$student->id] = 0; 
+    
+    foreach ($student->exams as $subject) {
+
+        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
+        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
+        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
+        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+
+        $totalScores[$student->id] +=  $first_ca + $second_ca + $third_ca + $exams;
+    }
+
+    $averageTotal[$student->id] = count($student->exams) > 0 ? $totalScores[$student->id] / count($student->exams) : 0;
+
+    $student->averageTotal = $averageTotal;
+}
+
+// =====================================================
+// POSITION CODES
+// =====================================================
+
+// Function to add ordinal suffix
+function teacherOrdinalSuffix($position) {
+    if ($position % 100 >= 11 && $position % 100 <= 13) {
+        return $position . 'th';
+    } else {
+        switch ($position % 10) {
+            case 1:
+                return $position . 'st';
+            case 2:
+                return $position . 'nd';
+            case 3:
+                return $position . 'rd';
+            default:
+                return $position . 'th';
+        }
+    }
+}
+
+$orderedStudents = $teacher->students->sortByDesc('averageTotal');
+$position = 1;
+$previousAverage = null;
+
+foreach ($orderedStudents as $student) {
+    if ($previousAverage !== null && $student->averageTotal < $previousAverage) {
+        $position++;
+    }
+
+    $student->position = teacherOrdinalSuffix($position);
+    $previousAverage = $student->averageTotal;
+}
+
+ // =====================================================
+// END OF POSITION CODES
+// =====================================================
+
+
+    return view('Exams.cleansheet', ['exam' => $exam,
+                                    'sessions' => $sessions,
+                                    // 'teachers' => $teachers,
+                                    'class' => $class,
+                                    'teacher' => $teacher,
+                                    'totalCa' => $totalCa,
+                                    'totalScores' => $totalScores,
+                                    'averageTotal' => $averageTotal,
+                                    'percentage' => $percentage,
+                                    'orderedStudents' => $orderedStudents,
+]);
+}
+
+
  //Show/Display Exams Edit Form
  public function edit($id){
 

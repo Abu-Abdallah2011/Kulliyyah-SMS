@@ -88,6 +88,19 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="bg-yellow-500 border border-gray-200 rounded p-6">
+                            <div class="flex">
+                                <a href="{{ url('/dashboard/exams/' . $teacher->id) }}">
+                                    <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon">
+                                    <div class="font-bold">
+                                        <h3 class="text-2xl">
+                                            Exams
+                                        </h3>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
     
             </div>
             

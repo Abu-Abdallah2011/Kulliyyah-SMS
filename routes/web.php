@@ -332,11 +332,8 @@ require __DIR__.'/auth.php';
     
     Route::controller(ExamsController::class)->group(function () {
        
-        // Show Exams form
-        // Route::get('/examsForm', 'create');
-
-        // Save Exam information
-        // Route::post('/examsForm', 'store')->name('exams.save');
+        // Show Exams for Executive
+        Route::get('dashboard/exams/{teacher_id}', 'selectedTeacherExams');
 
         // Show Exam Database
         Route::get('/exams/show', 'show')->name('exams.show');
