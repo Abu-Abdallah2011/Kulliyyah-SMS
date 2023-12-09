@@ -11,7 +11,7 @@
             <div class="bg-blue-500 border border-gray-200 rounded p-6">
                 <div class="flex">
                 <a href="{{ url('/curriculum_scale/' . $teacher->id) }}">
-                <img class="w-40 mr-6 md:block" src="/images/icon.png" alt="">
+                {{-- <img class="w-40 mr-6 md:block" src="/images/icon.png" alt=""> --}}
                 <div class="font-bold">
                     <h3 class="text-2xl">
                         Curriculum Scale
@@ -24,7 +24,7 @@
         <div class="bg-purple-500 border border-gray-200 rounded p-6">
             <div class="flex">
                     <a href="{{ url('/dashboard/class_teachers/' . $teacher->id) }}">
-                    <img class="w-40 mr-6 md:block" src="/images/blue_book.png" alt="Icon">
+                    {{-- <img class="w-40 mr-6 md:block" src="/images/blue_book.png" alt="Icon"> --}}
                     <div class="font-bold">
                         <h3 class="text-2xl">
                             Teachers: {{$teachers->count()}}
@@ -38,7 +38,7 @@
         <div class="bg-green-500 border border-gray-200 rounded p-6">
             <div class="flex">
                 <a href="{{ url('/dashboard/class_students/' . $teacher->id) }}">
-                    <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon">
+                    {{-- <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon"> --}}
                     <div class="font-bold">
                         <h3 class="text-2xl">
                             Students: {{$teacher->students->count()}}
@@ -52,7 +52,7 @@
                         <div class="bg-pink-500 border border-gray-200 rounded p-6">
                             <div class="flex">
                                 <a href="{{ url('/teachers_database/' . $teacher->id) }}">
-                                    <img class="w-40 mr-6 md:block" src="/images/prfl.png" alt="Icon">
+                                    {{-- <img class="w-40 mr-6 md:block" src="/images/prfl.png" alt="Icon"> --}}
                                     <div class="font-bold">
                                         <h3 class="text-2xl">
                                             Profile
@@ -66,7 +66,7 @@
                         <div class="bg-orange-500 border border-gray-200 rounded p-6">
                             <div class="flex">
                                 <a href="{{ url('/dashboard/studentsHadda/' . $teacher->id) }}">
-                                    <img class="w-40 mr-6 md:block" src="/images/blue_book.png" alt="Icon">
+                                    {{-- <img class="w-40 mr-6 md:block" src="/images/blue_book.png" alt="Icon"> --}}
                                     <div class="font-bold">
                                         <h3 class="text-2xl">
                                             Hadda
@@ -79,7 +79,7 @@
                         <div class="bg-yellow-500 border border-gray-200 rounded p-6">
                             <div class="flex">
                                 <a href="{{ url('/dashboard/attendance/' . $teacher->id) }}">
-                                    <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon">
+                                    {{-- <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon"> --}}
                                     <div class="font-bold">
                                         <h3 class="text-2xl">
                                             Attendance
@@ -92,7 +92,7 @@
                         <div class="bg-yellow-500 border border-gray-200 rounded p-6">
                             <div class="flex">
                                 <a href="{{ url('/dashboard/exams/' . $teacher->id) }}">
-                                    <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon">
+                                    {{-- <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon"> --}}
                                     <div class="font-bold">
                                         <h3 class="text-2xl">
                                             Exams
