@@ -21,15 +21,6 @@ public function show(){
 
     $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
 
-        $teachers = register_teacher::where('class', $class)
-        ->with(['students' => function ($query) 
-        {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
-        }])->with('user')
-        ->get();
-
         $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
         ->with(['students' => function ($query) 
         {
@@ -48,7 +39,7 @@ foreach ($teacher->students as $student) {
     $totalCa[$student->id] = [];
     
     $attendanceRecords[$student->id] = $student->attendance->filter(function ($record) {
-        return in_array($record->status, ['Present', 'present', 'Late', 'late']);
+        return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
     });
 
     $totalAttendanceRecords = $student->attendance->count();
@@ -132,7 +123,6 @@ foreach ($orderedStudents as $student) {
 
     return view('Exams.cleansheet', ['exam' => $exam,
                                     'sessions' => $sessions,
-                                    'teachers' => $teachers,
                                     'class' => $class,
                                     'teacher' => $teacher,
                                     'totalCa' => $totalCa,
@@ -152,15 +142,6 @@ public function selectedTeacherExams($teacher_id){
 
     $class = register_teacher::where('id', $teacher_id)->value('class');
 
-        // $teachers = register_teacher::where('class', $class)
-        // ->with(['students' => function ($query) 
-        // {
-        //     $query->where('status', 'IN SCHOOL')
-        //     ->orWhere('grad_type', 'TARTEEL ZALLA')
-        //     ->orderBy('fullname');
-        // }])->with('user')
-        // ->get();
-
         $teacher = register_teacher::where('class', $class)->where('id', $teacher_id)
         ->with(['students' => function ($query) 
         {
@@ -179,7 +160,7 @@ foreach ($teacher->students as $student) {
     $totalCa[$student->id] = [];
     
     $attendanceRecords[$student->id] = $student->attendance->filter(function ($record) {
-        return in_array($record->status, ['Present', 'present', 'Late', 'late']);
+        return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
     });
 
     $totalAttendanceRecords = $student->attendance->count();
@@ -263,7 +244,6 @@ foreach ($orderedStudents as $student) {
 
     return view('Exams.cleansheet', ['exam' => $exam,
                                     'sessions' => $sessions,
-                                    // 'teachers' => $teachers,
                                     'class' => $class,
                                     'teacher' => $teacher,
                                     'totalCa' => $totalCa,
@@ -616,7 +596,7 @@ public function reportSheet($id){
     }
 
     $attendanceRecords[$student->id] = $student->attendance->filter(function ($record) {
-        return in_array($record->status, ['Present', 'present', 'Late', 'late']);
+        return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
     });
 
     $totalAttendanceRecords = $student->attendance->count();
