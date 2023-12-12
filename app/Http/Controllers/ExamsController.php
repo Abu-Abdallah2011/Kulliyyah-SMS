@@ -103,7 +103,20 @@ function addOrdinalSuffix($position) {
     }
 }
 
-$orderedStudents = $teacher->students->sortByDesc('averageTotal');
+// $orderedStudents = $teacher->students->sortByDesc('averageTotal');
+$orderedStudents = $teacher->students->map(function ($student) {
+    $totalScores = 0;
+    $examCount = count($student->exams);
+
+    foreach ($student->exams as $subject) {
+        $totalScores += $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
+    }
+
+    $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
+    $student->averageTotal = $averageTotal;
+
+    return $student;
+})->sortByDesc('averageTotal');
 $position = 1;
 $previousAverage = null;
 
@@ -224,7 +237,20 @@ function teacherOrdinalSuffix($position) {
     }
 }
 
-$orderedStudents = $teacher->students->sortByDesc('averageTotal');
+// $orderedStudents = $teacher->students->sortByDesc('averageTotal');
+$orderedStudents = $teacher->students->map(function ($student) {
+    $totalScores = 0;
+    $examCount = count($student->exams);
+
+    foreach ($student->exams as $subject) {
+        $totalScores += $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
+    }
+
+    $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
+    $student->averageTotal = $averageTotal;
+
+    return $student;
+})->sortByDesc('averageTotal');
 $position = 1;
 $previousAverage = null;
 
@@ -380,7 +406,20 @@ function OrdinalSuffix($position) {
     }
 }
 
-$orderedStudents = $teacher->students->sortByDesc('averageTotal');
+// $orderedStudents = $teacher->students->sortByDesc('averageTotal');
+$orderedStudents = $teacher->students->map(function ($student) {
+    $totalScores = 0;
+    $examCount = count($student->exams);
+
+    foreach ($student->exams as $subject) {
+        $totalScores += $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
+    }
+
+    $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
+    $student->averageTotal = $averageTotal;
+
+    return $student;
+})->sortByDesc('averageTotal');
 $position = 1;
 $previousAverage = null;
 
