@@ -109,7 +109,12 @@ $orderedStudents = $teacher->students->map(function ($student) {
     $examCount = count($student->exams);
 
     foreach ($student->exams as $subject) {
-        $totalScores += $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
+        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
+        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
+        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
+        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+
+        $totalScores +=  $first_ca + $second_ca + $third_ca + $exams;
     }
 
     $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
@@ -243,7 +248,12 @@ $orderedStudents = $teacher->students->map(function ($student) {
     $examCount = count($student->exams);
 
     foreach ($student->exams as $subject) {
-        $totalScores += $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
+        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
+        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
+        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
+        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+
+        $totalScores +=  $first_ca + $second_ca + $third_ca + $exams;
     }
 
     $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
