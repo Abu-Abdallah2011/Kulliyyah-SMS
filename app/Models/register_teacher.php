@@ -33,6 +33,12 @@ class register_teacher extends Model
         return $this->hasMany(curriculum::class, 'set', 'set');
     }
 
+    //  Link this model to Teachers Attendance model
+    public function attendance()
+    {
+       return $this->hasMany(teachersAttendanceModel::class, 'teacher_id', 'id');
+    }
+
 
     protected $table = 'teachers_details';
 

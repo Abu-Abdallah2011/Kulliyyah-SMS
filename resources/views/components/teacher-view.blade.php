@@ -13,7 +13,6 @@
 <div class="bg-blue-500 border border-gray-200 rounded p-6">
     <div class="flex">
             <a href="curriculum_scale">
-            {{-- <img class="w-40 mr-6 md:block" src="/images/icon.png" alt=""> --}}
             <div class="font-bold">
                 <h3 class="text-2xl">
                     Curriculum Scale
@@ -26,7 +25,6 @@
             <div class="bg-purple-500 border border-gray-200 rounded p-6">
                 <div class="flex">
                     <a href="class_teachers">
-                        {{-- <img class="w-40 mr-6 md:block" src="/images/blue_book.png" alt="Icon"> --}}
                         <div class="font-bold">
                             <h3 class="text-2xl">
                                 Teachers: {{$teachers->count()}}
@@ -39,7 +37,6 @@
                 <div class="bg-green-500 border border-gray-200 rounded p-6">
                     <div class="flex">
                         <a href="class_students">
-                            {{-- <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon"> --}}
                             <div class="font-bold">
                                 <h3 class="text-2xl">
                                     Students: {{$teacher->students->count()}}
@@ -52,7 +49,6 @@
                     <div class="bg-pink-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="{{ url('/teachers_database/' . $teacher->id) }}">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/prfl.png" alt="Icon"> --}}
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Profile
@@ -64,8 +60,7 @@
 
                     <div class="bg-red-500 border border-gray-200 rounded p-6">
                         <div class="flex">
-                            <a href="studentsHadda">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/blue_book.png" alt="Icon"> --}}
+                            <a href="{{ url('/studentsHadda/' . $teacher->id) }}">
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Hadda
@@ -78,7 +73,6 @@
                     <div class="bg-yellow-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="attendance/show">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon"> --}}
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Attendance
@@ -91,10 +85,21 @@
                     <div class="bg-yellow-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="exams/show">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon"> --}}
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Exams
+                                    </h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-500 border border-gray-200 rounded p-6">
+                        <div class="flex">
+                            <a href="teachersAttendance/show">
+                                <div class="font-bold">
+                                    <h3 class="text-2xl">
+                                       Teachers Attendance
                                     </h3>
                                 </a>
                             </div>
@@ -106,7 +111,6 @@
                     <div class="bg-indigo-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="sets">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon"> --}}
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Sets
@@ -119,7 +123,6 @@
                     <div class="bg-violet-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="classes_database">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/blue_book.png" alt="Icon"> --}}
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Classes
@@ -132,7 +135,6 @@
                     <div class="bg-yellow-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="subjects">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/book_icon.png" alt="Icon"> --}}
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Subjects
@@ -145,7 +147,6 @@
                     <div class="bg-orange-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="suras_database">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/icon.png" alt="Icon"> --}}
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Surahs
@@ -158,7 +159,6 @@
                     <div class="bg-yellow-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="graduates_database">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/icon.png" alt="Icon"> --}}
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Graduates: {{$graduates->count()}}
@@ -171,7 +171,6 @@
                     <div class="bg-yellow-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="{{ url('sessions/' . $session->id . '/editform') }}">
-                                {{-- <img class="w-40 mr-6 md:block" src="/images/icon.png" alt="Icon"> --}}
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Session/Term

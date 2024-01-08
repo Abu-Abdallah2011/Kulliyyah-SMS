@@ -17,6 +17,7 @@ use App\Http\Controllers\ExamsController;
 use App\Http\Controllers\setsController;
 use App\Http\Controllers\subjectsController;
 use App\Http\Controllers\surasController;
+use App\Http\Controllers\teachersAttendanceController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -34,7 +35,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 // THIS APPLICATION WAS LAUNCHED IN APRIL 2023, BUT I CAN'T REMEMBER THE PRECISE DATE AS WE WERE SO
 // BUSY TRYING TO DEPLOY THEN TESTS THEN CORRECTIONS AND ADJUSTMENTS AND I FORGOT TO NOTE THE PRECISE DATE
 // BUT I WILL TRY TO RETRACE MY STEPS TO SEE IF I CAN FIND OUT AND IF I DO I WILL NOTE IT DOWN HERE IN SHAA ALLAAH.
-// -Sadiq Mustapha Ahmad April, 2023
+// -Sadiq Mustapha Ahmad. April, 2023
 
 //Show Home Page
 Route::get('/', function () {
@@ -209,6 +210,8 @@ require __DIR__.'/auth.php';
         Route::post('/hadda_page/{student_id}/HaddaForm', 'store')->middleware('can:isAssistant')->name('hadda_page.store');
         // Show Hadda Data in Hadda book page
         Route::get('/hadda_page/{student_id}', 'show')->name('hadda_page.show');
+        // Show Hadda Status
+        Route::get('/studentsHadda/{teacher_id}', 'showStatus')->name('hadda_status.show');
         // Edit Curriculum Data
         Route::get('/hadda_page/{id}/edit_hadda', 'edit')->middleware('can:isAssistant');
         // Update Curriculum
@@ -362,4 +365,25 @@ require __DIR__.'/auth.php';
         // Update Comment
         Route::put('/exams/{id}/comment_update', 'updateComment');
         });
+
+        // CRUD for Attendance
+    Route::controller(teachersAttendanceController::class)->group(function () {
+        // Show Attendance form
+        Route::get('/teachersAttendance', 'create')->name('teachersAttendance.create')->middleware('can:isExecutive');
+
+        // Save Attendance information
+        Route::post('/teachersAttendance', 'store')->middleware('can:isExecutive');
+
+        // Show Attendance Report
+        Route::get('/teachersAttendance/show', 'show')->name('teachersAttendance.show');
+
+        // Show Attendance Edit Form
+        Route::get('/teachersAttendance/{date}/edit_attendance', 'edit');
+
+        // Update Attendance
+        Route::put('/teachersAttendance/{date}', 'update')->middleware('can:isExecutive');
+
+        // Delete Attendance
+        Route::delete('/teachersAttendance/{date}', 'delete')->middleware('can:isExecutive');
+    });
    

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hadda;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\register_teacher;
+use App\Models\register_student;
 use App\Models\register_guardian;
+use Illuminate\Support\Facades\Auth;
 
 class ClassesController extends Controller
 {
@@ -180,17 +182,29 @@ public function selectedClassStudent($teacher_id)
 public function selectedStudentsHadda($teacher_id)
 {
 
-   $teachers = register_teacher::where('id', $teacher_id)
-   ->with(['students' => function ($query) 
-   {
-       $query->where('status', 'IN SCHOOL')->orWhere('grad_type', 'TARTEEL ZALLA')->orderBy('fullname');
-   }])->with('user')
-   ->get();
-   
+$teacher = register_teacher::where('id', $teacher_id)
+            ->with(['students' => function ($query) 
+            {
+                $query->where('status', 'IN SCHOOL')
+                ->orWhere('grad_type', 'TARTEEL ZALLA')
+                ->orderBy('fullname');
+            }])
+            ->first();
 
-   return view('Hadda.studentsHadda', [
-   'teachers' => $teachers,
-]);
+            $teacherClass = $teacher->class;
+
+            $studentIds = register_student::where('class', $teacherClass)
+            ->pluck('id')
+            ->toArray();
+
+            $hadda = Hadda::whereIn('student_id', $studentIds)
+            ->latest()
+            ->paginate(100);
+    
+            return view('Hadda.studentsHadda',[
+            'teacher' => $teacher, 
+            'hadda' => $hadda,   
+            ]);
 
 }
 

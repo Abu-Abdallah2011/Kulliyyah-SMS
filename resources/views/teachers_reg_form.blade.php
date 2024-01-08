@@ -111,11 +111,7 @@
                             <x-input-label for="status" :value="__('Status')" />
                             <x-select-input id="status" class="block mt-1 w-full" type="text" name="status" :value="old('status')" required autofocus autocomplete="status" />
                             <option selected>IN SCHOOL</option>
-                            <option>TRANSFERRED</option>
-                            <option>LEFT</option>
-                            <option>SUSPENDED</option>
-                            <option>DISMISSED</option>
-                            <option>EXCUSED</option>
+                            <option>NOT IN SCHOOL</option>
                             </select>
                             <x-input-error :messages="$errors->get('status')" class="mt-2" />
                         </div>

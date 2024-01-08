@@ -33,6 +33,35 @@ class HaddaController extends Controller
         ]);
     }
 
+        // Show Hadda Status
+        public function showStatus($teacher_id)
+        {
+
+            $teacher = register_teacher::where('id', $teacher_id)
+            ->with(['students' => function ($query) 
+            {
+                $query->where('status', 'IN SCHOOL')
+                ->orWhere('grad_type', 'TARTEEL ZALLA')
+                ->orderBy('fullname');
+            }])
+            ->first();
+
+            $teacherClass = $teacher->class;
+
+            $studentIds = register_student::where('class', $teacherClass)
+            ->pluck('id')
+            ->toArray();
+
+            $hadda = Hadda::whereIn('student_id', $studentIds)
+            ->latest()
+            ->paginate(100);
+    
+            return view('Hadda.studentsHadda',[
+            'teacher' => $teacher, 
+            'hadda' => $hadda,   
+            ]);
+        }
+
     // Show Hadda Entry Form Page
     public function create($student_id)
     {
@@ -76,10 +105,7 @@ class HaddaController extends Controller
     $save = Hadda::create($data);
 $hadda = Hadda::where('student_id', $student_id)->get();
 
-    return redirect()->route('hadda_page.show', ['student_id' => $student_id])->with([
-        
-        'message' => 'Hadda Recorded Successfully!'
-    ]);
+    return redirect('studentsHadda/{teacher_id}')->with(['message' => 'Hadda Recorded Successfully!']);
     
  }
 
@@ -130,17 +156,14 @@ public function edit($id){
         $save = Hadda::where('id', $id)->update($data);
     $hadda = Hadda::where('student_id', $id)->get();
     
-        return redirect()->route('hadda_page.show', ['student_id' => $student->id])->with([
-            
-            'message' => 'Hadda Record Updated Successfully!'
-        ]);
+        return redirect('studentsHadda/{teacher_id}')->with(['message' => 'Hadda Record Updated Successfully!']);
         
      }
 
-// Delete Curriculum
+// Delete Hadda
 public function delete($id) {
     $student = Hadda::where('id', $id)->delete();
-    return back()->with('message', 'Hadda Record Deleted Successfully!');
+    return redirect('studentsHadda/{teacher_id}')->with('message', 'Hadda Record Deleted Successfully!');
 }
 
 }
