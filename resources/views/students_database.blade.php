@@ -20,7 +20,13 @@
                 
             @foreach ($students as $student)
 
-            <div class="bg-blue-100 border border-gray-200 rounded p-6">
+            @if ($student->status == 'IN SCHOOL')
+            <div class="bg-green-300 border border-gray-200 rounded p-6">
+                @elseif ($student->status == 'GRADUATE')
+                <div class="bg-blue-300 border border-gray-200 rounded p-6">
+                    @else
+                    <div class="bg-red-300 border border-gray-200 rounded p-6">
+                        @endif
                 <div class="flex">
                     @can('isAdmin')
                     <img class="hidden w-48 mr-6 md:block" src="{{asset('storage/' . $student->photo) }}" alt="" />

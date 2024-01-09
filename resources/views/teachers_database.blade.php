@@ -17,8 +17,12 @@
             @unless (count($teachers) == 0)
                 
             @foreach ($teachers as $teacher)
-
-            <div class="bg-blue-100 border border-gray-200 rounded p-6">
+            @if ($teacher->status == "IN SCHOOL")
+            <div class="bg-green-300 border border-gray-200 rounded p-6">
+                {{-- @endif --}}
+                @else
+                <div class="bg-red-300 border border-gray-200 rounded p-6">
+                    @endif
                 <div class="flex">
                     <img class="hidden w-48 mr-6 md:block" src="{{ asset('storage/' . $teacher->photo) }}" alt="" />
                     

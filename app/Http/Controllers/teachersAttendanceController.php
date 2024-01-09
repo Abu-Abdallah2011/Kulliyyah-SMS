@@ -66,9 +66,10 @@ $attendance = teachersAttendanceModel::latest()
         'present' => '<i class="fas fa-check text-green-500"></i>',
         'absent' => '<i class="fas fa-times text-red-500"></i>',
         'late' => '<i class="fas fa-clock text-yellow-500"></i>',
+        'late with an excuse' => '<i class="fas fa-clock text-orange-500"></i>',
         'excused' => '<i class="fas fa-pencil text-purple-500"></i>',
-        'closed early' => '<i class="fas fa-clock text-orange-500"></i>',
-        'came late and closed early' => '<i class="fas fa-clock text-black-500"></i>',
+        'closed early' => '<i class="fas bi-alarm-fill text-pink-500"></i>',
+        'came late and closed early' => '<i class="fas bi-alarm-fill text-black-500"></i>',
     ];
     
         return view('Teachers Attendance.show', compact('attendance', 'teachers', 'statusIcons'));
@@ -110,14 +111,12 @@ $attendance = teachersAttendanceModel::latest()
     $term = sessions::pluck('term')->first();
 
     foreach ($teacherIds as $teacherId) {
-        // dd($attendanceData[$teacherId]);
-        foreach ($attendanceData as $time => $status) {
+        foreach ($attendanceData[$teacherId] as $time => $status) {
             $existingRecord = teachersAttendanceModel::where([
                 ['date', '=', $date],
                 ['teacher_id', '=', $teacherId],
                 ['time', '=', $time],
             ])->first();
-            dd($existingRecord);
 
             if ($existingRecord) {
                 // Update the attendance status and other data

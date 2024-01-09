@@ -51,7 +51,6 @@
                                                           ->where('teacher_id', $teacher->id)
                                                           ->pluck('status')
                                                           ->toArray();
-                                                         //  echo "Student ID: $student->id, Date: $date, Statuses: " . implode(', ', $statusesForDate) . '<br>';
                           @endphp
                           <td class="text-center w-full lg:w-auto p-2 md:p-3 lg:p-3 text-gray-800 border border-b lg:table-cell relative lg:static font-bold">                           
                               <a href="/teachersAttendance/{{$date}}/edit_attendance">

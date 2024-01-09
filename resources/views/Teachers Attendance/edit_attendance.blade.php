@@ -70,13 +70,14 @@
                                                     @endif
 
                                                     @if (!Auth::user()->can('isExecutive'))
-                                                    <select name="attendance[{{ $teacher->id }}][{{ $TimeForDate[$index] }}]" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled>
+                                                    <select name="" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled>
                                                         @endif
 
                                                     <option>{{ucfirst($status)}}</option>
                                                     <option value="absent">Absent</option>
                                                     <option value="present">Present</option>
                                                     <option value="late">Late</option>
+                                                    <option value="late with an excuse">Late With An Excuse</option>
                                                     <option value="excused">Excused</option>
                                                     <option value="closed early">Closed Early</option>
                                                     <option value="came late and closed early">Came Late And Closed Early</option>
@@ -89,11 +90,11 @@
                                             <div class="inline-block relative w-64">
                                                 @foreach($TimeInForDate as $TimeIn)
                                                 @if (Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_in[]" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <x-time-picker name="time_in" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                                 @endif
 
                                                 @if (!Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_in[]" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
+                                                <x-time-picker name="time_in" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
                                                 @endif
 
                                                 @endforeach
@@ -103,11 +104,11 @@
                                             <div class="inline-block relative w-64">
                                                 @foreach($TimeOutForDate as $TimeOut)
                                                 @if (Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_out[]" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <x-time-picker name="time_out" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                                 @endif
 
                                                 @if (!Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_out[]" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
+                                                <x-time-picker name="time_out" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
                                                 @endif
 
                                                 @endforeach

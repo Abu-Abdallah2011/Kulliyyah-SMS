@@ -44,6 +44,7 @@
                                                     <option value="absent">Absent</option>
                                                     <option value="present">Present</option>
                                                     <option value="late">Late</option>
+                                                    <option value="late with an excuse">Late With An Excuse</option>
                                                     <option value="excused">Excused</option>
                                                     <option value="closed early">Closed Early</option>
                                                     <option value="came late and closed early">Came Late And Closed Early</option>
