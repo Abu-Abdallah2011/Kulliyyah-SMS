@@ -90,11 +90,11 @@
                                             <div class="inline-block relative w-64">
                                                 @foreach($TimeInForDate as $TimeIn)
                                                 @if (Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_in" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <x-text-input name="time_in" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                                 @endif
 
                                                 @if (!Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_in" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
+                                                <x-text-input name="time_in" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
                                                 @endif
 
                                                 @endforeach
@@ -104,11 +104,11 @@
                                             <div class="inline-block relative w-64">
                                                 @foreach($TimeOutForDate as $TimeOut)
                                                 @if (Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_out" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <x-text-input name="time_out" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                                 @endif
 
                                                 @if (!Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_out" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
+                                                <x-text-input name="time_out" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
                                                 @endif
 
                                                 @endforeach
