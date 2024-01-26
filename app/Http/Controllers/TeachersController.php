@@ -7,6 +7,7 @@ use App\Models\classes;
 use App\Models\surasModel;
 use Illuminate\Http\Request;
 use App\Models\register_teacher;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\TeacherFormRequest;
 
@@ -23,6 +24,10 @@ class TeachersController extends Controller
 
     //Store Teachers Registration Information
     public function store(TeacherFormRequest $request){ 
+
+        $adder = register_teacher::where('user_id', Auth::user()->id)
+        ->first();
+        
         $data = $request->validated();
 
     $selectedOptionId = $request->input('dynamic_select');
@@ -45,6 +50,8 @@ class TeachersController extends Controller
             $data['set'] = $selectedOption->set;
     
             }
+
+            $data['created_by'] = $adder->fullname;
 
         $teacher = register_teacher::create($data);
         return redirect('/teachers_database')->with('message', 'Maa Shaa Allaah! Teacher Added Successfully! Jazaakumul Laahu Khaira!');
@@ -78,6 +85,10 @@ public function edit($id){
 
 // Update Teacher
 public function update(TeacherFormRequest $request, $id){
+
+    $adder = register_teacher::where('user_id', Auth::user()->id)
+    ->first();
+
     $data = $request->validated();
 
     $selectedOptionId = $request->input('dynamic_select');
@@ -100,6 +111,8 @@ public function update(TeacherFormRequest $request, $id){
         $data['set'] = $selectedOption->set;
 
         }
+
+        $data['edited_by'] = $adder->fullname;
 
     $teacher = register_teacher::where('id', $id)->update($data);
 

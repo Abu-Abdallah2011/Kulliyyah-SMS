@@ -39,17 +39,22 @@
                             {{$teacher->class}}
                             <div class="text-xl mb-4">
                             Born On: {{$teacher->dob}}
-                                <div class="text-xl mb-4">
-                                Gender: {{$teacher->gender}}
+                                {{-- <div class="text-xl mb-4">
+                                Gender: {{$teacher->gender}} --}}
                                     <div class="text-xl mb-4">
                                     Status: {{$teacher->status}}
                             <div class="text-lg mt-4">
                                 <i class="fa-solid fa-location-dot"></i>
                                 {{$teacher->address}}
+                                <div class="text-sm mt-4">
+                                    Added by: {{ $teacher->created_by }} at: {{ $teacher->created_at }}
+                                     <br/>
+                                    Edited by: {{ $teacher->edited_by }} at: {{ $teacher->updated_at }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                            </div>
+                            {{-- </div> --}}
                 </div>
 
             </div>

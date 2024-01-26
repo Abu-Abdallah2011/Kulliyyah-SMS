@@ -9,6 +9,8 @@ use App\Models\register_student;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StudentFormRequest;
+use App\Models\register_teacher;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class StudentsController extends Controller
@@ -24,6 +26,9 @@ class StudentsController extends Controller
 
     //Store Students Registration Information
     public function store(StudentFormRequest $request){
+
+        $adder = register_teacher::where('user_id', Auth::user()->id)
+        ->first();
         
         $data = $request->validated();
 
@@ -47,6 +52,8 @@ class StudentsController extends Controller
             $data['set'] = $selectedOption->set;
     
             }
+
+            $data['created_by'] = $adder->fullname;
 
         $student = register_student::create($data);
 
@@ -83,17 +90,8 @@ public function edit($id){
 // Edit Student
 public function update(StudentFormRequest $request, $id){
 
-    // dd([
-    //     'driver' => 's3',
-    //     'key' => env('AWS_ACCESS_KEY_ID'),
-    //     'secret' => env('AWS_SECRET_ACCESS_KEY'),
-    //     'region' => env('AWS_DEFAULT_REGION'),
-    //     'bucket' => env('AWS_BUCKET'),
-    //     'url' => env('AWS_URL'),
-    //     'endpoint' => env('AWS_ENDPOINT'),
-    //     'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-    //     'throw' => false,
-    // ],);
+    $adder = register_teacher::where('user_id', Auth::user()->id)
+    ->first();
         
     $data = $request->validated();
 
@@ -117,6 +115,8 @@ public function update(StudentFormRequest $request, $id){
         $data['set'] = $selectedOption->set;
 
         }
+
+        $data['edited_by'] = $adder->fullname;
 
     $student = register_student::where('id', $id)->update($data);
 

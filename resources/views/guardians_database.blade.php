@@ -37,6 +37,11 @@
                             <div class="text-lg mt-4">
                                 <i class="fa-solid fa-location-dot"></i>
                                 {{$guardian->address}}
+                                <div class="text-sm mt-4">
+                                    Added by: {{ $guardian->created_by }} at: {{ $guardian->created_at }}
+                                     <br/>
+                                    Edited by: {{ $guardian->edited_by }} at: {{ $guardian->updated_at }}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -41,19 +41,19 @@
                                                 <input type="hidden" name="term" value="{{$subject->term}}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                                 <input type="hidden" name="session" value="{{$subject->session}}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                                 @endforeach
-                                                <input name="scores[{{ $student->id }}][{{ $subject->subject_id }}][1st_ca]" value="{{ $subject['1st_ca'] }}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <input name="scores[{{ $student->id }}][{{ $subject->subject_id }}][1st_ca]" value="{{ $subject->first_ca }}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="inline-block relative w-64">
                                                 
-                                                <input name="scores[{{ $student->id }}][{{ $subject->subject_id }}][2nd_ca]" value="{{ $subject['2nd_ca'] }}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <input name="scores[{{ $student->id }}][{{ $subject->subject_id }}][2nd_ca]" value="{{ $subject->second_ca }}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                                 
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="inline-block relative w-64">
-                                                <input name="scores[{{ $student->id }}][{{ $subject->subject_id }}][3rd_ca]" value="{{ $subject['3rd_ca'] }}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <input name="scores[{{ $student->id }}][{{ $subject->subject_id }}][3rd_ca]" value="{{ $subject->third_ca }}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">

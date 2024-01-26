@@ -19,6 +19,7 @@ class ClassesController extends Controller
         $malams = register_teacher::with(['students' => function ($query) {
             $query->orderBy('fullname');
         }])
+        ->where('status', 'IN SCHOOL')
         ->with('user')
         ->get();
         

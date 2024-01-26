@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\register_teacher;
 use App\Models\register_guardian;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\GuardianFormRequest;
 
 class GuardiansController extends Controller
@@ -16,8 +18,13 @@ class GuardiansController extends Controller
  //Store Guardians Registration Information
 
  public function store(GuardianFormRequest $request){
+
+    $adder = register_teacher::where('user_id', Auth::user()->id)
+    ->first();
         
     $data = $request->validated();
+
+    $data['created_by'] = $adder->fullname;
 
     $guardian = register_guardian::create($data);
 
@@ -49,8 +56,13 @@ public function view($id) {
 
 // Update Guardian
 public function update(GuardianFormRequest $request, $id){
+
+    $adder = register_teacher::where('user_id', Auth::user()->id)
+    ->first();
         
     $data = $request->validated();
+
+    $data['edited_by'] = $adder->fullname;
 
     $guardian = register_guardian::where('id', $id)->update($data);
 

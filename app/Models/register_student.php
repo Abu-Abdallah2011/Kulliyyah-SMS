@@ -66,6 +66,8 @@ class register_student extends Model
         'photo',
         'relationship',
         'set',
+        'created_by',
+        'edited_by',
     ];
 
     public function scopeFilter($query, array $filters){

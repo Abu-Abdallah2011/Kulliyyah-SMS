@@ -47,19 +47,26 @@
                             <div class="text-xl mb-4">
                             Born On: {{$student->dob}}
                                 @endcan
-                                <div class="text-xl mb-4">
-                                Gender: {{$student->gender}}
+                                {{-- <div class="text-xl mb-4">
+                                Gender: {{$student->gender}} --}}
                                     <div class="text-xl mb-4">
                                     Status: {{$student->status}}
                                     @can('isAdmin')
                             <div class="text-lg mt-4">
                                 <i class="fa-solid fa-location-dot"></i>
                                 {{$student->address}}
+                                @endcan
+                                <div class="text-sm mt-4">
+                                    Added by: {{ $student->created_by }} at: {{ $student->created_at }}
+                                     <br/>
+                                    Edited by: {{ $student->edited_by }} at: {{ $student->updated_at }}
+                                </div>
+                                @can('isAdmin')
                             </div>
                         </div>
                         @endcan
                     </div>
-                            </div>
+                            {{-- </div> --}}
                 </div>
 
             </div>

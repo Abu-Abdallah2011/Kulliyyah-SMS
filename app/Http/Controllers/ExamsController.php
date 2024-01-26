@@ -37,26 +37,39 @@ public function show(){
 
 foreach ($teacher->students as $student) {
     $totalCa[$student->id] = [];
-    
-    $attendanceRecords[$student->id] = $student->attendance->filter(function ($record) {
+
+    $attendanceRecords[$student->id] = $student->attendance
+    ->where('session', $sessions->session)
+    ->where('term', $sessions->term)
+    ->filter(function ($record) {
         return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
     });
 
-    $totalAttendanceRecords = $student->attendance->count();
+    $totalAttendanceRecords = $student->attendance
+    ->where('session', $sessions->session)
+    ->where('term', $sessions->term)
+    ->count();
     $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
     $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
     $student->attendancePercentage = $percentage;
     
     foreach ($student->exams as $subject) {
-        // Calculate the total CA score for this subject and student
-        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
-        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
-        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
-        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
 
-        $totalCa[$student->id][$subject->subject_id] = $first_ca + $second_ca + $third_ca;
+        // $matchingSubjects = $subjects->where('session', $sessions->session)
+        //                           ->where('term', $sessions->term)
+        //                           ->where('student_id', $student->id)
+        //                           ->get();
+
+        // foreach ($matchingSubjects as $subject) {
+        // Calculate the total CA score for this subject and student
+        $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+        $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+        $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+
+        $totalCa[$student->id][$subject->subject_id] = $first_cas + $second_cas + $third_cas;
+        }
     }
-}
+// }
 
 // Initialize an array to store the total scores for each student
 $totalScores = [];
@@ -68,15 +81,25 @@ foreach ($teacher->students as $student) {
     
     foreach ($student->exams as $subject) {
 
-        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
-        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
-        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
-        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+//         $matchingSubjects = $subjects->where('session', $sessions->session)
+//         ->where('term', $sessions->term)
+//         ->where('student_id', $student->id)
+//         ->get();
 
-        $totalScores[$student->id] +=  $first_ca + $second_ca + $third_ca + $exams;
+// foreach ($matchingSubjects as $subject) {
+
+        // Calculate the total CA score for this subject and student
+        $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+        $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+        $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+        $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+
+        $totalScores[$student->id] +=  $first_cas + $second_cas + $third_cas + $examss;
+// }
     }
 
-    $averageTotal[$student->id] = count($student->exams) > 0 ? $totalScores[$student->id] / count($student->exams) : 0;
+    $averageTotal[$student->id] = count($student->exams->where('session', $sessions->session)->where('term', $sessions->term)) > 0 
+    ? $totalScores[$student->id] / count($student->exams->where('session', $sessions->session)->where('term', $sessions->term)) : 0;
 
     $student->averageTotal = $averageTotal;
 }
@@ -103,18 +126,29 @@ function addOrdinalSuffix($position) {
     }
 }
 
-// $orderedStudents = $teacher->students->sortByDesc('averageTotal');
 $orderedStudents = $teacher->students->map(function ($student) {
+    $sessions = sessions::first();
     $totalScores = 0;
-    $examCount = count($student->exams);
+    $examCount = count($student->exams->where('session', $sessions->session)->where('term', $sessions->term));
 
-    foreach ($student->exams as $subject) {
-        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
-        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
-        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
-        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+    $sessions = sessions::first();
 
-        $totalScores +=  $first_ca + $second_ca + $third_ca + $exams;
+    foreach ($student->exams as $subjects) {
+
+        $matchingSubjects = $subjects->where('session', $sessions->session)
+        ->where('term', $sessions->term)
+        ->where('student_id', $student->id)
+        ->get();
+
+foreach ($matchingSubjects as $subject) {
+
+    $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+    $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+    $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+    $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+
+        $totalScores +=  $first_cas + $second_cas + $third_cas + $examss;
+}
     }
 
     $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;

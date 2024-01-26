@@ -42,23 +42,11 @@
                                         </td>
 
                                         @php
-                                        $statusesForDate = $attendance->where('date', $date)
-                                                                    ->where('teacher_id', $teacher->id)
-                                                                    ->pluck('status')
-                                                                    ->toArray();
-                                       $TimeForDate = $attendance->where('date', $date)
-                                                                    ->where('teacher_id', $teacher->id)
-                                                                    ->pluck('time')
-                                                                    ->toArray();
-                                        $TimeInForDate = $attendance->where('date', $date)
-                                                                    ->where('teacher_id', $teacher->id)
-                                                                    ->pluck('time_in')
-                                                                    ->toArray();
-                                        $TimeOutForDate = $attendance->where('date', $date)
-                                                                    ->where('teacher_id', $teacher->id)
-                                                                    ->pluck('time_out')
-                                                                    ->toArray();
-                                                       @endphp
+                                        $statusesForDate = $attendance->where('date', $date)->where('teacher_id', $teacher->id)->pluck('status')->toArray();
+                                       $TimeForDate = $attendance->where('date', $date)->where('teacher_id', $teacher->id)->pluck('time')->toArray();
+                                        $TimeInForDate = $attendance->where('date', $date)->where('teacher_id', $teacher->id)->pluck('time_in')->toArray();
+                                        $TimeOutForDate = $attendance->where('date', $date)->where('teacher_id', $teacher->id)->pluck('time_out')->toArray();
+                                        @endphp
 
 
                                         <td class="px-6 py-4 whitespace-nowrap">
@@ -88,13 +76,13 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="inline-block relative w-64">
-                                                @foreach($TimeInForDate as $TimeIn)
+                                                @foreach($TimeInForDate as $index => $TimeIn)
                                                 @if (Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_in" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <x-time-picker name="time_in[{{ $teacher->id }}][{{ $TimeForDate[$index] }}]" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{ $TimeIn }}" />
                                                 @endif
 
                                                 @if (!Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_in" value="{{ $TimeIn }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
+                                                <x-time-picker name="" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{ $TimeIn }}" disabled />
                                                 @endif
 
                                                 @endforeach
@@ -102,19 +90,19 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="inline-block relative w-64">
-                                                @foreach($TimeOutForDate as $TimeOut)
+                                                @foreach($TimeOutForDate as $index => $TimeOut)
                                                 @if (Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_out" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <x-time-picker name="time_out[{{ $teacher->id }}][{{ $TimeForDate[$index] }}]" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{ $TimeOut }}" />
                                                 @endif
 
                                                 @if (!Auth::user()->can('isExecutive'))
-                                                <x-time-picker name="time_out" value="{{ $TimeOut }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" disabled />
+                                                <x-time-picker name="" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{ $TimeOut }}" disabled />
                                                 @endif
 
                                                 @endforeach
                                             </div>
                                         </td>
-                                            <input type="hidden" name="teacher_ids[]" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{$teacher->id}}">
+                                            {{-- <input type="hidden" name="teacher_ids[]" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{$teacher->id}}"> --}}
                                             <td>
                                                 <div class="inline-block relative w-64">
                                                 @foreach($TimeForDate as $time)

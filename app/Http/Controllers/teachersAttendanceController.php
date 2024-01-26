@@ -32,8 +32,10 @@ class teachersAttendanceController extends Controller
     $session = sessions::pluck('session')->first();
     $term = sessions::pluck('term')->first();
 
-    // Loop through all students and save their attendance records
+    // Loop through all Teachers and save their attendance records
     foreach ($teacherIds as $index => $teacherId) {
+
+
         $record = new teachersAttendanceModel;
         $record->date = $date;
         $record->teacher_id = $teacherId;
@@ -41,8 +43,8 @@ class teachersAttendanceController extends Controller
         $record->session = $session;
         $record->term = $term;
         $record->time = $time;
-        $record->time_in = $timeIn;
-        $record->time_out = $timeOut;
+        $record->time_in = $timeIn[$index];
+        $record->time_out = $timeOut[$index];
         $record->save();
     }
     return redirect('/teachersAttendance/show')->with('message', 'Attendance records saved successfully!');
@@ -109,9 +111,10 @@ $attendance = teachersAttendanceModel::latest()
 
     $session = sessions::pluck('session')->first();
     $term = sessions::pluck('term')->first();
-
+    
     foreach ($teacherIds as $teacherId) {
         foreach ($attendanceData[$teacherId] as $time => $status) {
+        
             $existingRecord = teachersAttendanceModel::where([
                 ['date', '=', $date],
                 ['teacher_id', '=', $teacherId],
@@ -123,8 +126,12 @@ $attendance = teachersAttendanceModel::latest()
                 $existingRecord->status = $status;
                 $existingRecord->session = $session;
                 $existingRecord->term = $term;
-                $existingRecord->time_in = $timeIn;
-                $existingRecord->time_out = $timeOut;
+                foreach ($timeIn[$teacherId] as $time => $time_in) {
+                $existingRecord->time_in = $time_in;
+                }
+                foreach ($timeOut[$teacherId] as $time => $time_out) {
+                $existingRecord->time_out = $time_out;
+                }
                 $existingRecord->update();
             }
 

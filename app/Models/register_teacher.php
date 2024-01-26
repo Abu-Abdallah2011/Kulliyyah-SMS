@@ -65,6 +65,8 @@ class register_teacher extends Model
         'contact',
         'photo',
         'set',
+        'created_by',
+        'edited_by',
     ];
 
     public function scopeFilter($query, array $filters){

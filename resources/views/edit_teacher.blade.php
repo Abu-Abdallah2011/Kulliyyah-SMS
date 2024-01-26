@@ -41,7 +41,7 @@
                 <x-input-error :messages="$errors->get('fullname')" class="mt-2" />
             </div>
 
-            @endcan
+            {{-- @endcan --}}
     
             <!-- Class -->
             <div>
@@ -65,7 +65,7 @@
                 </select>
             </div>
 
-            @can('isAdmin')
+            {{-- @can('isAdmin') --}}
 
             <!-- Gender -->
         <div>

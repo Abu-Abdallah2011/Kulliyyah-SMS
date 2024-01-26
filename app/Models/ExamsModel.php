@@ -27,9 +27,9 @@ class ExamsModel extends Model
     protected $fillable = [
         'student_id',
         'subject_id',
-        '1st_ca',
-        '2nd_ca',
-        '3rd_ca',
+        'first_ca',
+        'second_ca',
+        'third_ca',
         'exams',
         'term',
         'session',

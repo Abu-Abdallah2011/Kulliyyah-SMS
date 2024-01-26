@@ -62,6 +62,9 @@ public function show()
             ->orderBy('fullname');
         }])->with('user')
         ->get(); 
+
+        $session = sessions::pluck('session')->first();
+        $term = sessions::pluck('term')->first();
     
     $teacherClass = $teachers->first()->class;
 
@@ -70,6 +73,8 @@ public function show()
     ->toArray();
 
 $attendance = AttendanceModel::whereIn('student_id', $studentIds)
+->where('term', $term)
+->where('session', $session)
 ->with(['students' => function ($query) {
     $query->orderBy('fullname');
 }])

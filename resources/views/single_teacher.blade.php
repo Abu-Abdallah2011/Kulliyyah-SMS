@@ -1,8 +1,5 @@
 <x-app-layout>
     <x-slot name="header">
-        {{-- <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2> --}}
     </x-slot>
 
     <div class="py-6">
@@ -116,7 +113,7 @@
                 </div>
         </div>
 
-        @can('isAssistant')
+        @can('isExecutive')
         <div class="bg-gray-50 border border-gray-200 rounded">
         <div class="mt-4 p-2 flex space-x-6"><a href="/teachers_database/{{$teacher->id}}/edit_teacher"><x-primary-button class="ml-3">
             <i class="fa-solid fa-pencil">  {{ __('') }} </i>
