@@ -35,6 +35,8 @@ class register_guardian extends Model
         'phone',
         'teacher_id',
         'user_id',
+        'created_by',
+        'edited_by',
         
     ];
 
