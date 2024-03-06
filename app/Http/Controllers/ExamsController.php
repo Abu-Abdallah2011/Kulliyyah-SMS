@@ -35,6 +35,10 @@ public function show(){
 
 foreach ($teacher->students as $student) {
     $totalCa[$student->id] = [];
+    $matchingSubjects = $student->exams->where('session', $sessions->session)
+    ->where('term', $sessions->term)
+    ->where('student_id', $student->id);
+    // ->get();
 
     $attendanceRecords[$student->id] = $student->attendance
     ->where('session', $sessions->session)
