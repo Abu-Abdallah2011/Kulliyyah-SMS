@@ -74,7 +74,7 @@
                     </form>
                     <div class="flex items-center justify-end mt-4">
 
-                    <form method="POST" action="/exams/{{$subject->subject_id}}">
+                    {{-- <form method="POST" action="/exams/{{$subject->subject_id}}">
                         @csrf
                         @method('DELETE')
                         <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')">
@@ -82,7 +82,7 @@
                              {{ __('Delete') }}
                              </i>
                     </x-danger-button> 
-            </form>
+            </form> --}}
                     </div>
                 </div>
                 </div>

@@ -35,8 +35,8 @@ class AttendanceController extends Controller
     $studentIds = $request->input('student_ids');
     $time = $request->input('time');
 
-    $session = sessions::pluck('session')->first();
-    $term = sessions::pluck('term')->first();
+    $session = sessions::pluck('session')->last();
+    $term = sessions::pluck('term')->last();
 
     // Loop through all students and save their attendance records
     foreach ($studentIds as $index => $studentId) {
@@ -63,8 +63,8 @@ public function show()
         }])->with('user')
         ->get(); 
 
-        $session = sessions::pluck('session')->first();
-        $term = sessions::pluck('term')->first();
+        $session = sessions::pluck('session')->last();
+        $term = sessions::pluck('term')->last();
     
     $teacherClass = $teachers->first()->class;
 
@@ -124,8 +124,8 @@ $attendance = AttendanceModel::whereIn('student_id', $studentIds)
       $studentIds = $request->input('student_ids');
       $times = $request->input('time');
 
-      $session = sessions::pluck('session')->first();
-    $term = sessions::pluck('term')->first();
+      $session = sessions::pluck('session')->last();
+    $term = sessions::pluck('term')->last();
 
     foreach ($studentIds as $studentId) {
         foreach ($attendanceData[$studentId] as $time => $status) {

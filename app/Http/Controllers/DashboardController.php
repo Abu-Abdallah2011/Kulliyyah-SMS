@@ -38,26 +38,12 @@ class DashboardController extends Controller
             ->orderBy('fullname');
         }])
         ->first();
-
-        // $teacher->students;
-
-        // dd($teacher);
-
-        // ->with(['students' => function ($query) 
-        // {
-        //     $query->where('status', 'IN SCHOOL')
-        //     ->orWhere('grad_type', 'TARTEEL ZALLA')
-        //     ->orderBy('fullname');
-        // }])
-        // ->with('user')
-        // ->where('user_id', Auth::user()->id)
-        // ->get();
         
         $guardians = register_guardian::where('user_id', Auth::user()->id)->with('students')->get();
 
         $graduates = register_student::where('status', 'GRADUATE');
 
-        $session = sessions::first();
+        $session = sessions::orderBy('created_at', 'desc')->first();
 
         return view('dashboard', [
         'teacher' => $teacher,

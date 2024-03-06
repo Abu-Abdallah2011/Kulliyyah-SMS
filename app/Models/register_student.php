@@ -46,6 +46,12 @@ class register_student extends Model
        return $this->hasMany(ExamsModel::class, 'student_id', 'id');
     }
 
+    //  Link this model to School Fees Model
+    public function fees()
+    {
+        return $this->hasMany(SchoolFeesModel::class, 'student_id', 'id');
+    }
+
     protected $table = 'students_details_tables';
 
     protected $fillable = [

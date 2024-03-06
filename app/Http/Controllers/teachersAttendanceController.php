@@ -29,8 +29,8 @@ class teachersAttendanceController extends Controller
     $timeIn = $request->input('time_in');
     $timeOut = $request->input('time_out');
 
-    $session = sessions::pluck('session')->first();
-    $term = sessions::pluck('term')->first();
+    $session = sessions::pluck('session')->last();
+    $term = sessions::pluck('term')->last();
 
     // Loop through all Teachers and save their attendance records
     foreach ($teacherIds as $index => $teacherId) {
@@ -109,8 +109,8 @@ $attendance = teachersAttendanceModel::latest()
     $timeIn = $request->input('time_in');
     $timeOut = $request->input('time_out');
 
-    $session = sessions::pluck('session')->first();
-    $term = sessions::pluck('term')->first();
+    $session = sessions::pluck('session')->last();
+    $term = sessions::pluck('term')->last();
     
     foreach ($teacherIds as $teacherId) {
         foreach ($attendanceData[$teacherId] as $time => $status) {

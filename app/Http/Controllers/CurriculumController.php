@@ -29,7 +29,7 @@ class CurriculumController extends Controller
     $selectedOptionId = $request->input('dynamic_select');
 
     $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
-    $sessions = sessions::first();
+    $sessions = sessions::orderBy('created_at', 'desc')->first();
     $selectedOption = surasModel::find($selectedOptionId);
 
     $formData = $request->only([
@@ -89,7 +89,7 @@ public function update(CurriculumFormRequest $request, $id){
     $selectedOptionId = $request->input('dynamic_select');
 
     $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
-    $sessions = sessions::first();
+    $sessions = sessions::orderBy('created_at', 'desc')->first();
     $selectedOption = surasModel::find($selectedOptionId);
 
     $formData = $request->only([

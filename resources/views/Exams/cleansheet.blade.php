@@ -52,23 +52,21 @@
                                 @endphp
 
                                 @foreach($teacher->students as $student)
-                                @foreach($student->exams as $subject)
-                                {{-- @php
-                                $matchingSubjects = $subjects->where('session', $sessions->session)
-                                  ->where('term', $sessions->term)
-                                  ->get();
-                                  @endphp
-                                @foreach ($matchingSubjects as $subject) --}}
+                                @foreach($matchingSubjects as $subject)
+
+
                                 @if (!in_array($subject->subject_id, $subjectsDisplayed))
+                                @if ($matchingSubjects)
                                 <th colspan="2" class="text-center font-bold uppercase bg-gray-200  p-2 md:p-3 lg:p-4 text-gray-600 border border-gray-300 lg:table-cell">
                                     <a href="{{ url('/exams/' . $subject->subject_id . '/examsEdit')}}">{{$subject->subject_id}}</a>
                                 </th>
+                                @endif
                                 @php
                              $subjectsDisplayed[] = $subject->subject_id;
                          @endphp
                          @endif
                          @endforeach
-                         {{-- @endforeach --}}
+                         
                                 @endforeach
                                 <th class="text-center font-bold uppercase bg-gray-200  p-2 md:p-3 lg:p-4 text-gray-600 border border-gray-300 lg:table-cell">TOTAL</th>
                                 <th class="text-center font-bold uppercase bg-gray-200  p-2 md:p-3 lg:p-4 text-gray-600 border border-gray-300 lg:table-cell">AVR.</i></th>
@@ -90,40 +88,61 @@
                                     $columnsDisplayed = [];
                                 @endphp
 
-                                    @foreach($student->exams as $subject)
-                                    {{-- @php
-                                $matchingSubjects = $subjects->where('session', $sessions->session)
-                                  ->where('term', $sessions->term)
-                                  ->get();
-                                  @endphp
-                                @foreach ($matchingSubjects as $subject) --}}
+                                    @foreach($matchingSubjects as $subjects)
 
-                                @if($subject)
-                                    @if (!in_array($subject->subject_id, $columnsDisplayed))
-                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $totalCa[$student->id][$subject->subject_id] }}</td>
-                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $subject->exams }}</td>
                                     @php
-                             $columnsDisplayed[] = $subject->subject_id;
+                                    $subjective = $subjects
+                                                        ->where('session', $sessions->session)
+                                                        ->where('term', $sessions->term)
+                                                        ->where('student_id', $student->id)
+                                                        ->where('subject_id', $subjects->subject_id)
+                                                        ->get();
+                                    @endphp
+
+                                    @if (!in_array($subjects->subject_id, $columnsDisplayed))
+                                    @if ($matchingSubjects)
+                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $totalCa[$student->id][$subjects->subject_id] }}</td>
+                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
+                                        @foreach($subjective as $exam)
+                                        {{ $exam->exams }}</td>
+                                        @endforeach
+                                    @endif
+                                    @php
+                             $columnsDisplayed[] = $subjects->subject_id;
                          @endphp
                          @endif
-                         @endif
                          @endforeach
-                                    {{-- @endforeach --}}
-                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $totalScores[$student->id] }}</td>
-                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ number_format($averageTotal[$student->id], 2) }}</td>
+                                    
+                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
+                                        @if ($matchingSubjects !== null)
+                                        {{ $totalScores[$student->id] }}
+                                        @endif
+                                    </td>
+                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
+                                        @if ($matchingSubjects !== null)
+                                        {{ number_format($averageTotal[$student->id], 2) }}
+                                        @endif
+                                    </td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
                                         {{ number_format($student->attendancePercentage) }}%
                                 </td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $student->position}}</td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
-                                        @foreach($student->exams as $subject)
+                                        @if ($matchingSubjects)
+                                        @foreach($matchingSubjects as $subjects)
                                         @php
-                                $matchingSubjects = $subject->where('session', $sessions->session)
-                                  ->where('term', $sessions->term)
-                                  ->first();
-                                  @endphp
+                                        $subjective = $subjects
+                                                            ->where('session', $sessions->session)
+                                                            ->where('term', $sessions->term)
+                                                            ->where('student_id', $student->id)
+                                                            ->where('subject_id', $subjects->subject_id)
+                                                            ->get();
+                                        @endphp
+                                        @foreach($subjective as $subject)
                                         {{ $subject->comment }}
                                         @endforeach
+                                        @endforeach
+                                        @endif
                                 </td>
                                     
                                   </tr>

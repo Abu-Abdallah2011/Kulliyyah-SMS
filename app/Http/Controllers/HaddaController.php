@@ -27,6 +27,7 @@ class HaddaController extends Controller
         ->paginate(10);
 
         $student = register_student::where('id', $student_id)->first();
+
         return view('Hadda.hadda_page',[
         'student' => $student, 
         'hadda' => $hadda,   
@@ -81,7 +82,7 @@ class HaddaController extends Controller
     
     $student = register_student::where('id', $student_id)->first();
     $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
-    $sessions = sessions::first();
+    $sessions = sessions::orderBy('created_at', 'desc')->first();
     $selectedOption = surasModel::find($selectedOptionId);
     
     $formData = $request->only([
@@ -126,7 +127,7 @@ public function edit($id){
         $student = register_student::where('id', $entry->student_id)->first();
 
         $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
-        $sessions = sessions::first();
+        $sessions = sessions::orderBy('created_at', 'desc')->first();
 
         $selectedOption = surasModel::find($selectedOptionId);
         

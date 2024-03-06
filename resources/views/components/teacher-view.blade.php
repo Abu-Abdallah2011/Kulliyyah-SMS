@@ -108,6 +108,18 @@
 
                     @can('isExecutive')
 
+                    {{-- <div class="bg-indigo-500 border border-gray-200 rounded p-6">
+                        <div class="flex">
+                            <a href="fees_database/show">
+                                <div class="font-bold">
+                                    <h3 class="text-2xl">
+                                        School Fees
+                                    </h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div> --}}
+
                     <div class="bg-indigo-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="sets">
@@ -170,7 +182,8 @@
 
                     <div class="bg-yellow-500 border border-gray-200 rounded p-6">
                         <div class="flex">
-                            <a href="{{ url('sessions/' . $session->id . '/editform') }}">
+                            {{-- <a href="{{ url('sessions/' . $session->id . '/editform') }}"> --}}
+                                <a href="sessions_database">
                                 <div class="font-bold">
                                     <h3 class="text-2xl">
                                         Session/Term

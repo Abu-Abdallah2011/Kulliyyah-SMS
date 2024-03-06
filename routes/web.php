@@ -1,22 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\setsController;
+use App\Http\Controllers\ExamsController;
 use App\Http\Controllers\HaddaController;
+use App\Http\Controllers\surasController;
 use App\Http\Controllers\Users_controller;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\StudentsController;
+use App\Http\Controllers\subjectsController;
 use App\Http\Controllers\TeachersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuardiansController;
 use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\classesCrudController;
 use App\Http\Controllers\CurriculumController;
-use App\Http\Controllers\ExamsController;
-use App\Http\Controllers\setsController;
-use App\Http\Controllers\subjectsController;
-use App\Http\Controllers\surasController;
+use App\Http\Controllers\SchoolFeesController;
+use App\Http\Controllers\classesCrudController;
 use App\Http\Controllers\teachersAttendanceController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -196,10 +197,18 @@ require __DIR__.'/auth.php';
 
     // SESSIONS ROUTES
     Route::middleware('can:isExecutive')->controller(SessionsController::class)->group(function () {
+        // Show Sessions form
+        Route::get('/sessionsForm', 'create');
+        // Save Sessions information
+        Route::post('/sessionsForm', 'store')->name('sessions.save');
+        // Show Sessions Database
+        Route::get('/sessions_database', 'show')->name('sessions.show');
         // show page with edit form
         Route::get('/sessions/{id}/editform', 'edit')->name('EditSession');
         // update sessions data
         Route::put('/sessions/{id}', 'update');
+        // Delete Class
+        Route::delete('/session/{id}', 'delete')->name('session.delete');
         });
     
          //CRUD for Hadda Details
@@ -385,5 +394,29 @@ require __DIR__.'/auth.php';
 
         // Delete Attendance
         Route::delete('/teachersAttendance/{date}', 'delete')->middleware('can:isExecutive');
-    });
+        });
+
+            // CRUD for Attendance
+    Route::middleware('can:isExecutive')->controller(SchoolFeesController::class)->group(function () {
+        // Show Fees form
+        Route::get('/fees_record/{studentId}', 'create')->name('fees.create');
+
+        // Save Fees information
+        Route::post('/fees_record/{studentId}', 'store');
+
+        // Show Fees Report
+        Route::get('/fees_database/show', 'show')->name('fees.show');
+
+        // Show Previous Sessions Fees Record
+        Route::get('/fees_record/{studentId}/PreviousSessions', 'showPreviousSessions');
+
+        // Show Fees Edit Form
+        Route::get('/fees_record/{studentId}/{term}/{session}/edit_fees', 'edit');
+
+        // Update Fees Record
+        Route::put('/fees_record/{studentId}/{term}/{session}/update_fees', 'update');
+
+        // Delete Fees Record
+        Route::delete('/fees_record/{studentId}/{term}/{session}/delete_fees', 'delete');
+    }); 
    
