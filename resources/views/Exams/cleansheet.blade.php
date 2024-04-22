@@ -6,8 +6,13 @@
 
             @can('isAssistant')
                 <a href="/selectSubjects">
-                <x-primary-button class="absolute top-15 right-9 bg-green-500">
+                <x-primary-button class="absolute top-15 right-3 bg-green-500">
                     <i class="fa-solid fa-plus"> </i>
+                </x-primary-button>
+            </a> 
+            <a href="{{ url('/exams/' . $class . '/examsForPreviousTerms')}}">
+                <x-primary-button class="absolute top-15 right-20 bg-yellow-500">
+                    <i class="fa-solid fa-backward"> </i>
                 </x-primary-button>
             </a> 
                 @endcan
@@ -56,11 +61,9 @@
 
 
                                 @if (!in_array($subject->subject_id, $subjectsDisplayed))
-                                {{-- @if ($matchingSubjects) --}}
                                 <th colspan="2" class="text-center font-bold uppercase bg-gray-200  p-2 md:p-3 lg:p-4 text-gray-600 border border-gray-300 lg:table-cell">
                                     <a href="{{ url('/exams/' . $subject->subject_id . '/examsEdit')}}">{{$subject->subject_id}}</a>
                                 </th>
-                                {{-- @endif --}}
                                 @php
                              $subjectsDisplayed[] = $subject->subject_id;
                          @endphp

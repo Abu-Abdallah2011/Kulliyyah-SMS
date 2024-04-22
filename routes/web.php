@@ -373,6 +373,12 @@ require __DIR__.'/auth.php';
 
         // Update Comment
         Route::put('/exams/{id}/comment_update', 'updateComment');
+
+        // Go To Prevous Terms Exams Records
+        Route::get('/exams/{class}/examsForPreviousTerms', 'examsForPreviousTerms');
+
+        // Go To Prevous Terms Cleansheet
+        Route::get('/previousExams/{term}/{session}', 'PreviousTermsCleansheet');
         });
 
         // CRUD for Attendance

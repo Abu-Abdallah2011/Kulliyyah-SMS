@@ -70,15 +70,29 @@
     <div>
         <table class="table">
         <tr>
-            <td>Total: <strong>{{ $grandTotal[$examRecord->student_id] }}</strong></td>
-            <td>Average: <strong>{{ number_format($averageTotal[$student->id], 2) }}</strong></td>
+            <td>Total: <strong>
+                {{-- @foreach($exam as $examRecord)
+                {{ $grandTotal[$examRecord->student_id] }}
+                @endforeach --}}
+                @foreach($exam->unique('student_id') as $examRecord)
+    {{ $grandTotal[$examRecord->student_id] }}
+@endforeach
+
+            </strong></td>
+            @foreach($exam->unique('student_id') as $examRecord)
+            <td>Average: <strong>{{ number_format($averageTotal[$examRecord->student_id], 2) }}</strong></td>
+            @endforeach
             <td>Attendance: <strong>{{ number_format($student->attendancePercentage) }}%</strong></td>
-            <td>Position: <strong>{{ $student->position }}</strong></td>
+            <td>Position: <strong>{{ $dalibi->position }}</strong></td>
             <td>Out Of: <strong>{{ $class }}</strong></td>
             
         </tr>
         <tr>
-            <td colspan="2">Class Teachers' Remark: <strong>{{ $examRecord->comment }}</strong></td>
+            <td colspan="2">Class Teachers' Remark: <strong>
+                @foreach($exam as $examRecord)
+                {{ $examRecord->comment }}
+                @endforeach
+            </strong></td>
             <td colspan="2">Resumption Date For Next Term:</td>
             <td colspan="2"></td>
         </tr>

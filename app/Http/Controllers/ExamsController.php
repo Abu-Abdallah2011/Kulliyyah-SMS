@@ -709,11 +709,24 @@ public function delete($id) {
 //Show Report Sheet
 public function reportSheet($id){
 
-    $exam = ExamsModel::where('student_id', $id)->get();
+    $session = sessions::pluck('session')->last();
+    $term = sessions::pluck('term')->last();
+
+    $exam = ExamsModel::where('student_id', $id)->where('term', $term)->where('session', $session)->get();
 
     $sessions = sessions::orderBy('created_at', 'desc')->first();
 
     $subjects = subjectsModel::whereIn('subject', $exam->pluck('subject_id'))->get();
+
+    $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
+
+    $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
+    ->with(['students' => function ($query) 
+    {
+        $query->where('status', 'IN SCHOOL')
+        ->orWhere('grad_type', 'TARTEEL ZALLA');
+    }, 'students.attendance'])
+    ->first();
 
     $student = register_student::where('id', $id)->first();
 
@@ -725,20 +738,51 @@ public function reportSheet($id){
 
     $totalCa[$id] = [];
     foreach ($student->exams as $subject) {
-        $subjectId = $subject->subject_id;
-        $studentId = $subject->student_id;
-    $totalCa[$subjectId] = $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'];
-    $totalScores[$subjectId] = $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
-    $totalExam[$subjectId] =  $subject['exams'];
-    $grandTotal[$studentId] = $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
-    $averageTotal[$studentId] = count($student->exams) > 0 ? $grandTotal[$studentId] / count($student->exams) : 0;
+        if ($subject->term == $term && $subject->session == $session) {
+            $subjectId = $subject->subject_id;
+            $studentId = $subject->student_id;
+            
+            $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
+            $totalScores[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca + $subject->exams;
+            $totalExam[$subjectId] = $subject->exams;
+            
+            // Calculate grand total and average total outside the loop
+            if (!isset($grandTotal[$studentId])) {
+                $grandTotal[$studentId] = 0;
+            }
+            $grandTotal[$studentId] += $totalScores[$subjectId];
+            $averageTotal[$studentId] = count($student->exams) > 0 ? $grandTotal[$studentId] / count($student->exams->where('term', $term)->where('session', $session)) : 0;
+        }
     }
-
-    $attendanceRecords[$student->id] = $student->attendance->filter(function ($record) {
+    
+    // Calculate average total outside the loop
+    // foreach ($grandTotal as $studentId => $total) {
+        // $averageTotal[$studentId] = count($student->exams) > 0 ? $total / count($student->exams) : 0;
+    // }
+    
+    // foreach ($student->exams as $subject) {
+    //     if ($subject->term == $term && $subject->session == $session) {
+    //     $subjectId = $subject->subject_id;
+    //     $studentId = $subject->student_id;
+    // // $totalCa[$subjectId] = $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'];
+    // // $totalScores[$subjectId] = $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
+    // $totalExam[$subjectId] =  $subject['exams'];
+    // $grandTotal[$studentId] = $subject['first_ca'] + $subject['second_ca'] + $subject['third_ca'] + $subject['exams'];
+    // $averageTotal[$studentId] = count($student->exams) > 0 ? $grandTotal[$studentId] / count($student->exams) : 0;
+    // }
+    // $subjectId = $subject->subject_id;
+    // $studentId = $subject->student_id;
+    // $totalCa[$subjectId] = $subject['first_ca'] + $subject['second_ca'] + $subject['third_ca'];
+    // $totalScores[$subjectId] = $subject['first_ca'] + $subject['second_ca'] + $subject['third_ca'] + $subject['exams'];
+    // $totalExam[$subjectId] =  $subject['exams'];
+    // $grandTotal[$studentId] = $subject['first_ca'] + $subject['second_ca'] + $subject['third_ca'] + $subject['exams'];
+    // $averageTotal[$studentId] = count($student->exams) > 0 ? $grandTotal[$studentId] / count($student->exams) : 0;
+    // }
+    $attendanceRecords[$student->id] = $student->attendance->where('term', $term)->where('session', $session)->filter(function ($record) {
         return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
     });
 
-    $totalAttendanceRecords = $student->attendance->count();
+    $totalAttendanceRecords = $student->attendance->where('term', $term)->where('session', $session)->count();
     $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
     $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
     $student->attendancePercentage = $percentage;
@@ -765,18 +809,54 @@ function resultOrdinalSuffix($position) {
     }
 }
 
+$matchingSubjects = [];
+
+$orderedStudents = $teacher->students->map(function ($student) use ($sessions,  &$matchingSubjects) {
+
+    $matchingSubjects = $student->exams->where('session', $sessions->session)
+    ->where('term', $sessions->term)
+    ->where('student_id', $student->id);
+
+    $totalScores = 0;
+    $examCount = count($matchingSubjects);
+
+    $sessions = sessions::orderBy('created_at', 'desc')->first();
+
+foreach ($matchingSubjects as $subject) {
+
+    $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+    $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+    $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+    $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+
+        $totalScores +=  $first_cas + $second_cas + $third_cas + $examss;
+}
+
+    $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
+    $student->averageTotal = $averageTotal;
+
+    return $student;
+})->sortByDesc('averageTotal')->values();
+
 $position = 1;
 $previousAverage = null;
 
+foreach ($orderedStudents as $dalibi) {
+    if ($previousAverage !== null && $dalibi->averageTotal < $previousAverage) {
+        $position++;
+    }
 
-    $student->position = resultOrdinalSuffix($position);
-    $previousAverage = $student->averageTotal;
+    $dalibi->position = resultOrdinalSuffix($position);
+    $previousAverage = $dalibi->averageTotal;
+}
 
  // =====================================================
 // END OF POSITION CODES
 // =====================================================
 
-    return view('Exams.reportSheet', ['sessions' => $sessions, 'student' => $student,
+    return view('Exams.reportSheet', [
+                'sessions' => $sessions, 
+                'student' => $student,
                 'class' => $class,
                 'exam' => $exam,
                 'subjects' => $subjects,
@@ -785,9 +865,212 @@ $previousAverage = null;
                 'totalExam' => $totalExam,
                 'grandTotal' => $grandTotal,
                 'averageTotal' => $averageTotal,
+                'dalibi' => $dalibi,
 ]);
 }
 
+
+//Show Previous Terms For Exams
+public function examsForPreviousTerms($class){
+
+    $session = sessions::pluck('session')->last();
+    $term = sessions::pluck('term')->last();
+
+    $teacher = register_teacher::where('class', $class)
+    ->where('user_id', auth()->user()->id)
+    ->with(['students' => function ($query) {
+        $query->where('status', 'IN SCHOOL')
+              ->orWhere('grad_type', 'TARTEEL ZALLA');
+    }, 'students.exams'])
+    ->first();
+
+$students = $teacher->students;
+
+$exam = collect(); // Initialize an empty collection
+
+foreach ($students as $student) {
+    $exam = $exam->merge($student->exams); // Merge exams of all students into a single collection
+}
+
+
+
+    return view('Exams.examsPreviousTerms', [
+                'class' => $class,
+                'exam' => $exam,
+]);
+}
+
+//Show/Display Exams Clean Sheet For Previous Terms
+public function PreviousTermsCleansheet($term, $session){
+
+    $sessions = ExamsModel::where('term', $term)->where('session', $session)->first();
+
+    $exam = ExamsModel::get();
+
+    $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
+
+        $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
+        ->with(['students' => function ($query) 
+        {
+            $query->where('status', 'IN SCHOOL')
+            ->orWhere('grad_type', 'TARTEEL ZALLA');
+        }, 'students.attendance'])
+        ->first();
+
+        $totalCa = [];
+
+        $attendanceRecords = [];
+
+foreach ($teacher->students as $student) {
+    $totalCa[$student->id] = [];
+
+    $attendanceRecords[$student->id] = $student->attendance
+    ->where('session', $session)
+    ->where('term', $term)
+    ->filter(function ($record) {
+        return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
+    });
+
+    $totalAttendanceRecords = $student->attendance
+    ->where('session', $session)
+    ->where('term', $term)
+    ->count();
+    $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
+    $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
+    $student->attendancePercentage = $percentage;
+    
+    foreach ($student->exams as $subjects) {
+
+        $matchingSubjects = $subjects->where('session', $session)
+                                  ->where('term', $term)
+                                  ->where('student_id', $student->id)
+                                  ->get();
+
+        foreach ($matchingSubjects as $subject) {
+        // Calculate the total CA score for this subject and student
+        $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+        $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+        $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+
+        $totalCa[$student->id][$subject->subject_id] = $first_cas + $second_cas + $third_cas;
+        }
+    }
+}
+
+// Initialize an array to store the total scores for each student
+$totalScores = [];
+$averageTotal = [];
+
+foreach ($teacher->students as $student) {
+    $totalScores[$student->id] = 0;
+    $averageTotal[$student->id] = 0; 
+    
+    foreach ($student->exams as $subject) {
+
+        $matchingSubjects = [];
+
+        if ($subject->session == $session && $subject->term == $term && $subject->student_id == $student->id) {
+            $matchingSubjects[] = $subject;
+
+        // Calculate the total score for this subject and student
+        $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+        $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+        $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+        $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+
+        $totalScores[$student->id] +=  $first_cas + $second_cas + $third_cas + $examss;
+}
+    }
+
+    $averageTotal[$student->id] = count($student->exams->where('session', $session)->where('term', $term)) > 0 
+    ? $totalScores[$student->id] / count($student->exams->where('session', $session)->where('term', $term)) : 0;
+
+    $student->averageTotal = $averageTotal;
+}
+
+// =====================================================
+// POSITION CODES
+// =====================================================
+
+// Function to add ordinal suffix
+function previousTermOrdinalSuffix($position) {
+    if ($position % 100 >= 11 && $position % 100 <= 13) {
+        return $position . 'th';
+    } else {
+        switch ($position % 10) {
+            case 1:
+                return $position . 'st';
+            case 2:
+                return $position . 'nd';
+            case 3:
+                return $position . 'rd';
+            default:
+                return $position . 'th';
+        }
+    }
+}
+
+$matchingSubjects = [];
+
+$orderedStudents = $teacher->students->map(function ($student) use ($session, $term,  &$matchingSubjects) {
+
+    $matchingSubjects = $student->exams->where('session', $session)
+    ->where('term', $term)
+    ->where('student_id', $student->id);
+
+    $totalScores = 0;
+    $examCount = count($matchingSubjects);
+
+    $sessions = sessions::orderBy('created_at', 'desc')->first();
+
+foreach ($matchingSubjects as $subject) {
+
+    $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+    $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+    $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+    $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+
+        $totalScores +=  $first_cas + $second_cas + $third_cas + $examss;
+}
+
+    $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
+    $student->averageTotal = $averageTotal;
+
+    return $student;
+})->sortByDesc('averageTotal');
+$position = 1;
+$previousAverage = null;
+
+foreach ($orderedStudents as $student) {
+    if ($previousAverage !== null && $student->averageTotal < $previousAverage) {
+        $position++;
+    }
+
+    $student->position = previousTermOrdinalSuffix($position);
+    $previousAverage = $student->averageTotal;
+}
+
+ // =====================================================
+// END OF POSITION CODES
+// =====================================================
+$session = sessions::orderBy('created_at', 'desc')->first('session');
+$term = sessions::orderBy('created_at', 'desc')->first('term');
+
+
+    return view('Exams.cleansheet', ['exam' => $exam,
+                                    'sessions' => $sessions,
+                                    'class' => $class,
+                                    'teacher' => $teacher,
+                                    'totalCa' => $totalCa,
+                                    'totalScores' => $totalScores,
+                                    'averageTotal' => $averageTotal,
+                                    'percentage' => $percentage,
+                                    'orderedStudents' => $orderedStudents,
+                                    'matchingSubjects' => $matchingSubjects,
+                                    'session' => $session,
+                                    'term' => $term,
+]);
+}
 
 }
 

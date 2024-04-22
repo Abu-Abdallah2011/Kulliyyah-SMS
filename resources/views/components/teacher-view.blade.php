@@ -108,7 +108,7 @@
 
                     @can('isExecutive')
 
-                    {{-- <div class="bg-indigo-500 border border-gray-200 rounded p-6">
+                    <div class="bg-indigo-500 border border-gray-200 rounded p-6">
                         <div class="flex">
                             <a href="fees_database/show">
                                 <div class="font-bold">
@@ -118,7 +118,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
 
                     <div class="bg-indigo-500 border border-gray-200 rounded p-6">
                         <div class="flex">
