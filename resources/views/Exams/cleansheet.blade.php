@@ -32,7 +32,11 @@
                     <table class="table table-responsive">
                   
                       <tr>
+                        @if (Request::is('/previousExams/{term}/{session}'))
+                          <td>Session: {{ str_replace('_', '/', $sessions->session) }}</td>
+                          @else
                           <td>Session: {{ $sessions->session }}</td>
+                          @endif
                   
                           <td>Term: {{ $sessions->term }}</td>
                   
