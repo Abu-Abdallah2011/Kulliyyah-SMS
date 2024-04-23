@@ -903,7 +903,7 @@ foreach ($students as $student) {
 //Show/Display Exams Clean Sheet For Previous Terms
 public function PreviousTermsCleansheet($term, $session){
 
-    $sessions = ExamsModel::where('term', $term)->where('session', $session)->first();
+    $sessions = ExamsModel::where('term', $term)->where('session', str_replace('_', '/', $session))->first();
 
     $exam = ExamsModel::get();
 
@@ -1021,7 +1021,7 @@ $orderedStudents = $teacher->students->map(function ($student) use ($session, $t
     $totalScores = 0;
     $examCount = count($matchingSubjects);
 
-    $sessions = sessions::orderBy('created_at', 'desc')->first();
+    // $sessions = sessions::orderBy('created_at', 'desc')->first();
 
 foreach ($matchingSubjects as $subject) {
 
