@@ -811,11 +811,11 @@ function resultOrdinalSuffix($position) {
 
 $matchingSubjects = [];
 
-$orderedStudents = $teacher->students->map(function ($student) use ($sessions,  &$matchingSubjects) {
+$orderedStudents = $teacher->students->map(function ($dalibi) use ($sessions,  &$matchingSubjects) {
 
-    $matchingSubjects = $student->exams->where('session', $sessions->session)
+    $matchingSubjects = $dalibi->exams->where('session', $sessions->session)
     ->where('term', $sessions->term)
-    ->where('student_id', $student->id);
+    ->where('student_id', $dalibi->id);
 
     $totalScores = 0;
     $examCount = count($matchingSubjects);
@@ -833,9 +833,9 @@ foreach ($matchingSubjects as $subject) {
 }
 
     $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
-    $student->averageTotal = $averageTotal;
+    $dalibi->averageTotal = $averageTotal;
 
-    return $student;
+    return $dalibi;
 })->sortByDesc('averageTotal')->values();
 
 $position = 1;
@@ -925,14 +925,14 @@ foreach ($teacher->students as $student) {
     $totalCa[$student->id] = [];
 
     $attendanceRecords[$student->id] = $student->attendance
-    ->where('session', $session)
+    ->where('session', str_replace('_', '/', $session))
     ->where('term', $term)
     ->filter(function ($record) {
         return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
     });
 
     $totalAttendanceRecords = $student->attendance
-    ->where('session', $session)
+    ->where('session', str_replace('_', '/', $session))
     ->where('term', $term)
     ->count();
     $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
@@ -941,7 +941,7 @@ foreach ($teacher->students as $student) {
     
     foreach ($student->exams as $subjects) {
 
-        $matchingSubjects = $subjects->where('session', $session)
+        $matchingSubjects = $subjects->where('session', str_replace('_', '/', $session))
                                   ->where('term', $term)
                                   ->where('student_id', $student->id)
                                   ->get();
@@ -969,7 +969,7 @@ foreach ($teacher->students as $student) {
 
         $matchingSubjects = [];
 
-        if ($subject->session == $session && $subject->term == $term && $subject->student_id == $student->id) {
+        if ($subject->session == str_replace('_', '/', $session) && $subject->term == $term && $subject->student_id == $student->id) {
             $matchingSubjects[] = $subject;
 
         // Calculate the total score for this subject and student
@@ -982,8 +982,8 @@ foreach ($teacher->students as $student) {
 }
     }
 
-    $averageTotal[$student->id] = count($student->exams->where('session', $session)->where('term', $term)) > 0 
-    ? $totalScores[$student->id] / count($student->exams->where('session', $session)->where('term', $term)) : 0;
+    $averageTotal[$student->id] = count($student->exams->where('session', str_replace('_', '/', $session))->where('term', $term)) > 0 
+    ? $totalScores[$student->id] / count($student->exams->where('session', str_replace('_', '/', $session))->where('term', $term)) : 0;
 
     $student->averageTotal = $averageTotal;
 }
@@ -1014,7 +1014,7 @@ $matchingSubjects = [];
 
 $orderedStudents = $teacher->students->map(function ($student) use ($session, $term,  &$matchingSubjects) {
 
-    $matchingSubjects = $student->exams->where('session', $session)
+    $matchingSubjects = $student->exams->where('session', str_replace('_', '/', $session))
     ->where('term', $term)
     ->where('student_id', $student->id);
 
