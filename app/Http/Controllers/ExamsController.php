@@ -1012,6 +1012,8 @@ function previousTermOrdinalSuffix($position) {
 
 $matchingSubjects = [];
 
+$session = str_replace('_', '/', $session);
+
 $orderedStudents = $teacher->students->map(function ($student) use ($session, $term,  &$matchingSubjects) {
 
     $matchingSubjects = $student->exams->where('session', str_replace('_', '/', $session))
