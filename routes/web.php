@@ -1,12 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\setsController;
 use App\Http\Controllers\ExamsController;
 use App\Http\Controllers\HaddaController;
 use App\Http\Controllers\surasController;
 use App\Http\Controllers\Users_controller;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\StudentsController;
@@ -39,10 +41,12 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 // -Sadiq Mustapha Ahmad. April, 2023
 
 //Show Home Page
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [LandingController::class, 'index']);
 
+//Go To Login Page
+Route::get('/login', function () {
+    return view('login');
+});
 
 //Show Users Registration Form
 Route::get('/register', function () {
@@ -252,6 +256,9 @@ require __DIR__.'/auth.php';
 
             // Show Attendance form
             Route::get('dashboard/attendance/{teacher_id}', 'selectedCreate');
+
+            // Show Attendance Record for Previous Terms
+            Route::get('attendanceForPreviousTerms/attendance/{teacher_id}', 'selectedCreate');
         }); 
             // Show Attendance Page to Guardian
             Route::get('/attendance/guardian_view/{id}', [AttendanceController::class, 'attendanceGuardian']); 
