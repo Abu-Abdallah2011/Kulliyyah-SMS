@@ -219,7 +219,7 @@
                     and other Spiritual Activities In the Masjid and the Society at Large. Kulliyyatu Masjidil Qur'an Started with about 00 Students in
                     about 00 Classes for both Male and Female and the School is best known for Graduating High Quality Students in Qur'an Memorization and Islamic
                     Knowledge in General including The Inculcation of Islamic Values and Discipline in its Students. The School as of 2024 has Graduated More Than
-                    200 Students Majority of Whom have memorizedthe Qur'an and others learned to Recite the Qur'an Fluently. With Some of its Classes in Masjidul Qur'an and some in
+                    200 Students Majority of Whom have memorized the Qur'an and others learned to Recite the Qur'an Fluently. With Some of its Classes in Masjidul Qur'an and some in
                     the School Building, Kulliyyatu Masjidil Qur'an Continues to Mentor the Next Generation of Intellectual Giants In Shaa Allaah!
                   </p>
                 </div>
