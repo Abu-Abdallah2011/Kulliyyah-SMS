@@ -640,6 +640,8 @@
                   <p>Makama New Extension, Federal Low-Cost, Bauchi, Bauchi State, Nigeria.</p>
                   <p>Phone(s):</p>
                   <p><i class="fa fa-phone"></i> (+234) 803 211 6211</p>
+                  <p><i class="fa fa-phone"></i> (+234) 813 596 6693</p>
+                  <p><i class="fa fa-phone"></i> (+234) 803 791 6173</p>
                   <!-- <p><i class="fa fa-phone"></i> (+234) 803 211 6211</p> -->
                   <p>Website: www.kulliyyahsms-env-2.eba-qchuhpmn.us-east-2.elasticbeanstalk.com</p>
                   <p>Email: kulliyyah2009@gmail.com</p>
