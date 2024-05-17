@@ -233,10 +233,10 @@ foreach ($teacher->students as $student) {
 
 foreach ($matchingSubjects as $subject) {
         // Calculate the total CA score for this subject and student
-        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
-        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
-        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
-        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+        $first_ca = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+        $second_ca = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+        $third_ca = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+        $exams = is_numeric($subject->exams) ? $subject->exams : 0;
 
         $totalCa[$student->id][$subject->subject_id] = $first_ca + $second_ca + $third_ca;
     }
@@ -258,10 +258,10 @@ foreach ($teacher->students as $student) {
         if ($subject->session == $sessions->session && $subject->term == $sessions->term && $subject->student_id == $student->id) {
             $matchingSubjects[] = $subject;
 
-        $first_ca = is_numeric($subject['1st_ca']) ? $subject['1st_ca'] : 0;
-        $second_ca = is_numeric($subject['2nd_ca']) ? $subject['2nd_ca'] : 0;
-        $third_ca = is_numeric($subject['3rd_ca']) ? $subject['3rd_ca'] : 0;
-        $exams = is_numeric($subject['exams']) ? $subject['exams'] : 0;
+            $first_ca = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+            $second_ca = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+            $third_ca = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+            $exams = is_numeric($subject->exams) ? $subject->exams : 0;
 
         $totalScores[$student->id] +=  $first_ca + $second_ca + $third_ca + $exams;
     }
@@ -755,29 +755,6 @@ public function reportSheet($id){
         }
     }
     
-    // Calculate average total outside the loop
-    // foreach ($grandTotal as $studentId => $total) {
-        // $averageTotal[$studentId] = count($student->exams) > 0 ? $total / count($student->exams) : 0;
-    // }
-    
-    // foreach ($student->exams as $subject) {
-    //     if ($subject->term == $term && $subject->session == $session) {
-    //     $subjectId = $subject->subject_id;
-    //     $studentId = $subject->student_id;
-    // // $totalCa[$subjectId] = $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'];
-    // // $totalScores[$subjectId] = $subject['1st_ca'] + $subject['2nd_ca'] + $subject['3rd_ca'] + $subject['exams'];
-    // $totalExam[$subjectId] =  $subject['exams'];
-    // $grandTotal[$studentId] = $subject['first_ca'] + $subject['second_ca'] + $subject['third_ca'] + $subject['exams'];
-    // $averageTotal[$studentId] = count($student->exams) > 0 ? $grandTotal[$studentId] / count($student->exams) : 0;
-    // }
-    // $subjectId = $subject->subject_id;
-    // $studentId = $subject->student_id;
-    // $totalCa[$subjectId] = $subject['first_ca'] + $subject['second_ca'] + $subject['third_ca'];
-    // $totalScores[$subjectId] = $subject['first_ca'] + $subject['second_ca'] + $subject['third_ca'] + $subject['exams'];
-    // $totalExam[$subjectId] =  $subject['exams'];
-    // $grandTotal[$studentId] = $subject['first_ca'] + $subject['second_ca'] + $subject['third_ca'] + $subject['exams'];
-    // $averageTotal[$studentId] = count($student->exams) > 0 ? $grandTotal[$studentId] / count($student->exams) : 0;
-    // }
     $attendanceRecords[$student->id] = $student->attendance->where('term', $term)->where('session', $session)->filter(function ($record) {
         return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
     });
@@ -842,12 +819,15 @@ $position = 1;
 $previousAverage = null;
 
 foreach ($orderedStudents as $dalibi) {
+dd($dalibi);
     if ($previousAverage !== null && $dalibi->averageTotal < $previousAverage) {
         $position++;
     }
-
+    
+    // $sakamako = $teacher->students->where('id', $dalibi->id)->first();
     $dalibi->position = resultOrdinalSuffix($position);
     $previousAverage = $dalibi->averageTotal;
+    // dd($previousAverage);
 }
 
  // =====================================================
@@ -866,6 +846,7 @@ foreach ($orderedStudents as $dalibi) {
                 'grandTotal' => $grandTotal,
                 'averageTotal' => $averageTotal,
                 'dalibi' => $dalibi,
+                // 'sakamako' => $sakamako,
 ]);
 }
 
@@ -1012,7 +993,7 @@ function previousTermOrdinalSuffix($position) {
 
 $matchingSubjects = [];
 
-$session = str_replace('_', '/', $session);
+// $session = str_replace('_', '/', $session);
 
 $orderedStudents = $teacher->students->map(function ($student) use ($session, $term,  &$matchingSubjects) {
 
