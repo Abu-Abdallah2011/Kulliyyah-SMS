@@ -299,7 +299,7 @@
                   <div class="col-lg-3 col-md-3 col-sm-6">
                     <div class="mu-our-teacher-single">
                       <figure class="mu-our-teacher-img">
-                        <img style="height: 200px;" src="assets/img/logo.jpg" alt="teacher img">
+                        <img style="height: 200px;" src="assets/img/teachers/abuAmmar.jpg" alt="teacher img">
                       </figure>                    
                       <div class="mu-ourteacher-single-content" style="color: white;">
                         <h4>Malam Sadiq Munkaila(Abu Ammar)</h4>
