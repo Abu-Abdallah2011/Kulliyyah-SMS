@@ -57,31 +57,13 @@
 <!-- Include Bootstrap Timepicker JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 
+{{-- CODES FOR STATISTICAL CHARTS --}}
 
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"> --}}
-      
-        
-  
-  {{-- End of Added css codes --}}
+{{-- <canvas id="myChart" width="400" height="400"></canvas> --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-        <!-- Bootstrap CSS -->
-{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"> --}}
-
-<!-- Bootstrap JS -->
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> --}}
-<!-- Add the jQuery library -->
-{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-
-<!-- Add the jQuery UI library -->
-{{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script> --}}
-
-
-{{-- DATE PICKER SCRIPT --}}
-{{-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> --}}
-        <!-- Scripts -->
+{{-- END OF CODES FOR STATISTICAL CHARTS --}}
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>

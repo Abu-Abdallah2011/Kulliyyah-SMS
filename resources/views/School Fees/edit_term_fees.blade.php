@@ -57,7 +57,7 @@
                            <!-- Amount -->
                            <div>
                             <x-input-label class="font-bold" for="amount" :value="__('Amount Paid')" />
-                            <x-text-input id="amount" class="block mt-1 w-full" type="text" name="amount" :value="old('amount')" list="datalistOptions" value="{{ $studentTermFees->amount }}" required autocomplete="amount" />
+                            <x-text-input id="amount" class="block mt-1 w-full" type="text" name="amount" :value="old('amount')" list="datalistOptions" value="{{ $studentTermFees->amount }}" autocomplete="amount" />
                             <datalist id="datalistOptions">
                                 <option value="500">
                                 <option value="1,000">

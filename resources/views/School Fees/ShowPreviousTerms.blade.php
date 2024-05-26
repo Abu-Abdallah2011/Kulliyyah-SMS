@@ -12,26 +12,40 @@
             
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
 
-                <table class="border-collapse w-full table-responsive">
-                    <thead>
-              
-                        <tr>
-                            <th class="text-center font-bold uppercase bg-gray-200  p-2 md:p-3 lg:p-4 text-gray-600 border border-gray-300 lg:table-cell">Term</th>
-                    
-                    </thead>
-
-                    <tbody>
-                  
-                            <tr class="bg-white lg:hover:bg-gray-100 lg:table-row mb-10 lg:mb-0">
                                 @foreach($paymentStatus as $PreviousSession)
-                                @if($PreviousSession->status === 'PAID' || 'FREE')
-                            <td class="w-full lg:w-auto p-3 bg-green-500 text-white border border-b lg:table-cell relative lg:static">{{$PreviousSession->term}} {{$PreviousSession->session}} Academic Session</td>
+
+                                @php
+                                $unPaidUrl = url('/fees_record/' . $studentId . '/' . $PreviousSession->term . '/' . str_replace('/', '_', $PreviousSession->session) . '/edit_fees');
+                                $url = url('/reciept/' . $studentId . '/' . $PreviousSession->term . '/' . str_replace('/', '_', $PreviousSession->session))  
+                                @endphp
+
+                                @if($PreviousSession->status === 'PAID')
+                                <div>
+                                    <a href="{{ $url }}">
+                            <x-primary-button class="bg-green-500">{{$PreviousSession->term}} {{$PreviousSession->session}} Academic Session</x-primary-button>
+                                    </a>
+                                </div>
+                                @elseif($PreviousSession->status === 'FREE')
+                                <div>
+                                    <a href="{{ $url }}">
+                            <x-primary-button class="bg-purple-500">{{$PreviousSession->term}} {{$PreviousSession->session}} Academic Session</x-primary-button>
+                                    </a>
+                                </div>
+                            @elseif($PreviousSession->status === 'PART')
+                            <div>
+                                <a href="{{ $url }}">
+                            <x-primary-button class="bg-yellow-500">{{$PreviousSession->term}} {{$PreviousSession->session}} Academic Session</x-primary-button>
+                                </a>
+                            </div>
                             @else
-                            <td class="w-full lg:w-auto p-3 bg-red-500 text-gray-800 border border-b lg:table-cell relative lg:static">{{$PreviousSession->term}} {{$PreviousSession->session}} Academic Session</td>
+                            <div>
+                               @can('isExecutive') <a href="{{ $unPaidUrl }}"> @endcan
+                            <x-danger-button>{{$PreviousSession->term}} {{$PreviousSession->session}} Academic Session</x-danger-button>
+                            @can('isExecutive') </a> @endcan
+                        </div>
                             @endif
+                        </a>
                             @endforeach                   
-                        </tbody>
-                </table>
             </div>
         </div>
     </div>

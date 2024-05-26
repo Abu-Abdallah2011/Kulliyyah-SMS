@@ -25,11 +25,9 @@ class SchoolFeesRequest extends FormRequest
     {
         return [
             'date' => [
-                'required',
                 'max:255'
             ],
             'paid_for' => [
-                'required',
                 'max:255'
             ],
         ];

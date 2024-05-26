@@ -154,6 +154,13 @@
         <x-primary-button class="">
             <i class="fa-solid fa-book-open">  {{ __('') }} </i>
         </x-primary-button></a>
+
+        {{-- @can('isAdGuardian')
+        <a href="{{ url('/fees_record/' . $student->id . '/PreviousSessions') }}">
+            <x-primary-button class="">
+                <i class="fa-solid fa-calculator">  {{ __('') }} </i>
+            </x-primary-button></a>
+            @endcan --}}
     </div>
 
         </div>

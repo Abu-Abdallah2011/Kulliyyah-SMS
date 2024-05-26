@@ -23,13 +23,59 @@ public function show()
         }])->with('user')
         ->get();
         
-        $students = register_student::where('status', 'IN SCHOOL')
+
+    
+    $students = register_student::with(['fees' => function($query) {
+        $studentIds = register_student::where('status', 'IN SCHOOL')
         ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('class')
-            ->get();
+        ->pluck('id');
+        $query->whereIn('student_id', $studentIds);
+        }])
+        ->where('status', 'IN SCHOOL')
+        ->orWhere('grad_type', 'TARTEEL ZALLA')
+        ->orderBy('class')
+        ->get();
 
         $session = sessions::pluck('session')->last();
         $term = sessions::pluck('term')->last();
+
+$currentSession = sessions::pluck('session')->last();
+$clearedStatuses = ['PAID', 'FREE'];
+
+
+        foreach ($students as $student) {
+            // Check if a fees record exists for the current term and session
+            $existingRecord = SchoolFeesModel::where([
+                'student_id' => $student->id,
+                'term' => $term,
+                'session' => $session
+            ])->first();
+
+            // If no record exists, create a new one
+            if (!$existingRecord) {
+                $fees = new SchoolFeesModel();
+                $fees->student_id = $student->id;
+                $fees->class = $student->class;
+                $fees->term = $term;
+                $fees->session = $session;
+                $fees->status = 'UNCLEARED';
+                $fees->save();
+            }
+
+    $allCleared = $student->fees->filter(function($fee) use ($currentSession) {
+        return $fee->session != $currentSession;
+    })->every(function ($fee) use ($clearedStatuses) {
+        return in_array($fee->status, $clearedStatuses);
+    });
+
+    if ($allCleared) {
+        // Mark student as eligible
+        $student->eligible = true;
+    } else {
+        // Mark student as not eligible
+        $student->eligible = false;
+    }
+        }
 
 $feesRecord = SchoolFeesModel::where('term', $term)
 ->where('session', $session)
@@ -78,7 +124,7 @@ $firstTerm = sessions::where('session', $session)
             'term',
             'firstTerm',
             'secondTerm',
-            'thirdTerm'
+            'thirdTerm',
         ));
 }
 
@@ -189,15 +235,39 @@ public function delete($studentId, $term, $session) {
 // Show Previous Sessions Fees Records
 public function showPreviousSessions($studentId) {
     $session = sessions::pluck('session')->last();
-    $previousTerms = sessions::where('session', '!=', $session)->get();
+
     $paymentStatus = SchoolFeesModel::where('student_id', $studentId)
-    ->whereNot('session', $session)
+    // ->where('session', '!=', $session)
     ->get();
     return view('School Fees.ShowPreviousTerms', 
     [
         'session' => $session,
-        'previousTerms' => $previousTerms,
+        'studentId' => $studentId,
         'paymentStatus' => $paymentStatus,
+    ]
+);
+}
+
+// Show Reciept For Student For Term And Session
+public function showStudentRecieptForTerm($studentId, $term, $session) {
+
+    $student = register_student::where('id', $studentId)
+    ->with(['fees' => function ($query) use ($term, $session) 
+     {
+         $query->where('term', $term)
+         ->where('session', str_replace('_', '/', $session));
+     }])
+     ->first();
+
+     $studentFees = $student->fees
+     ->where('term', $term)
+     ->where('session', str_replace('_', '/', $session))
+     ->first();
+     
+    return view('School Fees.reciept', 
+    [
+        'student' => $student,
+        'studentFees' => $studentFees,
     ]
 );
 }

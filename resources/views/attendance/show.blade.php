@@ -5,9 +5,16 @@
           {{ __('Attendance Record') }}
 
         @can('isAssistant')
-          <a href="{{ url('/attendance') }}" class="lg-text-xl md-text-lg bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute top-15 right-9">
+          <a href="{{ url('/attendance') }}">
+            <x-primary-button class="absolute top-15 right-3 bg-green-500">
             <i class="fa-solid fa-pen"></i>
+            </x-primary-button>
         </a>
+        <a href="{{ url('/attendanceForPreviousTerms')}}">
+            <x-primary-button class="absolute top-15 right-20 bg-yellow-500">
+                <i class="fa-solid fa-backward"> </i>
+            </x-primary-button>
+        </a> 
         @endcan
       </h2>
   </x-slot>

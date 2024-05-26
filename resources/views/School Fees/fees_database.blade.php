@@ -6,7 +6,7 @@
 
         </h2>
     </x-slot>
-
+    <x-search />
     <x-success-status class="mb-4" :status="session('message')" />
 
     <div class="py-6">
@@ -58,41 +58,28 @@
                       
                                 <tr class="bg-white lg:hover:bg-gray-100 lg:table-row mb-10 lg:mb-0">
                                 <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $student->id }}</td>
-                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static"><a href="{{ url('/fees_record/' . $student->id )}}">{{ $student->fullname }}</a></td>
+                                    <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{--<a href="{{ url('/fees_record/' . $student->id )}}">--}}{{ $student->fullname }}{{--</a>--}}</td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $student->class }}</td>
 
                                     @php
-                                    $clearedStatuses = ['PAID', 'FREE'];
-                                    $termsToCheck = ['1st Term', '2nd Term', '3rd Term'];
-                                    $clearance = true;
-
-                                    foreach ($termsToCheck as $termToCheck) {
-                                        $clearedRecord = $student->fees
-                                            ->where('term', $termToCheck)
-                                            ->whereIn('status', $clearedStatuses)
-                                            ->where('session', $session)
-                                            ->isNotEmpty();
-
-                                        if (!$clearedRecord) {
-                                            $clearance = false;
-                                            break;
-                                        }
-                                    }
                                     $PreviousSessionUrl = url('/fees_record/' . $student->id . '/PreviousSessions');
                                     @endphp
 
-                                    @if($clearance)
+                                    @if($student->eligible)
                                         <td class="w-full bg-green-500 lg:w-auto p-3 text-white border border-b lg:table-cell relative lg:static"><a href="{{ $PreviousSessionUrl }}">CLEARED</a></td>
                                     @else
                                         <td class="w-full bg-red-500 lg:w-auto p-3 text-white border border-b lg:table-cell relative lg:static"><a href="{{ $PreviousSessionUrl }}">NOT CLEARED</a></td>
                                     @endif
 
-                                    @foreach ($student->fees as $record)
+                                    @php
+                                        $studentFees = $student->fees->where('session', $session);
+                                    @endphp
+
+                                    @foreach ($studentFees as $record)
 
                                     @php
-                                    $statusRecord = $record->where('term', $term)->where('session', $session)->first(); 
-                                    $status = $statusRecord ? $statusRecord->status : null; 
-                                    $url = $statusRecord ? url("/fees_record/{$student->id}/{$record->term}/" . str_replace('/', '_', $record->session) . '/edit_fees') : null;
+                                    $status = $record->status; 
+                                    $url = url("/fees_record/{$student->id}/{$record->term}/" . str_replace('/', '_', $record->session) . '/edit_fees');
                                     @endphp
 
                                     @if ($status === 'PAID')
@@ -101,7 +88,7 @@
                                     <td class="w-full bg-yellow-500 lg:w-auto p-3 text-white border border-b lg:table-cell relative lg:static">
                                     @elseif ($status === 'FREE')
                                     <td class="w-full bg-purple-500 lg:w-auto p-3 text-white border border-b lg:table-cell relative lg:static">
-                                    @else
+                                    @elseif ($status === 'UNCLEARED')
                                     <td class="w-full bg-red-500 lg:w-auto p-3 text-white border border-b lg:table-cell relative lg:static">
                                     @endif
 

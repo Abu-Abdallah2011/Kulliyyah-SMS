@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('balance')->nullable();
             $table->string('paid_for')->nullable();
             $table->string('description')->nullable();
-            $table->string('class');
+            $table->string('class')->nullable();
         });
     }
 

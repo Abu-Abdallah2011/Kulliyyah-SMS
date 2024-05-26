@@ -38,7 +38,7 @@ class HaddaController extends Controller
         public function showStatus($teacher_id)
         {
 
-            $teacher = register_teacher::where('id', Auth::user()->id)
+            $teacher = register_teacher::where('user_id', Auth::user()->id)
             ->with(['students' => function ($query) 
             {
                 $query->where('status', 'IN SCHOOL')

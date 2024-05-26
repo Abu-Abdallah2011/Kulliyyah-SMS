@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('student_id');
-            $table->string('date');
+            $table->string('date')->nullable();
             $table->string('status');
-            $table->string('amount');
+            $table->string('amount')->nullable();
             $table->string('term');
             $table->string('session');
         });

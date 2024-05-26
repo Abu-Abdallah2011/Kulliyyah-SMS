@@ -728,16 +728,17 @@ public function reportSheet($id){
     }, 'students.attendance'])
     ->first();
 
-    $student = register_student::where('id', $id)->first();
+    $dalibi = register_student::where('id', $id)->first();
 
-    $class = register_student::where('class', $student->class)
+    $class = register_student::where('class', $dalibi->class)
     ->where('status', 'IN SCHOOL')
     ->count();
 
     $totalCa = [];
 
     $totalCa[$id] = [];
-    foreach ($student->exams as $subject) {
+
+    foreach ($dalibi->exams as $subject) {
         if ($subject->term == $term && $subject->session == $session) {
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
@@ -751,18 +752,18 @@ public function reportSheet($id){
                 $grandTotal[$studentId] = 0;
             }
             $grandTotal[$studentId] += $totalScores[$subjectId];
-            $averageTotal[$studentId] = count($student->exams) > 0 ? $grandTotal[$studentId] / count($student->exams->where('term', $term)->where('session', $session)) : 0;
+            $averageTotal[$studentId] = count($dalibi->exams) > 0 ? $grandTotal[$studentId] / count($dalibi->exams->where('term', $term)->where('session', $session)) : 0;
         }
     }
     
-    $attendanceRecords[$student->id] = $student->attendance->where('term', $term)->where('session', $session)->filter(function ($record) {
+    $attendanceRecords[$dalibi->id] = $dalibi->attendance->where('term', $term)->where('session', $session)->filter(function ($record) {
         return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
     });
 
-    $totalAttendanceRecords = $student->attendance->where('term', $term)->where('session', $session)->count();
-    $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
+    $totalAttendanceRecords = $dalibi->attendance->where('term', $term)->where('session', $session)->count();
+    $presentAttendanceRecords = $attendanceRecords[$dalibi->id]->count();
     $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
-    $student->attendancePercentage = $percentage;
+    $dalibi->attendancePercentage = $percentage;
 
     // =====================================================
 // POSITION CODES
@@ -788,16 +789,18 @@ function resultOrdinalSuffix($position) {
 
 $matchingSubjects = [];
 
-$orderedStudents = $teacher->students->map(function ($dalibi) use ($sessions,  &$matchingSubjects) {
+// $session = str_replace('_', '/', $session);
 
-    $matchingSubjects = $dalibi->exams->where('session', $sessions->session)
-    ->where('term', $sessions->term)
-    ->where('student_id', $dalibi->id);
+$orderedStudents = $teacher->students->map(function ($student) use ($session, $term,  &$matchingSubjects) {
+
+    $matchingSubjects = $student->exams->where('session', str_replace('_', '/', $session))
+    ->where('term', $term)
+    ->where('student_id', $student->id);
 
     $totalScores = 0;
     $examCount = count($matchingSubjects);
 
-    $sessions = sessions::orderBy('created_at', 'desc')->first();
+    // $sessions = sessions::orderBy('created_at', 'desc')->first();
 
 foreach ($matchingSubjects as $subject) {
 
@@ -810,24 +813,20 @@ foreach ($matchingSubjects as $subject) {
 }
 
     $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
-    $dalibi->averageTotal = $averageTotal;
+    $student->averageTotal = $averageTotal;
 
-    return $dalibi;
-})->sortByDesc('averageTotal')->values();
-
+    return $student;
+})->sortByDesc('averageTotal');
 $position = 1;
 $previousAverage = null;
 
-foreach ($orderedStudents as $dalibi) {
-dd($dalibi);
-    if ($previousAverage !== null && $dalibi->averageTotal < $previousAverage) {
+foreach ($orderedStudents as $student) {
+    if ($previousAverage !== null && $student->averageTotal < $previousAverage) {
         $position++;
     }
-    
-    // $sakamako = $teacher->students->where('id', $dalibi->id)->first();
-    $dalibi->position = resultOrdinalSuffix($position);
-    $previousAverage = $dalibi->averageTotal;
-    // dd($previousAverage);
+
+    $student->position = resultOrdinalSuffix($position);
+    $previousAverage = $student->averageTotal;
 }
 
  // =====================================================

@@ -23,8 +23,8 @@
         <table class="table">
         
         <tr>
-            <td>Name: {{ $student->fullname }}</td>
-            <td>Class: {{ $student->class }}</td>
+            <td>Name: {{ $dalibi->fullname }}</td>
+            <td>Class: {{ $dalibi->class }}</td>
         </tr>
         <tr>
             <td>Term: {{ $sessions->term }}</td>
@@ -82,8 +82,8 @@
             @foreach($exam->unique('student_id') as $examRecord)
             <td>Average: <strong>{{ number_format($averageTotal[$examRecord->student_id], 2) }}</strong></td>
             @endforeach
-            <td>Attendance: <strong>{{ number_format($student->attendancePercentage) }}%</strong></td>
-            <td>Position: <strong>{{ $dalibi->position }}</strong></td>
+            <td>Attendance: <strong>{{ number_format($dalibi->attendancePercentage) }}%</strong></td>
+            <td>Position: <strong>{{ $student->position }}</strong></td>
             <td>Out Of: <strong>{{ $class }}</strong></td>
             
         </tr>

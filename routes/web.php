@@ -38,7 +38,8 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 // THIS APPLICATION WAS LAUNCHED IN APRIL 2023, BUT I CAN'T REMEMBER THE PRECISE DATE AS WE WERE SO
 // BUSY TRYING TO DEPLOY THEN TESTS THEN CORRECTIONS AND ADJUSTMENTS AND I FORGOT TO NOTE THE PRECISE DATE
 // BUT I WILL TRY TO RETRACE MY STEPS TO SEE IF I CAN FIND OUT AND IF I DO I WILL NOTE IT DOWN HERE IN SHAA ALLAAH.
-// -Sadiq Mustapha Ahmad. April, 2023
+// -Sadiq Mustapha Ahmad. April, 2023.
+// THE LANDING PAGE WAS LAUNCHED ON 16/05/2024 AT AROUND 03:00PM.
 
 //Show Home Page
 Route::get('/', [LandingController::class, 'index']);
@@ -410,26 +411,29 @@ require __DIR__.'/auth.php';
         });
 
             // CRUD for Attendance
-    Route::middleware('can:isExecutive')->controller(SchoolFeesController::class)->group(function () {
+    Route::controller(SchoolFeesController::class)->group(function () {
         // Show Fees form
-        Route::get('/fees_record/{studentId}', 'create')->name('fees.create');
+        Route::get('/fees_record/{studentId}', 'create')->name('fees.create')->middleware('can:isExecutive');
 
         // Save Fees information
-        Route::post('/fees_record/{studentId}', 'store');
+        Route::post('/fees_record/{studentId}', 'store')->middleware('can:isExecutive');
 
         // Show Fees Report
-        Route::get('/fees_database/show', 'show')->name('fees.show');
+        Route::get('/fees_database/show', 'show')->name('fees.show')->middleware('can:isExecutive');
 
         // Show Previous Sessions Fees Record
         Route::get('/fees_record/{studentId}/PreviousSessions', 'showPreviousSessions');
 
         // Show Fees Edit Form
-        Route::get('/fees_record/{studentId}/{term}/{session}/edit_fees', 'edit');
+        Route::get('/fees_record/{studentId}/{term}/{session}/edit_fees', 'edit')->middleware('can:isExecutive');
 
         // Update Fees Record
-        Route::put('/fees_record/{studentId}/{term}/{session}/update_fees', 'update');
+        Route::put('/fees_record/{studentId}/{term}/{session}/update_fees', 'update')->middleware('can:isExecutive');
 
         // Delete Fees Record
-        Route::delete('/fees_record/{studentId}/{term}/{session}/delete_fees', 'delete');
+        Route::delete('/fees_record/{studentId}/{term}/{session}/delete_fees', 'delete')->middleware('can:isExecutive');
+
+        // Go To Reciept
+        Route::get('/reciept/{studentId}/{term}/{session}', 'showStudentRecieptForTerm');
     }); 
    
