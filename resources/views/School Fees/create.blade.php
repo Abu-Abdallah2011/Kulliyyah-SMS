@@ -68,12 +68,12 @@
                             <x-text-input id="amount" class="block mt-1 w-full" type="text" name="amount" :value="old('amount')" list="datalistOptions" required autocomplete="amount" />
                             <datalist id="datalistOptions">
                                 <option value="500">
-                                <option value="1,000">
-                                <option value="1,500">
-                                <option value="2,000">
-                                <option value="2,500">
-                                <option value="3,000">
-                                <option value="3,500">
+                                <option value="1000">
+                                <option value="1500">
+                                <option value="2000">
+                                <option value="2500">
+                                <option value="3000">
+                                <option value="3500">
                               </datalist>
                             <x-input-error :messages="$errors->get('amount')" class="mt-2" />
                         </div>
