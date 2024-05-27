@@ -50,6 +50,7 @@
                             <option>PAID</option>
                             <option>PART</option>
                             <option>FREE</option>
+                            <option>UNCLEARED</option>
                             </select>
                             <x-input-error :messages="$errors->get('status')" class="mt-2" />
                         </div>
