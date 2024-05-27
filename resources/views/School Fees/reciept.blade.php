@@ -58,7 +58,7 @@
     
             @can('isExecutive')
             <div class="mt-6 text-center">
-                <a href="{{ url('/fees_record/' . $student->id . '/' . $studentFees->term . '/' . $studentFees->session . '/edit_fees') }}">
+                <a href="{{ url('/fees_record/' . $student->id . '/' . $studentFees->term . '/' . str_replace('/', '_', $studentFees->session) . '/edit_fees') }}">
                     <x-primary-button>Update</x-primary-button>
                 </a>
             </div>
