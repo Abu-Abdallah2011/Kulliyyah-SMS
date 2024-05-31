@@ -93,23 +93,12 @@
 
                                     @foreach($matchingSubjects as $subjects)
 
-                                    @php
-                                    $subjective = $subjects
-                                                        ->where('session', $sessions->session)
-                                                        ->where('term', $sessions->term)
-                                                        ->where('student_id', $student->id)
-                                                        ->where('subject_id', $subjects->subject_id)
-                                                        ->get();
-                                    @endphp
-
                                     @if (!in_array($subjects->subject_id, $columnsDisplayed))
-                                    {{-- @if ($matchingSubjects) --}}
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $totalCa[$student->id][$subjects->subject_id] }}</td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
                                         @foreach($subjective as $exam)
                                         {{ $exam->exams }}</td>
                                         @endforeach
-                                    {{-- @endif --}}
                                     @php
                              $columnsDisplayed[] = $subjects->subject_id;
                          @endphp
@@ -127,65 +116,15 @@
                                         @endif
                                     </td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
-                                        {{-- <canvas id="myChart" width="400" height="400"></canvas> --}}
-{{-- <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['absent', 'late', 'present', 'excused'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5],
-                backgroundColor: [
-                    'rgba(255, 0, 0, 0.5)',
-                    'rgba(255, 255, 0, 0.5)',
-                    'rgba(0, 255, 0, 0.5)',
-                    'rgba(255, 0, 255, 0.5)'
-                ],
-                borderColor: [
-                    'rgba(255, 0, 0, 0.5)',
-                    'rgba(255, 255, 0, 0.5)',
-                    'rgba(0, 255, 0, 0.5)',
-                    'rgba(255, 0, 255, 0.5)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            plugins: {
-                datalabels: {
-                    color: '#000', // Color of the data labels
-                    anchor: 'end',
-                    align: 'top',
-                    formatter: function(value, context) {
-                        return value;
-                    }
-                }
-            }
-        }
-    });
-</script> --}}
-
                                         {{ number_format($student->attendancePercentage) }}%
                                 </td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $student->position}}</td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
-                                        {{-- @if ($matchingSubjects) --}}
                                         @foreach($matchingSubjects as $subjects)
-                                        @php
-                                        $subjective = $subjects
-                                                            ->where('session', $sessions->session)
-                                                            ->where('term', $sessions->term)
-                                                            ->where('student_id', $student->id)
-                                                            ->where('subject_id', $subjects->subject_id)
-                                                            ->get();
-                                        @endphp
                                         @foreach($subjective as $subject)
                                         {{ $subject->comment }}
                                         @endforeach
                                         @endforeach
-                                        {{-- @endif --}}
                                 </td>
                                     
                                   </tr>

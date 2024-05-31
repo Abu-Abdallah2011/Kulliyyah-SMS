@@ -50,6 +50,8 @@ foreach ($teacher->students as $student) {
     $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
     $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
     $student->attendancePercentage = $percentage;
+
+    $subjective = [];
     
     foreach ($student->exams as $subjects) {
 
@@ -59,6 +61,14 @@ foreach ($teacher->students as $student) {
                                   ->get();
 
         foreach ($matchingSubjects as $subject) {
+
+            $subjective = $subject
+            ->where('session', $sessions->session)
+            ->where('term', $sessions->term)
+            ->where('student_id', $student->id)
+            ->where('subject_id', $subject->subject_id)
+            ->get();
+
         // Calculate the total CA score for this subject and student
         $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
         $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
@@ -181,6 +191,7 @@ $term = sessions::orderBy('created_at', 'desc')->first('term');
                                     'matchingSubjects' => $matchingSubjects,
                                     'session' => $session,
                                     'term' => $term,
+                                    'subjective' => $subjective,
 ]);
 }
 
@@ -223,6 +234,8 @@ foreach ($teacher->students as $student) {
     $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
     $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
     $student->attendancePercentage = $percentage;
+
+    $subjective = [];
     
     foreach ($student->exams as $subjects) {
 
@@ -232,6 +245,14 @@ foreach ($teacher->students as $student) {
         ->get();
 
 foreach ($matchingSubjects as $subject) {
+
+    $subjective = $subject
+    ->where('session', $sessions->session)
+    ->where('term', $sessions->term)
+    ->where('student_id', $student->id)
+    ->where('subject_id', $subject->subject_id)
+    ->get();
+
         // Calculate the total CA score for this subject and student
         $first_ca = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
         $second_ca = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
@@ -352,6 +373,7 @@ $term = sessions::orderBy('created_at', 'desc')->first('term');
                                     'matchingSubjects' => $matchingSubjects,
                                     'session' => $session,
                                     'term' => $term,
+                                    'subjective' => $subjective,
 ]);
 }
 
@@ -820,13 +842,16 @@ foreach ($matchingSubjects as $subject) {
 $position = 1;
 $previousAverage = null;
 
+// dd($orderedStudents);
+
 foreach ($orderedStudents as $student) {
-    if ($previousAverage !== null && $student->averageTotal < $previousAverage) {
+    if ($averageTotal !== null && $student->averageTotal < $previousAverage) {
         $position++;
     }
-
+    // dd($student);
     $student->position = resultOrdinalSuffix($position);
     $previousAverage = $student->averageTotal;
+
 }
 
  // =====================================================
@@ -918,6 +943,8 @@ foreach ($teacher->students as $student) {
     $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
     $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
     $student->attendancePercentage = $percentage;
+
+    $subjective = [];
     
     foreach ($student->exams as $subjects) {
 
@@ -927,6 +954,14 @@ foreach ($teacher->students as $student) {
                                   ->get();
 
         foreach ($matchingSubjects as $subject) {
+
+            $subjective = $subject
+            ->where('session', $sessions->session)
+            ->where('term', $sessions->term)
+            ->where('student_id', $student->id)
+            ->where('subject_id', $subject->subject_id)
+            ->get();
+
         // Calculate the total CA score for this subject and student
         $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
         $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
@@ -1051,6 +1086,7 @@ $term = sessions::orderBy('created_at', 'desc')->first('term');
                                     'matchingSubjects' => $matchingSubjects,
                                     'session' => $session,
                                     'term' => $term,
+                                    'subjective' => $subjective,
 ]);
 }
 
