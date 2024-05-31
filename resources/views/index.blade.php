@@ -216,8 +216,8 @@
                   <p>Kulliyyatu Masjidil Qur'an was first Established in the Year 2009 by Our Mentor, Role Model and the Proprietor
                     of the School <strong>Professor Isa Ali Ibrahim Pantami(Malam Babba).</strong> It was Established to be the Intellectual 
                     Cornucopia for Masjidul Qur'an and the Society at Large, providing highly Educated Students to Lead Prayers
-                    and other Spiritual Activities In the Masjid and the Society at Large. Kulliyyatu Masjidil Qur'an Started with about 00 Students in
-                    about 00 Classes for both Male and Female and the School is best known for Graduating High Quality Students in Qur'an Memorization and Islamic
+                    and other Spiritual Activities In the Masjid and the Society at Large. Kulliyyatu Masjidil Qur'an Started with a Moderate Number of Students
+                    and Classes for both Male and Female and the School is best known for Graduating High Quality Students in Qur'an Memorization and Islamic
                     Knowledge in General including The Inculcation of Islamic Values and Discipline in its Students. The School as of 2024 has Graduated More Than
                     200 Students Majority of Whom have memorized the Qur'an and others learned to Recite the Qur'an Fluently. With Some of its Classes in Masjidul Qur'an and some in
                     the School Building, Kulliyyatu Masjidil Qur'an Continues to Mentor the Next Generation of Intellectual Giants In Shaa Allaah!
@@ -573,20 +573,28 @@
               <div class="mu-testimonial-item">
                 <div class="mu-testimonial-quote">
                   <blockquote>
-                    <p>Jazaakumul Laahu Khaira</p>
+                    <p>Alhamdulil Laah!
+                      Yabo da Jinjina ga Kulliyyatu Masjidil Qur'an bisa Kokari da Jajircewa da
+                      akeyi a kanmu wajen ganin an bamu Ilimi da Tarbiyya. Don haka babu abinda zamu iya cewa
+                      sai dai Fatan Alheri wa Jagororinta tun daga kan Mu'assisinta har zuwa kan Wadanda suke
+                      Jagorantarta a Yau.
+                      <br>
+                      Jazaakumul Laahu Khairan wa zaadakumul Laahu Ilman wa Imanan wa Ihsanan wa Ikhlasan wa
+                      Taufiqan wa Hidaya.
+                    </p>
                   </blockquote>
                 </div>
                 <div class="mu-testimonial-img">
-                  <img src="assets/img/teachers/gokaru.jpg" alt="img">
+                  <img src="assets/img/Students/std001.jpg" alt="img">
                 </div>
                 <div class="mu-testimonial-info">
-                  <h4>Testing</h4>
-                  <span>Happy Teacher</span>
+                  <h4>Muhammad Jamil Yunusa</h4>
+                  <span>Happy Student</span>
                 </div>
               </div>
               <!-- end testimonial single item -->
               <!-- start testimonial single item -->
-              <div class="mu-testimonial-item">
+              {{-- <div class="mu-testimonial-item">
                 <div class="mu-testimonial-quote">
                   <blockquote>
                     <p>Jazaakumul Laahu Khaira</p>
@@ -599,10 +607,10 @@
                   <h4>Abu Abdallah</h4>
                   <span>Happy Parent</span>
                 </div>
-              </div>
+              </div> --}}
               <!-- end testimonial single item -->
               <!-- start testimonial single item -->
-              <div class="mu-testimonial-item">
+              {{-- <div class="mu-testimonial-item">
                 <div class="mu-testimonial-quote">
                   <blockquote>
                     <p>Jazaakumul Laahu Khaira.</p>
@@ -615,7 +623,7 @@
                   <h4>Testing</h4>
                   <span>Happy Teacher</span>
                 </div>
-              </div>
+              </div> --}}
               <!-- end testimonial single item -->
             </div>
           </div>
