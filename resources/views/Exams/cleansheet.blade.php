@@ -93,6 +93,15 @@
 
                                     @foreach($matchingSubjects as $subjects)
 
+                                    @php
+                                        $subjective = $subjects
+                                                            ->where('session', $sessions->session)
+                                                            ->where('term', $sessions->term)
+                                                            ->where('student_id', $student->id)
+                                                            ->where('subject_id', $subjects->subject_id)
+                                                            ->get();
+                                        @endphp
+
                                     @if (!in_array($subjects->subject_id, $columnsDisplayed))
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $totalCa[$student->id][$subjects->subject_id] }}</td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
@@ -121,6 +130,14 @@
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ $student->position}}</td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
                                         @foreach($matchingSubjects as $subjects)
+                                        @php
+                                        $subjective = $subjects
+                                                            ->where('session', $sessions->session)
+                                                            ->where('term', $sessions->term)
+                                                            ->where('student_id', $student->id)
+                                                            ->where('subject_id', $subjects->subject_id)
+                                                            ->get();
+                                        @endphp
                                         @foreach($subjective as $subject)
                                         {{ $subject->comment }}
                                         @endforeach
