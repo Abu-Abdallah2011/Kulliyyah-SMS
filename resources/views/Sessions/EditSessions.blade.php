@@ -31,7 +31,11 @@
                             <!-- Term -->
                             <div>
                                 <x-input-label for="term" :value="__('Term')" />
-                                <x-text-input id="term" class="block mt-1 w-full" type="text" name="term" value="{{$session->term}}" required autofocus autocomplete="term" />
+                                <select id="term" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" type="text" name="term" value="{{$session->term}}" required autofocus autocomplete="term" />
+                                    <option value="1st Term">1st Term</option>
+                                    <option value="2nd Term">2nd Term</option>
+                                    <option value="3rd Term">3rd Term</option>
+                                    </select>
                                 <x-input-error :messages="$errors->get('term')" class="mt-2" />
                             </div>
                     
