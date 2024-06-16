@@ -114,7 +114,7 @@ $firstTerm = sessions::where('session', $session)
         'late' => '<i class="fas fa-clock text-yellow-500"></i>',
         'excused' => '<i class="fas fa-pencil text-purple-500"></i>',
     ];    
-        return view('School Fees.fees_database', 
+        return view('SchoolFees.fees_database', 
         compact(
             'teachers', 
             'students', 
@@ -141,7 +141,7 @@ $firstTerm = sessions::where('session', $session)
          ->orderBy('fullname');
      }])->with('user')
      ->get();
-     return view('School Fees.create', 
+     return view('SchoolFees.create', 
      [
         'teachers' => $teachers,
         'student' => $student,
@@ -186,7 +186,7 @@ public function edit($studentId, $term, $session){
                                       ->where('term', $term)
                                       ->where('session', str_replace('_', '/', $session))
                                       ->first();
-    return view('School Fees.edit_term_fees', compact('studentTermFees', 'student'));
+    return view('SchoolFees.edit_term_fees', compact('studentTermFees', 'student'));
 }
 
 //UPDATE School Fees Information
@@ -239,7 +239,7 @@ public function showPreviousSessions($studentId) {
     $paymentStatus = SchoolFeesModel::where('student_id', $studentId)
     // ->where('session', '!=', $session)
     ->get();
-    return view('School Fees.ShowPreviousTerms', 
+    return view('SchoolFees.ShowPreviousTerms', 
     [
         'session' => $session,
         'studentId' => $studentId,
@@ -264,7 +264,7 @@ public function showStudentRecieptForTerm($studentId, $term, $session) {
      ->where('session', str_replace('_', '/', $session))
      ->first();
      
-    return view('School Fees.reciept', 
+    return view('SchoolFees.reciept', 
     [
         'student' => $student,
         'studentFees' => $studentFees,
