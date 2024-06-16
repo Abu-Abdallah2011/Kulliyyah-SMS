@@ -13,8 +13,11 @@ use App\Http\Requests\SchoolFeesRequest;
 class SchoolFeesController extends Controller
 {
     // Show Fees Database
-public function show()
+public function show(Request $request)
 {
+
+    $search = $request->input('search');
+
     $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) {
             $query->where('status', 'IN SCHOOL')
@@ -35,6 +38,7 @@ public function show()
         ->orWhere('grad_type', 'TARTEEL ZALLA')
         ->WhereNot('class', '#')
         ->orderBy('class')
+        ->filter(['search' => $search])
         ->get();
 
         $session = sessions::pluck('session')->last();

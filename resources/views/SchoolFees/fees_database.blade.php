@@ -6,7 +6,7 @@
 
         </h2>
     </x-slot>
-    <x-search />
+    <x-schoolFeesSearch />
     <x-success-status class="mb-4" :status="session('message')" />
 
     <div class="py-6">
