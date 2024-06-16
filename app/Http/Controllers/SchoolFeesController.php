@@ -33,6 +33,7 @@ public function show()
         }])
         ->where('status', 'IN SCHOOL')
         ->orWhere('grad_type', 'TARTEEL ZALLA')
+        ->WhereNot('class', '#')
         ->orderBy('class')
         ->get();
 
