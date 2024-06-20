@@ -58,6 +58,11 @@ Route::get('/register', function () {
 Route::get('/dashboard', [DashboardController::class, 'view'])
 ->middleware(['auth', 'verified'])->name('dashboard');
 
+ //Go To Settings Page
+ Route::get('settings', function () {
+    return view('settings');
+})->middleware('can:isExecutive');
+
 Route::controller(App\Http\Controllers\DashboardController::class)->group(function () {
 
 //Show Dashboard after Authentication

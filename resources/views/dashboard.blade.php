@@ -15,7 +15,18 @@
     {{-- TEACHER DASHBOARD VIEW --}}
     @if(Auth::user()->can('isAssistant') && !Request::is('dashboard/*'))
     <x-teacher-view :teacher="$teacher" :class="$class" :teachers="$teachers" 
-    :graduates="$graduates" :session="$session" />
+    :graduates="$graduates" :session="$session" :totalpaid="$totalpaid" :totalfree="$totalfree"
+    :totalnotpaid="$totalnotpaid" :totalpart="$totalpart" :percentagepaid="$percentagepaid" 
+    :percentagefree="$percentagefree" :percentagenotpaid="$percentagenotpaid" :percentagepart="$percentagepart"
+    :presentpercentage="$presentpercentage" :absentpercentage="$absentpercentage" :excusedpercentage="$excusedpercentage"
+    :latepercentage="$latepercentage" :presentpercentageforteachers="$presentpercentageforteachers"
+    :absentpercentageforteachers="$absentpercentageforteachers" :excusedpercentageforteachers="$excusedpercentageforteachers"
+    :latepercentageforteachers="$latepercentageforteachers" :percentageexcusedlate="$percentageexcusedlate"
+    :percentageclosedearly="$percentageclosedearly" :percentagelatecominandearlyclose="$percentagelatecominandearlyclose"
+    :totalteachers="$totalteachers" :totalmaleteachers="$totalmaleteachers" :totalfemaleteachers="$totalfemaleteachers"
+    :totalstudents="$totalstudents" :totalmalestudents="$totalmalestudents" :totalfemalestudents="$totalfemalestudents"
+    :percentageclasspresent="$percentageclasspresent" :percentageclasslate="$percentageclasslate" :percentageclassexcused="$percentageclassexcused"
+    :percentageclassabsent="$percentageclassabsent" />
     @endif
 
         @can('isAssistant')
