@@ -820,17 +820,23 @@ foreach ($matchingSubjects as $subject) {
 $position = 1;
 $previousAverage = null;
 
-// dd($orderedStudents);
-
 foreach ($orderedStudents as $student) {
     if ($averageTotal !== null && $student->averageTotal < $previousAverage) {
         $position++;
     }
-    // dd($student);
     $student->position = resultOrdinalSuffix($position);
+    $studentPositions[$student->id] = resultOrdinalSuffix($position);
+
     $previousAverage = $student->averageTotal;
 
+    echo "Student ID: " . $student->id . " - Student Name: " . $student->fullname . " - Total: " . $student->averageTotal . " - Position: " . $student->position . "\n";
+
 }
+
+// foreach ($orderedStudents as $student) {
+
+//     echo "Student ID: " . $student->id . " - Student Name: " . $student->fullname . " - Average Total: " . $student->averageTotal . " - Position: " . $student->position . "\n";
+// }
 
  // =====================================================
 // END OF POSITION CODES
