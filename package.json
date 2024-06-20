@@ -20,7 +20,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "chart.js": "^4.4.2",
+        "chart.js": "^4.4.3",
         "flatpickr": "^4.6.13",
         "jquery": "^3.6.4"
     }

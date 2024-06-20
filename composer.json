@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "aws/aws-sdk-php": "^3.263",
+        "barryvdh/laravel-dompdf": "^2.2",
         "davidhsianturi/blade-bootstrap-icons": "^1.4",
         "guzzlehttp/guzzle": "^7.2",
         "khatabwedaa/blade-css-icons": "^1.3",
