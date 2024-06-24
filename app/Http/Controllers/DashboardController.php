@@ -179,163 +179,108 @@ class DashboardController extends Controller
 
         // CALCULATING SINGLE CLASS STUDENTS ATTENDANCE PERCENTAGES
 
-    function getPresentAttendancePercentage()
-{
-    $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
-    $session = sessions::orderBy('created_at', 'desc')->first();
-    // Retrieve the teacher
-    $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
-    ->with(['students' => function ($query) 
-    {
-        $query->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA')
-        ->orderBy('fullname');
-    }])
-    ->first();
-
-    // Get all students of the teacher
-    $students = $teacher->students;
-
-    // Initialize counters
-    $totalAttendances = 0;
-    $totalPresent = 0;
-
-    // Iterate through each student
-    foreach ($students as $student) {
-        // Get all attendances of the student
-        $attendances = $student->attendance;
+        function getPresentAttendancePercentage($teacher)
+        {
+            $session = sessions::orderBy('created_at', 'desc')->first();
+            $students = $teacher->students;
         
-        // Count total attendances and present attendances
-        $totalAttendances += $attendances->where('term', $session->term)->where('session', $session->session)->count();
-        $totalPresent += $attendances->where('term', $session->term)->where('session', $session->session)
-        ->where('status', 'present')->count();
-    }
-
-    // Calculate the attendance percentage
-    if ($totalAttendances == 0) {
-        return 0;
-    }
-
-    $attendancePercentage = ($totalPresent / $totalAttendances) * 100;
-
-    return $attendancePercentage;
-}
-
-function getLatePercentage()
-{
-    $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
-    $session = sessions::orderBy('created_at', 'desc')->first();
-    // Retrieve the teacher
-    $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
-    ->with(['students' => function ($query) 
-    {
-        $query->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA')
-        ->orderBy('fullname');
-    }])
-    ->first();
-
-    $students = $teacher->students;
-
-    $totalAttendances = 0;
-    $totalLate = 0;
-
-    foreach ($students as $student) {
-        $attendances = $student->attendance;
-
-        $totalAttendances += $attendances->where('term', $session->term)->where('session', $session->session)->count();
-        $totalLate += $attendances->where('term', $session->term)->where('session', $session->session)
-        ->where('status', 'late')->count();
-    }
-
-    if ($totalAttendances == 0) {
-        return 0;
-    }
-
-    $latePercentage = ($totalLate / $totalAttendances) * 100;
-
-    return $latePercentage;
-}
-
-function getExcusedPercentage()
-{
-    $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
-    $session = sessions::orderBy('created_at', 'desc')->first();
-    // Retrieve the teacher
-    $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
-    ->with(['students' => function ($query) 
-    {
-        $query->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA')
-        ->orderBy('fullname');
-    }])
-    ->first();
-
-    $students = $teacher->students;
-
-    $totalAttendances = 0;
-    $totalExcused = 0;
-
-    foreach ($students as $student) {
-        $attendances = $student->attendance;
-
-        $totalAttendances += $attendances->where('term', $session->term)->where('session', $session->session)->count();
-        $totalExcused += $attendances->where('term', $session->term)->where('session', $session->session)
-        ->where('status', 'excused')->count();
-    }
-
-    if ($totalAttendances == 0) {
-        return 0;
-    }
-
-    $excusedPercentage = ($totalExcused / $totalAttendances) * 100;
-
-    return $excusedPercentage;
-}
-
-
-function getAbsentPercentage()
-{
-    $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
-    $session = sessions::orderBy('created_at', 'desc')->first();
-    // Retrieve the teacher
-    $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
-    ->with(['students' => function ($query) 
-    {
-        $query->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA')
-        ->orderBy('fullname');
-    }])
-    ->first();
-
-    $students = $teacher->students;
-
-    $totalAttendances = 0;
-    $totalAbsent = 0;
-
-    foreach ($students as $student) {
-        $attendances = $student->attendance;
-
-        $totalAttendances += $attendances->where('term', $session->term)->where('session', $session->session)->count();
-        $totalAbsent += $attendances->where('term', $session->term)->where('session', $session->session)
-        ->where('status', 'absent')->count();
-    }
-
-    if ($totalAttendances == 0) {
-        return 0;
-    }
-
-    $absentPercentage = ($totalAbsent / $totalAttendances) * 100;
-
-    return $absentPercentage;
-}
-
-if (Gate::allows('isAssistant')) {
-$teacherId = $teacher->pluck('id');
-$percentageclasspresent = getPresentAttendancePercentage($teacherId);
-$percentageclasslate = getLatePercentage($teacherId);
-$percentageclassexcused = getExcusedPercentage($teacherId);
-$percentageclassabsent = getAbsentPercentage($teacherId);
+            $totalAttendances = 0;
+            $totalPresent = 0;
+        
+            foreach ($students as $student) {
+                $attendances = $student->attendance;
+                $totalAttendances += $attendances->where('term', $session->term)->where('session', $session->session)->count();
+                $totalPresent += $attendances->where('term', $session->term)->where('session', $session->session)
+                    ->where('status', 'present')->count();
+            }
+        
+            if ($totalAttendances == 0) {
+                return 0;
+            }
+        
+            return ($totalPresent / $totalAttendances) * 100;
+        }
+        
+        function getLatePercentage($teacher)
+        {
+            $session = sessions::orderBy('created_at', 'desc')->first();
+            $students = $teacher->students;
+        
+            $totalAttendances = 0;
+            $totalLate = 0;
+        
+            foreach ($students as $student) {
+                $attendances = $student->attendance;
+                $totalAttendances += $attendances->where('term', $session->term)->where('session', $session->session)->count();
+                $totalLate += $attendances->where('term', $session->term)->where('session', $session->session)
+                    ->where('status', 'late')->count();
+            }
+        
+            if ($totalAttendances == 0) {
+                return 0;
+            }
+        
+            return ($totalLate / $totalAttendances) * 100;
+        }
+        
+        function getExcusedPercentage($teacher)
+        {
+            $session = sessions::orderBy('created_at', 'desc')->first();
+            $students = $teacher->students;
+        
+            $totalAttendances = 0;
+            $totalExcused = 0;
+        
+            foreach ($students as $student) {
+                $attendances = $student->attendance;
+                $totalAttendances += $attendances->where('term', $session->term)->where('session', $session->session)->count();
+                $totalExcused += $attendances->where('term', $session->term)->where('session', $session->session)
+                    ->where('status', 'excused')->count();
+            }
+        
+            if ($totalAttendances == 0) {
+                return 0;
+            }
+        
+            return ($totalExcused / $totalAttendances) * 100;
+        }
+        
+        function getAbsentPercentage($teacher)
+        {
+            $session = sessions::orderBy('created_at', 'desc')->first();
+            $students = $teacher->students;
+        
+            $totalAttendances = 0;
+            $totalAbsent = 0;
+        
+            foreach ($students as $student) {
+                $attendances = $student->attendance;
+                $totalAttendances += $attendances->where('term', $session->term)->where('session', $session->session)->count();
+                $totalAbsent += $attendances->where('term', $session->term)->where('session', $session->session)
+                    ->where('status', 'absent')->count();
+            }
+        
+            if ($totalAttendances == 0) {
+                return 0;
+            }
+        
+            return ($totalAbsent / $totalAttendances) * 100;
+        }
+        if (Gate::allows('isAssistant')) {
+            $teacher = register_teacher::where('user_id', Auth::user()->id)
+                ->with(['students' => function ($query) {
+                    $query->where('status', 'IN SCHOOL')
+                        ->orWhere('grad_type', 'TARTEEL ZALLA')
+                        ->orderBy('fullname');
+                }])
+                ->first();
+        
+            if ($teacher) {
+                $percentageclasspresent = getPresentAttendancePercentage($teacher);
+                $percentageclasslate = getLatePercentage($teacher);
+                $percentageclassexcused = getExcusedPercentage($teacher);
+                $percentageclassabsent = getAbsentPercentage($teacher);
+            }        
 
 return view('dashboard', [
     'teacher' => $teacher,
@@ -408,10 +353,6 @@ return view('dashboard', [
         'totalstudents' => $totalstudents,
         'totalmalestudents' => $totalmalestudents,
         'totalfemalestudents' => $totalfemalestudents,
-        // 'percentageclasspresent' => $percentageclasspresent,
-        // 'percentageclasslate' => $percentageclasslate,
-        // 'percentageclassexcused' => $percentageclassexcused,
-        // 'percentageclassabsent' => $percentageclassabsent,
     ]);
     }
     
