@@ -96,7 +96,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-900">Attendance</h3>
-                                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">{{ $percentageclasspresent }}%</p>
+                                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">{{ number_format($percentageclasspresent, 2) }}%</p>
                                             </div>
                                         </div>
                                     </div>
@@ -149,7 +149,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-900">School Fees</h3>
-                                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">Paid: {{$percentagepaid}}%</p>
+                                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">Paid: {{ number_format($percentagepaid, 2) }}%</p>
                                             </div>
                                         </div>
                                     </div>
@@ -329,7 +329,7 @@
                                 document.addEventListener('DOMContentLoaded', function () {
                                     var ctx = document.getElementById('teachersAttendance').getContext('2d');
 
-                                    var labels = ['%Present', '%Excused', '%Absent', '%Late', '%E. Late', '%Early Close', '%Came Late And Closed Early'];
+                                    var labels = ['%Present', '%Absent', '%Excused', '%Late', '%E. Late', '%Early Close', '%Came Late And Closed Early'];
                                     var data = [
                                         {{ $presentpercentageforteachers }},
                                         {{ $absentpercentageforteachers }},
@@ -349,8 +349,8 @@
                                                 data: data,
                                                 backgroundColor: [
                                                     'rgba(0, 255, 0, 0.5)',
-                                                    'rgba(153, 0, 255, 0.5)',
                                                     'rgba(255, 0, 0, 0.5)',
+                                                    'rgba(153, 0, 255, 0.5)',
                                                     'rgba(255, 255, 0, 0.5)',
                                                     'rgba(255, 135, 0, 0.5)',
                                                     'rgba(255, 87, 255, 0.5)',
@@ -358,14 +358,15 @@
                                                 ],
                                                 borderColor: [
                                                     'rgba(75, 192, 192, 1)',
-                                                    'rgba(153, 102, 255, 1)',
                                                     'rgba(255, 99, 132, 1)',
+                                                    'rgba(153, 102, 255, 1)',
                                                     'rgba(200, 255, 0, 1)',
                                                     'rgba(255, 135, 0, 1)',
                                                     'rgba(255, 87, 255, 1)',
                                                     'rgba(0, 0, 0, 1)',
                                                 ],
-                                                borderWidth: 1
+                                                borderWidth: 1,
+                                               // fill: true // This makes the area under the line filled
                                             }]
                                         },
                                         options: {
