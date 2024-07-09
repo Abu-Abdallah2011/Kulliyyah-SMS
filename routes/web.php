@@ -426,7 +426,7 @@ require __DIR__.'/auth.php';
         Route::post('/fees_record/{studentId}', 'store')->middleware('can:isFinxam');
 
         // Show Fees Report
-        Route::get('/fees_database/show', 'show')->name('fees.show')->middleware('can:isFInxam');
+        Route::get('/fees_database/show', 'show')->name('fees.show')->middleware('can:isFinxam');
 
         // Show Previous Sessions Fees Record
         Route::get('/fees_record/{studentId}/PreviousSessions', 'showPreviousSessions');
@@ -435,7 +435,7 @@ require __DIR__.'/auth.php';
         Route::get('/fees_record/{studentId}/{term}/{session}/edit_fees', 'edit')->middleware('can:isFinxam');
 
         // Update Fees Record
-        Route::put('/fees_record/{studentId}/{term}/{session}/update_fees', 'update')->middleware('can:isFInxam');
+        Route::put('/fees_record/{studentId}/{term}/{session}/update_fees', 'update')->middleware('can:isFinxam');
 
         // Delete Fees Record
         Route::delete('/fees_record/{studentId}/{term}/{session}/delete_fees', 'delete')->middleware('can:isFinxam');
