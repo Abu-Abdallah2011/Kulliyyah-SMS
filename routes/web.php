@@ -420,25 +420,25 @@ require __DIR__.'/auth.php';
             // CRUD for Attendance
     Route::controller(SchoolFeesController::class)->group(function () {
         // Show Fees form
-        Route::get('/fees_record/{studentId}', 'create')->name('fees.create')->middleware('can:isFinxam');
+        Route::get('/fees_record/{studentId}', 'create')->name('fees.create')->middleware('can:isFinance');
 
         // Save Fees information
-        Route::post('/fees_record/{studentId}', 'store')->middleware('can:isFinxam');
+        Route::post('/fees_record/{studentId}', 'store')->middleware('can:isFinance');
 
         // Show Fees Report
-        Route::get('/fees_database/show', 'show')->name('fees.show')->middleware('can:isFinxam');
+        Route::get('/fees_database/show', 'show')->name('fees.show')->middleware('can:isFinance');
 
         // Show Previous Sessions Fees Record
         Route::get('/fees_record/{studentId}/PreviousSessions', 'showPreviousSessions');
 
         // Show Fees Edit Form
-        Route::get('/fees_record/{studentId}/{term}/{session}/edit_fees', 'edit')->middleware('can:isFinxam');
+        Route::get('/fees_record/{studentId}/{term}/{session}/edit_fees', 'edit')->middleware('can:isFinance');
 
         // Update Fees Record
-        Route::put('/fees_record/{studentId}/{term}/{session}/update_fees', 'update')->middleware('can:isFinxam');
+        Route::put('/fees_record/{studentId}/{term}/{session}/update_fees', 'update')->middleware('can:isFinance');
 
         // Delete Fees Record
-        Route::delete('/fees_record/{studentId}/{term}/{session}/delete_fees', 'delete')->middleware('can:isFinxam');
+        Route::delete('/fees_record/{studentId}/{term}/{session}/delete_fees', 'delete')->middleware('can:isFinance');
 
         // Go To Reciept
         Route::get('/reciept/{studentId}/{term}/{session}', 'showStudentRecieptForTerm');

@@ -138,7 +138,7 @@
                                 </div>
 
                                 {{-- FOR EXECUTIVES/FINANCE OFFICERS ONLY --}}
-                                @can('isFinxam')
+                                @can('isFinance')
 
                                 <!-- Card: School Fees -->
                                 <a href="fees_database/show">
