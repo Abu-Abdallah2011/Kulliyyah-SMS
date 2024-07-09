@@ -137,8 +137,8 @@
                                 </div>
                                 </div>
 
-                                {{-- FOR EXECUTIVES ONLY --}}
-                                @can('isExecutive')
+                                {{-- FOR EXECUTIVES/FINANCE OFFICERS ONLY --}}
+                                @can('isFinxam')
 
                                 <!-- Card: School Fees -->
                                 <a href="fees_database/show">
@@ -209,7 +209,7 @@
                                 </script>
 
                                 @endcan
-                                {{-- END OF FOR EXECUTIVES ONLY --}}
+                                {{-- END OF FOR EXECUTIVES/FINANCE OFFICERS ONLY --}}
 
                                 <div class="bg-gray-300 dark:bg-gray-800 shadow rounded-lg p-6">
                                     <div class="flex items-center">
