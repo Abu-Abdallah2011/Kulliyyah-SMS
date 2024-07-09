@@ -362,7 +362,7 @@ require __DIR__.'/auth.php';
         Route::get('dashboard/exams/{teacher_id}', 'selectedTeacherExams');
 
         // Show Exam Database
-        Route::get('/exams/show', 'show')->name('exams.show')->middleware('can:isAssistant');
+        Route::get('/exams/show', 'show')->middleware('can:isAssistant')->name('exams.show');
 
         // Edit Exam Data
         Route::get('/exams/{id}/examsEdit', 'edit')->middleware('can:isAssistant');
