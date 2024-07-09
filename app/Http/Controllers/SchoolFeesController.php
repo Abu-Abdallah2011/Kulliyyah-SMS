@@ -37,7 +37,13 @@ public function show(Request $request)
         ->where('status', 'IN SCHOOL')
         ->orWhere('grad_type', 'TARTEEL ZALLA')
         ->WhereNot('class', '#')
-        ->orderBy('updated_at', 'desc')
+        ->orderByDesc(function ($query) {
+            $query->select('updated_at')
+                ->from('school_fees_database')
+                ->whereColumn('school_fees_database.student_id', 'students_details_tables.id')
+                ->orderBy('updated_at', 'desc')
+                ->limit(1);
+        })
         ->filter(['search' => $search])
         ->get();
 
