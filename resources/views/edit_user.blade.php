@@ -24,6 +24,7 @@
            <option>{{ $user->role }}</option>
            <option>ADMIN</option>
            <option>EXECUTIVE</option>
+           <option>FINXAM</option>
            <option>TEACHER</option>
            <option>ASSISTANT</option>
            <option>DAN T.P</option>

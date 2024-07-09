@@ -34,6 +34,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role == 'EXECUTIVE' || $user->role == 'ADMIN';
         });
 
+        Gate::define('isFinxam', function($user){
+            return $user->role == 'FINXAM' || $user->role == 'ADMIN' || $user->role == 'EXECUTIVE';
+        });
+
         Gate::define('isTeacher', function($user){
             return $user->role == 'TEACHER' || $user->role == 'EXECUTIVE' || $user->role == 'ADMIN';
         });

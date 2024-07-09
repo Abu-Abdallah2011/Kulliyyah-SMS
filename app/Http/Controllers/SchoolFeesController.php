@@ -37,7 +37,7 @@ public function show(Request $request)
         ->where('status', 'IN SCHOOL')
         ->orWhere('grad_type', 'TARTEEL ZALLA')
         ->WhereNot('class', '#')
-        ->orderBy('class')
+        ->orderBy('updated_at', 'desc')
         ->filter(['search' => $search])
         ->get();
 
