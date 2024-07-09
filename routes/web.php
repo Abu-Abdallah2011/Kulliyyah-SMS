@@ -362,34 +362,34 @@ require __DIR__.'/auth.php';
         Route::get('dashboard/exams/{teacher_id}', 'selectedTeacherExams');
 
         // Show Exam Database
-        Route::get('/exams/show', 'show')->name('exams.show');
+        Route::get('/exams/show', 'show')->name('exams.show')->middleware('isAssistant');
 
         // Edit Exam Data
-        Route::get('/exams/{id}/examsEdit', 'edit');
+        Route::get('/exams/{id}/examsEdit', 'edit')->middleware('isAssistant');
 
         // Update Exam
-        Route::put('/exams/{id}', 'update');
+        Route::put('/exams/{id}', 'update')->middleware('isAssistant');
 
         // Delete Exam
-        Route::delete('/exams/{id}', 'delete')->name('exams.delete');
+        Route::delete('/exams/{id}', 'delete')->name('exams.delete')->middleware('isAssistant');
 
         // Select Subjects
-        Route::get('/selectSubjects', 'selectSubjects');
+        Route::get('/selectSubjects', 'selectSubjects')->middleware('isAssistant');
 
         // Store Subjects
-        Route::post('/subjectsCreate', 'subjectsCreate');
+        Route::post('/subjectsCreate', 'subjectsCreate')->middleware('isAssistant');
 
         // Go To Comment
-        Route::get('/exams/commentEditView', 'examComment');
+        Route::get('/exams/commentEditView', 'examComment')->middleware('isAssistant');
 
         // Update Comment
-        Route::put('/exams/{id}/comment_update', 'updateComment');
+        Route::put('/exams/{id}/comment_update', 'updateComment')->middleware('isAssistant');
 
         // Go To Prevous Terms Exams Records
         Route::get('/exams/{class}/examsForPreviousTerms', 'examsForPreviousTerms');
 
         // Go To Prevous Terms Cleansheet
-        Route::get('/previousExams/{term}/{session}', 'PreviousTermsCleansheet');
+        Route::get('/previousExams/{term}/{session}', 'PreviousTermsCleansheet')->middleware('isAssistant');
 
         // Go To Prevous Terms Cleansheet
         Route::get('/ExamsRecords/{id}/PreviousTerms', 'PreviousTermsExamsForParents');
