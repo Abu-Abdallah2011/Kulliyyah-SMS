@@ -362,28 +362,28 @@ require __DIR__.'/auth.php';
         Route::get('dashboard/exams/{teacher_id}', 'selectedTeacherExams');
 
         // Show Exam Database
-        Route::get('/exams/show', 'show')->name('exams.show')->middleware('isAssistant');
+        Route::get('/exams/show', 'show')->name('exams.show')->middleware('can:isAssistant');
 
         // Edit Exam Data
-        Route::get('/exams/{id}/examsEdit', 'edit')->middleware('isAssistant');
+        Route::get('/exams/{id}/examsEdit', 'edit')->middleware('can:isAssistant');
 
         // Update Exam
-        Route::put('/exams/{id}', 'update')->middleware('isAssistant');
+        Route::put('/exams/{id}', 'update')->middleware('can:isAssistant');
 
         // Delete Exam
-        Route::delete('/exams/{id}', 'delete')->name('exams.delete')->middleware('isAssistant');
+        Route::delete('/exams/{id}', 'delete')->name('exams.delete')->middleware('can:isAssistant');
 
         // Select Subjects
-        Route::get('/selectSubjects', 'selectSubjects')->middleware('isAssistant');
+        Route::get('/selectSubjects', 'selectSubjects')->middleware('can:isAssistant');
 
         // Store Subjects
-        Route::post('/subjectsCreate', 'subjectsCreate')->middleware('isAssistant');
+        Route::post('/subjectsCreate', 'subjectsCreate')->middleware('can:isAssistant');
 
         // Go To Comment
-        Route::get('/exams/commentEditView', 'examComment')->middleware('isAssistant');
+        Route::get('/exams/commentEditView', 'examComment')->middleware('can:isAssistant');
 
         // Update Comment
-        Route::put('/exams/{id}/comment_update', 'updateComment')->middleware('isAssistant');
+        Route::put('/exams/{id}/comment_update', 'updateComment')->middleware('can:isAssistant');
 
         // Go To Prevous Terms Exams Records
         Route::get('/exams/{class}/examsForPreviousTerms', 'examsForPreviousTerms');
