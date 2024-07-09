@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PDFsController;
 use App\Http\Controllers\setsController;
 use App\Http\Controllers\ExamsController;
 use App\Http\Controllers\HaddaController;
@@ -378,9 +379,6 @@ require __DIR__.'/auth.php';
         // Store Subjects
         Route::post('/subjectsCreate', 'subjectsCreate');
 
-        // Go To Report Sheet
-        Route::get('/reportSheet/{id}', 'reportSheet');
-
         // Go To Comment
         Route::get('/exams/commentEditView', 'examComment');
 
@@ -392,6 +390,10 @@ require __DIR__.'/auth.php';
 
         // Go To Prevous Terms Cleansheet
         Route::get('/previousExams/{term}/{session}', 'PreviousTermsCleansheet');
+
+        // Go To Prevous Terms Cleansheet
+        Route::get('/ExamsRecords/{id}/PreviousTerms', 'PreviousTermsExamsForParents');
+
         });
 
         // CRUD for Attendance
@@ -418,27 +420,48 @@ require __DIR__.'/auth.php';
             // CRUD for Attendance
     Route::controller(SchoolFeesController::class)->group(function () {
         // Show Fees form
-        Route::get('/fees_record/{studentId}', 'create')->name('fees.create')->middleware('can:isExecutive');
+        Route::get('/fees_record/{studentId}', 'create')->name('fees.create')->middleware('can:isFinxam');
 
         // Save Fees information
-        Route::post('/fees_record/{studentId}', 'store')->middleware('can:isExecutive');
+        Route::post('/fees_record/{studentId}', 'store')->middleware('can:isFinxam');
 
         // Show Fees Report
-        Route::get('/fees_database/show', 'show')->name('fees.show')->middleware('can:isExecutive');
+        Route::get('/fees_database/show', 'show')->name('fees.show')->middleware('can:isFInxam');
 
         // Show Previous Sessions Fees Record
         Route::get('/fees_record/{studentId}/PreviousSessions', 'showPreviousSessions');
 
         // Show Fees Edit Form
-        Route::get('/fees_record/{studentId}/{term}/{session}/edit_fees', 'edit')->middleware('can:isExecutive');
+        Route::get('/fees_record/{studentId}/{term}/{session}/edit_fees', 'edit')->middleware('can:isFinxam');
 
         // Update Fees Record
-        Route::put('/fees_record/{studentId}/{term}/{session}/update_fees', 'update')->middleware('can:isExecutive');
+        Route::put('/fees_record/{studentId}/{term}/{session}/update_fees', 'update')->middleware('can:isFInxam');
 
         // Delete Fees Record
-        Route::delete('/fees_record/{studentId}/{term}/{session}/delete_fees', 'delete')->middleware('can:isExecutive');
+        Route::delete('/fees_record/{studentId}/{term}/{session}/delete_fees', 'delete')->middleware('can:isFinxam');
 
         // Go To Reciept
         Route::get('/reciept/{studentId}/{term}/{session}', 'showStudentRecieptForTerm');
     }); 
+
+    // DOWNLOADING PDFS
+    Route::controller(PDFsController::class)->group(function () {
+        // Go To Report Sheet
+        Route::get('/reportSheet/{id}', 'reportSheet');
+
+        // DOWNLOAD ALL STUDENTS REPORT SHEET FOR A PARTICULAR TERM
+        Route::get('/download-all-reportsheets', 'downloadAllReportSheets')->name('download.all.reportsheets')->middleware('can:isExecutive');
+
+        // DOWNLOAD CLEAN SHEET FOR A CLASS
+        Route::get('/downloadCleanSheets', 'cleanSheets')->name('downloadCleanSheets')->middleware('can:isAssistant');
+
+        // DOWNLOAD REPORT SHEET FOR A CLASS
+        Route::get('/downloadReportSheets', 'reportSheets')->name('downloadReportSheets')->middleware('can:isAssistant');
+
+        // DOWNLOAD ALL CLEAN SHEETS FOR A PARTICULAR TERM
+        Route::get('/download-all-cleansheets', 'downloadAllCleanSheets')->name('download.all.cleansheets')->middleware('can:isExecutive');
+
+        // Download Report Sheet For Guardians
+        Route::get('/reportSheet/{id}/{term}/{session}', 'reportSheetForGuardians');
+    });
    
