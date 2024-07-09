@@ -39,11 +39,11 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('isTeacher', function($user){
-            return $user->role == 'TEACHER' || $user->role == 'EXECUTIVE' || $user->role == 'ADMIN';
+            return $user->role == 'TEACHER' || $user->role == 'EXECUTIVE' || $user->role == 'ADMIN' || $user->role == 'FINXAM';
         });
 
         Gate::define('isAssistant', function($user){
-            return $user->role == 'ASSISTANT' || $user->role == 'TEACHER' || $user->role == 'EXECUTIVE' || $user->role == 'ADMIN';
+            return $user->role == 'ASSISTANT' || $user->role == 'TEACHER' || $user->role == 'EXECUTIVE' || $user->role == 'ADMIN' || $user->role == 'FINXAM';
         });
 
         Gate::define('isGuardian', function($user){
