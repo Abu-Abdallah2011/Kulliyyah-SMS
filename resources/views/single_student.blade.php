@@ -161,6 +161,13 @@
                 <i class="fa-solid fa-calculator">  {{ __('') }} </i>
             </x-primary-button></a>
             @endcan
+
+            @can('isAdGuardian')
+            <a href="{{ url('/ExamsRecords/' . $student->id . '/PreviousTerms') }}">
+                <x-primary-button class="">
+                    <i class="fa-solid fa-list">  {{ __('') }} </i>
+                </x-primary-button></a>
+                @endcan
     </div>
 
         </div>

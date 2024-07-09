@@ -9,7 +9,7 @@ use App\Http\Requests\SessionsFormController;
 
 class SessionsController extends Controller
 {
-    //Show/Display Classes in Database
+    //Show/Display Sessions in Database
     public function show(){
 
     return view('Sessions.sessionsDatabase', ['sessions' => sessions::latest()
@@ -22,7 +22,7 @@ class SessionsController extends Controller
     return view('Sessions.sessionsForm');
 }
 
-//Store Class Registration Information
+//Store Session Registration Information
 
 public function store(SessionsFormRequest $request){
     

@@ -29,8 +29,6 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-         {{-- Include Bootstrap CSS --}}
-         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
           {{-- Include Bootstrap Datepicker CSS --}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
          {{-- Include Bootstrap Icons CSS --}}
@@ -58,8 +56,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 
 {{-- CODES FOR STATISTICAL CHARTS --}}
-
-{{-- <canvas id="myChart" width="400" height="400"></canvas> --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
@@ -67,8 +63,7 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    {{-- <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900"> --}}
+
           <body class="font-sans antialiased" x-data="{ sidebarOpen: false }">
             @include('layouts.navigation')
                   <!-- Page Heading -->
@@ -89,9 +84,7 @@
               <i class="fas fa-times text-white"></i>
           </button>
       </div>
-      {{-- <div class="flex items-center justify-center h-16 bg-gray-900 text-white">
-          <span class="text-xl font-semibold pt-3 pb-3">{{ config('APP_NAME', 'KULLIYYAH') }}</span>
-      </div> --}}
+
       <nav class="mt-4">
           <a href="{{ route('dashboard') }}" class="flex items-center p-4 text-gray-300 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
               <i class="fas fa-tachometer-alt w-5 h-5"></i>
@@ -158,9 +151,7 @@
 </div>
 <div class="hidden md:flex md:flex-shrink-0">
   <div class="flex flex-col w-64 bg-gray-800 dark:bg-gray-800 shadow-lg">
-      {{-- <div class="flex items-center justify-center h-16 bg-gray-900 text-white">
-          <span class="text-xl font-semibold">{{ config('APP_NAME', 'KULLIYYAH') }}</span>
-      </div> --}}
+
       <nav class="mt-4">
           <a href="{{ route('dashboard') }}" class="flex items-center p-4 text-gray-300 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
               <i class="fas fa-tachometer-alt w-5 h-5"></i>
@@ -232,16 +223,6 @@
       </button>
   </header>
   <div class="flex-1">
-      {{-- @include('layouts.navigation') --}}
-
-      {{-- <!-- Page Heading -->
-      @if (isset($header))
-          <header class="bg-white dark:bg-gray-800 shadow">
-              <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                  {{ $header }}
-              </div>
-          </header>
-      @endif --}}
 
       <!-- Page Content -->
       <main>

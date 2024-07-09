@@ -14,5 +14,8 @@ class sessions extends Model
     protected $fillable = [
         'session',
         'term',
+        'term_starts',
+        'term_ends',
+        'next_term_starts',
     ];
 }

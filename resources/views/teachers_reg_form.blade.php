@@ -119,7 +119,11 @@
                             <!-- Rank -->
                             <div>
                                 <x-input-label for="rank" :value="__('Rank')" />
-                                <x-text-input id="rank" class="block mt-1 w-full" type="text" name="rank" :value="old('rank')" required autofocus autocomplete="rank" />
+                                <select id="rank" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" type="text" name="rank" :value="old('rank')" autofocus autocomplete="rank">
+                                    <option value="CLASS TEACHER">CLASS TEACHER</option>
+                                    <option value="ASSISTANT CLASS TEACHER">ASSISTANT CLASS TEACHER</option>
+                                    <option value="TEACHING PRACTICE">TEACHING PRACTICE</option>
+                                    </select>
                                 <x-input-error :messages="$errors->get('rank')" class="mt-2" />
                             </div>
 

@@ -30,6 +30,15 @@ class SessionsFormRequest extends FormRequest
             'term' => [
                 'max:255'
             ],
+            'term_starts' => [
+                'max:255'
+            ],
+            'term_ends' => [
+                'max:255'
+            ],
+            'next_term_starts' => [
+                'max:255'
+            ],
         ];
     }
 }

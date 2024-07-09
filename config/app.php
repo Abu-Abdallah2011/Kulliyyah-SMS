@@ -153,8 +153,7 @@ return [
     | this array to grant expanded functionality to your applications.
     |
     */
-
-    'providers' => [
+'providers' => [
 
         /*
          * Laravel Framework Service Providers...
@@ -195,6 +194,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+
     ],
 
     /*
@@ -210,6 +212,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-    ])->toArray(),
+        'PDF' => Barryvdh\DomPDF\Facade\PDF::class,
+        'PDF' => Barryvdh\DomPDF\Facade\pdf::class,
 
+        'Image' => Intervention\Image\Facades\Image::class,
+    ])->toArray(),
 ];
