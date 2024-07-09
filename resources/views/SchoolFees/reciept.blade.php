@@ -43,7 +43,7 @@
                         <td class="w-full lg:w-auto p-3 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600">For</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600">{{ $studentFees->term }} {{ $studentFees->session }} Academic Session</td>
                     </tr>
-                    @can('isExecutive');
+                    @can('isFInance');
                     <tr>
                         <td class="w-full lg:w-auto p-3 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600">Description</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600">{{ $studentFees->description }}</td>
@@ -56,7 +56,7 @@
                 </tbody>
             </table>
     
-            @can('isExecutive')
+            @can('isFInance')
             <div class="mt-6 text-center">
                 <a href="{{ url('/fees_record/' . $student->id . '/' . $studentFees->term . '/' . str_replace('/', '_', $studentFees->session) . '/edit_fees') }}">
                     <x-primary-button>Update</x-primary-button>
