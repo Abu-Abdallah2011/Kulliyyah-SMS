@@ -116,7 +116,7 @@ foreach ($teacher->students as $student) {
         $cummulativematchingSubjects = [];
 
         if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
-            $matchingSubjects[] = $subject;
+            $cummulativematchingSubjects[] = $subject;
 
         // Calculate the total score for this subject and student
         $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
