@@ -389,7 +389,7 @@ require __DIR__.'/auth.php';
         Route::get('/exams/{class}/examsForPreviousTerms', 'examsForPreviousTerms');
 
         // Go To Prevous Terms Cleansheet
-        Route::get('/previousExams/{term}/{session}', 'PreviousTermsCleansheet')->middleware('isAssistant');
+        Route::get('/previousExams/{term}/{session}', 'PreviousTermsCleansheet')->middleware('can:isAssistant');
 
         // Go To Prevous Terms Cleansheet
         Route::get('/ExamsRecords/{id}/PreviousTerms', 'PreviousTermsExamsForParents');
