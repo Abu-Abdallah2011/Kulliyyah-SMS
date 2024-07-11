@@ -157,6 +157,7 @@ function addOrdinalSuffix($position) {
 }
 
 $matchingSubjects = [];
+$cummulativematchingSubjects = [];
 
 $orderedStudents = $teacher->students->map(function ($student) use ($sessions,  &$matchingSubjects) {
 
