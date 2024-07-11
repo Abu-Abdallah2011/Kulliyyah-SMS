@@ -1019,15 +1019,15 @@ foreach ($teacher->students as $student) {
  * @param string $term
  * @return int
  */
-function termOrder($term) {
-    $terms = [
-        '1st Term' => 1,
-        '2nd Term' => 2,
-        '3rd Term' => 3,
-    ];
+// private function termOrder($term) {
+//     $terms = [
+//         '1st Term' => 1,
+//         '2nd Term' => 2,
+//         '3rd Term' => 3,
+//     ];
 
-    return $terms[$term] ?? 0;
-}
+//     return $terms[$term] ?? 0;
+// }
 
 
 // =====================================================
@@ -1136,6 +1136,16 @@ $term = sessions::orderBy('created_at', 'desc')->first('term');
                                     'cummulativeaverageTotal' => $cummulativeaverageTotal,
                                     'cummulativematchingSubjects' => $cummulativematchingSubjects,
 ]);
+}
+
+private function termOrder($term) {
+    $terms = [
+        '1st Term' => 1,
+        '2nd Term' => 2,
+        '3rd Term' => 3,
+    ];
+
+    return $terms[$term] ?? 0;
 }
 
 //Show Previous Terms For Parents
