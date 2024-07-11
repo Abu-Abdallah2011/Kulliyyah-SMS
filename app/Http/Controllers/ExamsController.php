@@ -1002,14 +1002,18 @@ function previousTermOrdinalSuffix($position) {
 }
 
 $matchingSubjects = [];
+$cummulativematchingSubjects = [];
 
-$orderedStudents = $teacher->students->map(function ($student) use ($session, $term,  &$matchingSubjects) {
+$orderedStudents = $teacher->students->map(function ($student) use ($sessions,  &$matchingSubjects) {
 
-    $matchingSubjects = $student->exams->where('session', str_replace('_', '/', $session))
+    $matchingSubjects = $student->exams->where('session', $sessions->session)
+    ->where('term', $sessions->term)
     ->where('student_id', $student->id);
 
     $totalScores = 0;
     $examCount = count($matchingSubjects);
+
+    $sessions = sessions::orderBy('created_at', 'desc')->first();
 
 foreach ($matchingSubjects as $subject) {
 
@@ -1024,8 +1028,29 @@ foreach ($matchingSubjects as $subject) {
     $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
     $student->averageTotal = $averageTotal;
 
+    // ADD CUMMULATIVES
+
+    $cummulativematchingSubjects = $student->exams->where('session', $sessions->session)
+    ->where('student_id', $student->id);
+
+    $cummulativeTotalScores = 0;
+    $cummulativeExamCount = count($cummulativematchingSubjects);
+
+foreach ($cummulativematchingSubjects as $subject) {
+
+    $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+    $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+    $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+    $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+
+        $cummulativeTotalScores +=  $first_cas + $second_cas + $third_cas + $examss;
+}
+
+    $cummulativeAverageTotal = $cummulativeExamCount > 0 ? $cummulativeTotalScores / $cummulativeExamCount : 0;
+    $student->cummulativeAverageTotal = $cummulativeAverageTotal;
+
     return $student;
-})->sortByDesc('averageTotal');
+})->sortByDesc('cummulativeAverageTotal');
 $position = 1;
 $previousAverage = null;
 
