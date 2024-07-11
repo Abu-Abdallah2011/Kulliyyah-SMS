@@ -113,7 +113,7 @@ foreach ($teacher->students as $student) {
     
     foreach ($student->exams as $subject) {
 
-        $matchingSubjects = [];
+        $cummulativematchingSubjects = [];
 
         if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
             $matchingSubjects[] = $subject;
@@ -216,6 +216,7 @@ $term = sessions::orderBy('created_at', 'desc')->first('term');
                                     'session' => $session,
                                     'term' => $term,
                                     'cummulativeaverageTotal' => $cummulativeaverageTotal,
+                                    'cummulativematchingSubjects' => $cummulativematchingSubjects,
 ]);
 }
 
@@ -317,10 +318,10 @@ foreach ($teacher->students as $student) {
     
     foreach ($student->exams as $subject) {
 
-        $matchingSubjects = [];
+        $cummulativematchingSubjects = [];
 
         if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
-            $matchingSubjects[] = $subject;
+            $cummulativematchingSubjects[] = $subject;
 
         // Calculate the total score for this subject and student
         $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
@@ -418,6 +419,7 @@ $term = sessions::orderBy('created_at', 'desc')->first('term');
                                     'session' => $session,
                                     'term' => $term,
                                     'cummulativeaverageTotal' => $cummulativeaverageTotal,
+                                    'cummulativematchingSubjects' => $cummulativematchingSubjects,
 ]);
 }
 
@@ -931,10 +933,10 @@ foreach ($teacher->students as $student) {
     
     foreach ($student->exams as $subject) {
 
-        $matchingSubjects = [];
+        $cummulativematchingSubjects = [];
 
         if ($subject->session == str_replace('_', '/', $session) && $subject->student_id == $student->id) {
-            $matchingSubjects[] = $subject;
+            $cummulativematchingSubjects[] = $subject;
 
         // Calculate the total score for this subject and student
         $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
@@ -1031,6 +1033,7 @@ $term = sessions::orderBy('created_at', 'desc')->first('term');
                                     'session' => $session,
                                     'term' => $term,
                                     'cummulativeaverageTotal' => $cummulativeaverageTotal,
+                                    'cummulativematchingSubjects' => $cummulativematchingSubjects,
 ]);
 }
 

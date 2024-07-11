@@ -261,7 +261,7 @@
                                     @endif
                                 </td>
                                 <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
-                                    @if ($matchingSubjects !== null)
+                                    @if ($cummulativematchingSubjects !== null)
                                     {{ number_format($cummulativeaverageTotal[$student->id], 2) }}
                                     @endif
                                 </td>

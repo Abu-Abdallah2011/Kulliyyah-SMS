@@ -112,10 +112,10 @@ foreach ($teacher->students as $student) {
     
     foreach ($student->exams as $subject) {
 
-        $matchingSubjects = [];
+        $cummulativematchingSubjects = [];
 
         if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
-            $matchingSubjects[] = $subject;
+            $cummulativematchingSubjects[] = $subject;
 
         // Calculate the total score for this subject and student
         $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
@@ -215,6 +215,7 @@ $pdf = PDF::loadView('PDFs.cleanSheet', ['exam' => $exam,
                                     'session' => $session,
                                     'term' => $term,
                                     'cummulativeaverageTotal' => $cummulativeaverageTotal,
+                                    'cummulativematchingSubjects' => $cummulativematchingSubjects,
 ]);
 
 $pdf->setPaper('A4', 'landscape');
@@ -1001,11 +1002,8 @@ public function downloadAllCleanSheets()
             }
         }
 
-        //Show Report Sheet
+        //Download Report Sheet
 public function reportSheetForGuardians($id, $term, $session){
-
-    // $session = sessions::pluck('session')->last();
-    // $term = sessions::pluck('term')->last();
 
     $exam = ExamsModel::where('student_id', $id)->where('term', $term)->where('session', $session)->get();
 
