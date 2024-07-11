@@ -191,7 +191,7 @@ foreach ($matchingSubjects as $subject) {
     $cummulativeTotalScores = 0;
     $cummulativeExamCount = count($cummulativematchingSubjects);
 
-    $sessions = sessions::orderBy('created_at', 'desc')->first();
+    // $sessions = sessions::orderBy('created_at', 'desc')->first();
 
 foreach ($cummulativematchingSubjects as $subject) {
 
@@ -203,11 +203,12 @@ foreach ($cummulativematchingSubjects as $subject) {
         $cummulativeTotalScores +=  $first_cas + $second_cas + $third_cas + $examss;
 }
 
-    $cummulativeAverageTotal = $cummulativeExamCount > 0 ? $totalScores / $cummulativeExamCount : 0;
+    $cummulativeAverageTotal = $cummulativeExamCount > 0 ? $cummulativeTotalScores / $cummulativeExamCount : 0;
     $student->cummulativeAverageTotal = $cummulativeAverageTotal;
 
     return $student;
 })->sortByDesc('cummulativeAverageTotal');
+
 $position = 1;
 $previousAverage = null;
 
