@@ -213,7 +213,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'PDF' => Barryvdh\DomPDF\Facade\PDF::class,
-        'PDF' => Barryvdh\DomPDF\Facade\pdf::class,
+        // 'PDF' => Barryvdh\DomPDF\Facade\pdf::class,
 
         'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
