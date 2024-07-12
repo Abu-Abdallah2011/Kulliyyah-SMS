@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\sessions;
 // use Barryvdh\DomPDF\PDF;
-use Barryvdh\DomPDF\Facade\pdf;
+use Barryvdh\DomPDF\Facade\PDF;
 use App\Models\ExamsModel;
 use App\Models\subjectsModel;
 use App\Models\register_student;
@@ -387,7 +387,7 @@ foreach ($student->exams as $jarabawa) {
  $student = register_student::findOrFail($id);
 
  // Generate PDF using Dompdf
- $pdf = pdf::loadView('PDFs.reportsheet', [
+ $pdf = PDF::loadView('PDFs.reportsheet', [
     'sessions' => $sessions, 
     'student' => $student,
     'class' => $class,
