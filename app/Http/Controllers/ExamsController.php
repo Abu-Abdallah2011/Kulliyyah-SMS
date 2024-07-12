@@ -213,12 +213,12 @@ $position = 1;
 $previousAverage = null;
 
 foreach ($orderedStudents as $student) {
-    if ($previousAverage !== null && $student->averageTotal < $previousAverage) {
+    if ($previousAverage !== null && $student->cummulativeAverageTotal < $previousAverage) {
         $position++;
     }
 
     $student->position = addOrdinalSuffix($position);
-    $previousAverage = $student->averageTotal;
+    $previousAverage = $student->cummulativeAverageTotal;
 }
 
  // =====================================================
@@ -1019,16 +1019,6 @@ foreach ($teacher->students as $student) {
  * @param string $term
  * @return int
  */
-// private function termOrder($term) {
-//     $terms = [
-//         '1st Term' => 1,
-//         '2nd Term' => 2,
-//         '3rd Term' => 3,
-//     ];
-
-//     return $terms[$term] ?? 0;
-// }
-
 
 // =====================================================
 // POSITION CODES
@@ -1102,18 +1092,18 @@ foreach ($cummulativematchingSubjects as $subject) {
 
     return $student;
 })->sortByDesc('cummulativeAverageTotal');
+
 $position = 1;
 $previousAverage = null;
 
 foreach ($orderedStudents as $student) {
-    if ($previousAverage !== null && $student->averageTotal < $previousAverage) {
+    if ($previousAverage !== null && $student->cummulativeAverageTotal < $previousAverage) {
         $position++;
     }
 
     $student->position = previousTermOrdinalSuffix($position);
-    $previousAverage = $student->averageTotal;
+    $previousAverage = $student->cummulativeAverageTotal;
 }
-
  // =====================================================
 // END OF POSITION CODES
 // =====================================================

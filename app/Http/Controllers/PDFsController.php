@@ -183,6 +183,7 @@ foreach ($matchingSubjects as $subject) {
 
     return $student;
 })->sortByDesc('averageTotal');
+
 $position = 1;
 $previousAverage = null;
 
