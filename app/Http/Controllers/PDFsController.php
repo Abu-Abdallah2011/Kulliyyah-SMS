@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\sessions;
 // use Barryvdh\DomPDF\PDF;
-use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\pdf;
 use App\Models\ExamsModel;
 use App\Models\subjectsModel;
 use App\Models\register_student;
@@ -203,7 +203,7 @@ $session = sessions::orderBy('created_at', 'desc')->first('session');
 $term = sessions::orderBy('created_at', 'desc')->first('term');
 
 
-$pdf = PDF::loadView('PDFs.cleanSheet', ['exam' => $exam,
+$pdf = pdf::loadView('PDFs.cleanSheet', ['exam' => $exam,
                                     'sessions' => $sessions,
                                     'class' => $class,
                                     'teacher' => $teacher,
