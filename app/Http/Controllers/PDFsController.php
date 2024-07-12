@@ -202,7 +202,6 @@ foreach ($orderedStudents as $student) {
 $session = sessions::orderBy('created_at', 'desc')->first('session');
 $term = sessions::orderBy('created_at', 'desc')->first('term');
 
-
 $pdf = pdf::loadView('PDFs.cleanSheet', ['exam' => $exam,
                                     'sessions' => $sessions,
                                     'class' => $class,
@@ -354,6 +353,7 @@ foreach ($matchingSubjects as $subject) {
 
     return $student;
 })->sortByDesc('averageTotal');
+
 $position = 1;
 $previousAverage = null;
 
@@ -387,7 +387,7 @@ foreach ($student->exams as $jarabawa) {
  $student = register_student::findOrFail($id);
 
  // Generate PDF using Dompdf
- $pdf = PDF::loadView('PDFs.reportsheet', [
+ $pdf = pdf::loadView('PDFs.reportsheet', [
     'sessions' => $sessions, 
     'student' => $student,
     'class' => $class,
