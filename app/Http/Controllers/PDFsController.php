@@ -388,7 +388,7 @@ foreach ($student->exams as $jarabawa) {
  $student = register_student::findOrFail($id);
 
  // Generate PDF using Dompdf
- $pdf = PDF::loadView('PDFs.reportsheet', [
+ $pdf = PDF::loadView('PDFs.reportSheet', [
     'sessions' => $sessions, 
     'student' => $student,
     'class' => $class,
