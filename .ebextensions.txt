@@ -1,8 +1,0 @@
-files:
-  "/etc/elasticbeanstalk/hooks/appdeploy/post/99_setup_wkhtmltopdf.sh":
-    mode: "000755"
-    owner: root
-    group: root
-    content: |
-      #!/bin/bash
-      sudo ln -sf /var/app/current/storage/wkhtmltopdf /usr/local/bin/wkhtmltopdf
