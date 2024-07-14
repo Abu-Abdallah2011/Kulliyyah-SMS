@@ -8,6 +8,7 @@
         "php": "^8.0.2",
         "aws/aws-sdk-php": "^3.263",
         "barryvdh/laravel-dompdf": "^2.2",
+        "barryvdh/laravel-snappy": "^1.0",
         "clegginabox/pdf-merger": "dev-master",
         "davidhsianturi/blade-bootstrap-icons": "^1.4",
         "dompdf/dompdf": "^2.0",
