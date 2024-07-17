@@ -47,7 +47,7 @@ public function edit($id){
         return redirect('/sessions_database')->with('message', 'Session/Term Updated Successfully!');
     }
 
-    // Delete Class
+    // Delete Session
 public function delete($id) {
     $session = sessions::where('id', $id)->delete();
     return redirect('/sessions_database')->with('message', 'Maa Shaa Allaah! Session/Term Deleted Successfully!');

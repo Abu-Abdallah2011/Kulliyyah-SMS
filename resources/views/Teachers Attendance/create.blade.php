@@ -14,7 +14,7 @@
                         @csrf
                         <div class="flex">
                         <label for="date">Date: </label>
-                        <x-date-picker class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Input Date..."/>
+                        <x-date-picker name="date" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Input Date..."/>
                         <div class="relative w-64 flex ml-4">
                         <label for="zango">Zango: </label>
                         <select name="time" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
