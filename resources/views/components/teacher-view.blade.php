@@ -163,7 +163,7 @@
                                     </div>
                                 </div>
                                 
-                                <script>
+                                {{-- <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         var ctx = document.getElementById('FeesChart').getContext('2d');
                                 
@@ -208,7 +208,7 @@
                                     });
                                 </script>
 
-                                @endcan
+                                @endcan --}}
                                 {{-- END OF FOR EXECUTIVES/FINANCE OFFICERS ONLY --}}
 
                                 <div class="bg-gray-300 dark:bg-gray-800 shadow rounded-lg p-6">
@@ -219,7 +219,7 @@
                                     </div>
                                 </div>
 
-                                <script>
+                                {{-- <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         var ctx = document.getElementById('classAttendanceChart').getContext('2d');
 
@@ -262,7 +262,7 @@
                                             }
                                         });
                                     });
-                                </script>
+                                </script> --}}
                                 
                                 <div class="bg-gray-300 dark:bg-gray-800 shadow rounded-lg p-6">
                                     <div class="flex items-center">
@@ -272,7 +272,7 @@
                                     </div>
                                 </div>
                                 
-                                <script>
+                                {{-- <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         var ctx = document.getElementById('AttendanceChart').getContext('2d');
                                 
@@ -315,7 +315,7 @@
                                             }
                                         });
                                     });
-                                </script>
+                                </script> --}}
 
                             <div class="bg-gray-300 dark:bg-gray-800 shadow rounded-lg p-6">
                                 <div class="flex items-center">
@@ -325,7 +325,7 @@
                                 </div>
                             </div>
 
-                            <script>
+                            {{-- <script>
                                 document.addEventListener('DOMContentLoaded', function () {
                                     var ctx = document.getElementById('teachersAttendance').getContext('2d');
 
@@ -378,7 +378,7 @@
                                         }
                                     });
                                 });
-                            </script>
+                            </script> --}}
 
                                 <div class="bg-gray-300 dark:bg-gray-800 shadow rounded-lg p-6">
                                     <div class="flex items-center">
@@ -388,7 +388,7 @@
                                     </div>
                                 </div>
                                 
-                                <script>
+                                {{-- <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         var ctx = document.getElementById('teachersAttendance').getContext('2d');
                                 
@@ -440,7 +440,7 @@
                                             }
                                         });
                                     });
-                                </script>
+                                </script> --}}
 
 
                                     </div>
