@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\sessions;
 // use Barryvdh\DomPDF\PDF;
-use Barryvdh\DomPDF\Facade\pdf as PDF;
-// use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use App\Models\ExamsModel;
 use App\Models\subjectsModel;
 use App\Models\register_student;
