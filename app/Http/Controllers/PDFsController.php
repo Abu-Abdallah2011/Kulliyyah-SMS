@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\sessions;
 // use Barryvdh\DomPDF\PDF;
-use Barryvdh\DomPDF\Facade\pdf;
+use Barryvdh\DomPDF\Facade as PDF;
 // use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use App\Models\ExamsModel;
 use App\Models\subjectsModel;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 class PDFsController extends Controller
 {
-    //Show/Display Exams Clean Sheet
+    //Download Exams Clean Sheet
 public function cleanSheets(){
 
     $sessions = sessions::orderBy('created_at', 'desc')->first();
@@ -203,7 +203,7 @@ foreach ($orderedStudents as $student) {
 $session = sessions::orderBy('created_at', 'desc')->first('session');
 $term = sessions::orderBy('created_at', 'desc')->first('term');
 
-$pdf = pdf::loadView('PDFs.cleanSheet', ['exam' => $exam,
+$pdf = PDF::loadView('PDFs.cleanSheet', ['exam' => $exam,
                                     'sessions' => $sessions,
                                     'class' => $class,
                                     'teacher' => $teacher,
@@ -897,6 +897,13 @@ public function downloadAllCleanSheets()
             $classData['cummulativeaverageTotal'][$student->id] = 0;
 
             foreach ($student->exams as $subject) {
+
+                $cummulativematchingSubjects = [];
+        
+                if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
+                    $cummulativematchingSubjects[] = $subject;
+        }
+
                 if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
                     $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
                     $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
@@ -956,6 +963,7 @@ public function downloadAllCleanSheets()
             'averageTotal' => $classData['averageTotal'],
             'orderedStudents' => $orderedStudents,
             'matchingSubjects' => $matchingSubjects,
+            'cummulativematchingSubjects' => $cummulativematchingSubjects,
             'session' => $sessions->session,
             'term' => $sessions->term,
             'cummulativeaverageTotal' => $classData['cummulativeaverageTotal'],
