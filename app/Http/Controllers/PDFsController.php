@@ -310,10 +310,15 @@ public function reportSheet($id){
             if (!isset($cummulativeAverageTotal[$studentId])) {
                 $cummulativeAverageTotal[$studentId] = 0;
             }
+
+            $first_ca = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+            $second_ca = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+            $third_ca = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+            $exams = is_numeric($subject->exams) ? $subject->exams : 0;
             
-            $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-            $cummulativeTotalScores[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca + $subject->exams;
-            $cummulativeTotalExam[$subjectId] = $subject->exams;
+            $cummulativeTotalCa[$subjectId] = $first_ca + $second_ca + $third_ca;
+            $cummulativeTotalScores[$subjectId] = $first_ca + $second_ca + $third_ca + $exams;
+            $cummulativeTotalExam[$subjectId] = $exams;
             $cummulativeGrandTotal[$studentId] += $cummulativeTotalScores[$subjectId];
             $cummulativeAverageTotal[$studentId] = count($dalibi->exams) > 0 ? $cummulativeGrandTotal[$studentId] / count($dalibi->exams->where('session', $session)) : 0;
         }
