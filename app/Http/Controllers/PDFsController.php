@@ -261,15 +261,26 @@ public function reportSheet($id){
         if ($subject->term == $term && $subject->session == $session) {
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
+
+            if (!isset($totalCa[$subjectId])) {
+                $totalCa[$subjectId] = 0;
+            }
+            if (!isset($totalScores[$subjectId])) {
+                $totalScores[$subjectId] = 0;
+            }
+            if (!isset($totalExam[$subjectId])) {
+                $totalExam[$subjectId] = 0;
+            }
+            if (!isset($grandTotal[$studentId])) {
+                $grandTotal[$studentId] = 0;
+            }
+            if (!isset($averageTotal[$studentId])) {
+                $averageTotal[$studentId] = 0;
+            }
             
             $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
             $totalScores[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca + $subject->exams;
             $totalExam[$subjectId] = $subject->exams;
-            
-            // Calculate grand total and average total outside the loop
-            if (!isset($grandTotal[$studentId])) {
-                $grandTotal[$studentId] = 0;
-            }
             $grandTotal[$studentId] += $totalScores[$subjectId];
             $averageTotal[$studentId] = count($dalibi->exams) > 0 ? $grandTotal[$studentId] / count($dalibi->exams->where('term', $term)->where('session', $session)) : 0;
         }
@@ -283,15 +294,26 @@ public function reportSheet($id){
         if ($subject->session == $session) {
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
+
+            if (!isset($cummulativeTotalCa[$subjectId])) {
+                $cummulativeTotalCa[$subjectId] = 0;
+            }
+            if (!isset($cummulativeTotalScores[$subjectId])) {
+                $cummulativeTotalScores[$subjectId] = 0;
+            }
+            if (!isset($cummulativeTotalExam[$subjectId])) {
+                $cummulativeTotalExam[$subjectId] = 0;
+            }
+            if (!isset($cummulativeGrandTotal[$studentId])) {
+                $cummulativeGrandTotal[$studentId] = 0;
+            }
+            if (!isset($cummulativeAverageTotal[$studentId])) {
+                $cummulativeAverageTotal[$studentId] = 0;
+            }
             
             $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
             $cummulativeTotalScores[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca + $subject->exams;
             $cummulativeTotalExam[$subjectId] = $subject->exams;
-            
-            // Calculate grand total and average total outside the loop
-            if (!isset($cummulativeGrandTotal[$studentId])) {
-                $cummulativeGrandTotal[$studentId] = 0;
-            }
             $cummulativeGrandTotal[$studentId] += $cummulativeTotalScores[$subjectId];
             $cummulativeAverageTotal[$studentId] = count($dalibi->exams) > 0 ? $cummulativeGrandTotal[$studentId] / count($dalibi->exams->where('session', $session)) : 0;
         }
@@ -442,14 +464,23 @@ public function downloadAllReportSheets()
 
             foreach ($exam as $subject) {
                 $subjectId = $subject->subject_id;
-                $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-                $totalScores[$subjectId] = $totalCa[$subjectId] + $subject->exams;
-                $totalExam[$subjectId] = $subject->exams;
 
-                // Calculate grand total
+                if (!isset($totalCa[$subjectId])) {
+                    $totalCa[$subjectId] = 0;
+                }
+                if (!isset($totalScores[$subjectId])) {
+                    $totalScores[$subjectId] = 0;
+                }
+                if (!isset($totalExam[$subjectId])) {
+                    $totalExam[$subjectId] = 0;
+                }
                 if (!isset($grandTotal[$student->id])) {
                     $grandTotal[$student->id] = 0;
                 }
+
+                $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
+                $totalScores[$subjectId] = $totalCa[$subjectId] + $subject->exams;
+                $totalExam[$subjectId] = $subject->exams;
                 $grandTotal[$student->id] += $totalScores[$subjectId];
             }
 
@@ -471,14 +502,23 @@ public function downloadAllReportSheets()
 
             foreach ($cummulativeExam as $subject) {
                 $subjectId = $subject->subject_id;
-                $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-                $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $subject->exams;
-                $cummulativeTotalExam[$subjectId] = $subject->exams;
 
-                // Calculate grand total
+                if (!isset($cummulativeTotalCa[$subjectId])) {
+                    $cummulativeTotalCa[$subjectId] = 0;
+                }
+                if (!isset($cummulativeTotalScores[$subjectId])) {
+                    $cummulativeTotalScores[$subjectId] = 0;
+                }
+                if (!isset($cummulativeTotalExam[$subjectId])) {
+                    $cummulativeTotalExam[$subjectId] = 0;
+                }
                 if (!isset($cummulativeGrandTotal[$student->id])) {
                     $cummulativeGrandTotal[$student->id] = 0;
                 }
+
+                $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
+                $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $subject->exams;
+                $cummulativeTotalExam[$subjectId] = $subject->exams;
                 $cummulativeGrandTotal[$student->id] += $cummulativeTotalScores[$subjectId];
             }
 
@@ -647,13 +687,22 @@ public function downloadAllReportSheets()
 
         foreach ($exam as $subject) {
             $subjectId = $subject->subject_id;
-            $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-            $totalScores[$subjectId] = $totalCa[$subjectId] + $subject->exams;
-            $totalExam[$subjectId] = $subject->exams;
 
+            if (!isset($totalCa[$subjectId])) {
+                $totalCa[$subjectId] = 0;
+            }
+            if (!isset($totalScores[$subjectId])) {
+                $totalScores[$subjectId] = 0;
+            }
+            if (!isset($totalExam[$subjectId])) {
+                $totalExam[$subjectId] = 0;
+            }
             if (!isset($grandTotal[$student->id])) {
                 $grandTotal[$student->id] = 0;
             }
+            $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
+            $totalScores[$subjectId] = $totalCa[$subjectId] + $subject->exams;
+            $totalExam[$subjectId] = $subject->exams;
             $grandTotal[$student->id] += $totalScores[$subjectId];
         }
 
@@ -675,13 +724,21 @@ public function downloadAllReportSheets()
 
         foreach ($cummulativeExam as $subject) {
             $subjectId = $subject->subject_id;
-            $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-            $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $subject->exams;
-            $cummulativeTotalExam[$subjectId] = $subject->exams;
-
+            if (!isset($cummulativeTotalCa[$subjectId])) {
+                $cummulativeTotalCa[$subjectId] = 0;
+            }
+            if (!isset($cummulativeTotalScores[$subjectId])) {
+                $cummulativeTotalScores[$subjectId] = 0;
+            }
+            if (!isset($cummulativeTotalExam[$subjectId])) {
+                $cummulativeTotalExam[$subjectId] = 0;
+            }
             if (!isset($cummulativeGrandTotal[$student->id])) {
                 $cummulativeGrandTotal[$student->id] = 0;
             }
+            $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
+            $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $subject->exams;
+            $cummulativeTotalExam[$subjectId] = $subject->exams;
             $cummulativeGrandTotal[$student->id] += $cummulativeTotalScores[$subjectId];
         }
 
@@ -1011,10 +1068,10 @@ public function downloadAllCleanSheets()
             }
         }
 
-        //Download Report Sheet
+        //Download Report Sheet For Guardians
 public function reportSheetForGuardians($id, $term, $session){
 
-    $exam = ExamsModel::where('student_id', $id)->where('term', $term)->where('session', $session)->get();
+    $exam = ExamsModel::where('student_id', $id)->where('term', $term)->where('session', str_replace('_', '/', $session))->get();
 
     $sessions = sessions::where('term', $term)->where('session', str_replace('_', '/', $session))->first();
 
@@ -1038,11 +1095,18 @@ public function reportSheetForGuardians($id, $term, $session){
     ->count();
 
     $totalCa = [];
-
     $totalCa[$id] = [];
 
+    $totalExam = [];
+    $totalExam[$id] = [];
+
+    $averageTotal = [];
+
+    $grandTotal = [];
+    $grandTotal[$id] = [];
+
     foreach ($dalibi->exams as $subject) {
-        if ($subject->term == $term && $subject->session == $session) {
+        if ($subject->term == $term && $subject->session == str_replace('_', '/', $session)) {
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
             
@@ -1060,8 +1124,10 @@ public function reportSheetForGuardians($id, $term, $session){
     }
 
     $cummulativeTotalCa = [];
-
     $cummulativeTotalCa[$id] = [];
+
+    $cummulativeAverageTotal = [];
+    $cummulativeAverageTotal[$id] = [];
 
     foreach ($dalibi->exams as $subject) {
         if ($subject->session == $session) {
@@ -1113,6 +1179,7 @@ function GuardianresultOrdinalSuffix($position) {
 }
 
 $matchingSubjects = [];
+$totalScores = [];
 
 $orderedStudents = $teacher->students->map(function ($student) use ($session, $term,  &$matchingSubjects) {
 
@@ -1172,7 +1239,7 @@ foreach ($student->exams as $jarabawa) {
  $student = register_student::findOrFail($id);
 
  // Generate PDF using Dompdf
- $pdf = PDF::loadView('PDFs.reportsheet', [
+ $pdf = PDF::loadView('PDFs.reportSheet', [
     'sessions' => $sessions, 
     'student' => $student,
     'class' => $class,
@@ -1189,7 +1256,7 @@ foreach ($student->exams as $jarabawa) {
 ]);
 
  // Return a response with PDF content to download
- return $pdf->download($dalibi->fullname);
+ return $pdf->download($dalibi->fullname . ' ' . $term . ' ' . str_replace('_', '/', $session));
 
 }
 
