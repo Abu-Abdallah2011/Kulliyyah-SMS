@@ -483,8 +483,13 @@ public function downloadAllReportSheets()
                     $grandTotal[$student->id] = 0;
                 }
 
-                $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-                $totalScores[$subjectId] = $totalCa[$subjectId] + $subject->exams;
+                $first_ca = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+                $second_ca = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+                $third_ca = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+                $exams = is_numeric($subject->exams) ? $subject->exams : 0;
+
+                $totalCa[$subjectId] = $first_ca + $second_ca + $third_ca;
+                $totalScores[$subjectId] = $totalCa[$subjectId] + $exams;
                 $totalExam[$subjectId] = $subject->exams;
                 $grandTotal[$student->id] += $totalScores[$subjectId];
             }
@@ -521,9 +526,14 @@ public function downloadAllReportSheets()
                     $cummulativeGrandTotal[$student->id] = 0;
                 }
 
-                $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-                $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $subject->exams;
-                $cummulativeTotalExam[$subjectId] = $subject->exams;
+                $first_ca = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+                $second_ca = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+                $third_ca = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+                $exams = is_numeric($subject->exams) ? $subject->exams : 0;
+
+                $cummulativeTotalCa[$subjectId] = $first_ca + $second_ca + $third_ca;
+                $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $exams;
+                $cummulativeTotalExam[$subjectId] = $exams;
                 $cummulativeGrandTotal[$student->id] += $cummulativeTotalScores[$subjectId];
             }
 
@@ -705,9 +715,15 @@ public function downloadAllReportSheets()
             if (!isset($grandTotal[$student->id])) {
                 $grandTotal[$student->id] = 0;
             }
-            $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-            $totalScores[$subjectId] = $totalCa[$subjectId] + $subject->exams;
-            $totalExam[$subjectId] = $subject->exams;
+
+            $first_ca = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+            $second_ca = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+            $third_ca = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+            $exams = is_numeric($subject->exams) ? $subject->exams : 0;
+
+            $totalCa[$subjectId] = $first_ca + $second_ca + $third_ca;
+            $totalScores[$subjectId] = $totalCa[$subjectId] + $exams;
+            $totalExam[$subjectId] = $exams;
             $grandTotal[$student->id] += $totalScores[$subjectId];
         }
 
@@ -741,9 +757,15 @@ public function downloadAllReportSheets()
             if (!isset($cummulativeGrandTotal[$student->id])) {
                 $cummulativeGrandTotal[$student->id] = 0;
             }
-            $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-            $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $subject->exams;
-            $cummulativeTotalExam[$subjectId] = $subject->exams;
+
+            $first_ca = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+            $second_ca = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+            $third_ca = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+            $exams = is_numeric($subject->exams) ? $subject->exams : 0;
+
+            $cummulativeTotalCa[$subjectId] = $first_ca + $second_ca + $third_ca;
+            $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $exams;
+            $cummulativeTotalExam[$subjectId] = $exams;
             $cummulativeGrandTotal[$student->id] += $cummulativeTotalScores[$subjectId];
         }
 
