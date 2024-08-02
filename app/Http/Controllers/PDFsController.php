@@ -560,7 +560,7 @@ public function downloadAllReportSheets()
                 'averageTotal' => $averageTotal,
                 'cummulativeAverageTotal' => $cummulativeAverageTotal,
                 'dalibi' => $student,
-                'studentPosition' => $this->getStudentPosition($student->id, $sessionName, $term, $averageTotal)
+                'studentPosition' => $this->getStudentPosition($student->id, $sessionName, $term, $cummulativeAverageTotal)
             ];
 
             // Generate PDF content
@@ -590,7 +590,7 @@ public function downloadAllReportSheets()
             return response()->download($mergedPdfFileName);
     }
 
-    private function getStudentPosition($studentId, $session, $term, $averageTotal)
+    private function getStudentPosition($studentId, $session, $term, $cummulativeAverageTotal)
     {
 
         $studentClass = register_student::find($studentId)->class;
@@ -606,7 +606,7 @@ public function downloadAllReportSheets()
                 return('1st');
             }
 
-        $orderedStudents = $teacher->students->map(function ($student) use ($session, $term, $averageTotal) {
+        $orderedStudents = $teacher->students->map(function ($student) use ($session, $term, $cummulativeAverageTotal) {
             $matchingSubjects = $student->exams->where('session', str_replace('_', '/', $session))
                 // ->where('term', $term)
                 ->where('student_id', $student->id);
@@ -623,24 +623,24 @@ public function downloadAllReportSheets()
                 $totalScores +=  $first_cas + $second_cas + $third_cas + $examss;
             }
 
-            $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
-            $student->averageTotal = $averageTotal;
+            $cummulativeAverageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
+            $student->cummulativeAverageTotal = $cummulativeAverageTotal;
 
             return $student;
-        })->sortByDesc('averageTotal');
+        })->sortByDesc('cummulativeAverageTotal');
 
         $position = 1;
         $previousAverage = null;
 
         foreach ($orderedStudents as $student) {
-            if ($averageTotal !== null && $student->averageTotal < $previousAverage) {
+            if ($cummulativeAverageTotal !== null && $student->cummulativeAverageTotal < $previousAverage) {
                 $position++;
             }
             $student->position = $this->allresultOrdinalSuffix($position);
             if ($student->id == $studentId) {
                 return $student->position;
             }
-            $previousAverage = $student->averageTotal;
+            $previousAverage = $student->cummulativeAverageTotal;
         }
 
         return null;
