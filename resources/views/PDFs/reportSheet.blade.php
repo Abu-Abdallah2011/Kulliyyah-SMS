@@ -122,11 +122,12 @@
                         {{ $examRecord->comment }}
                     @endforeach
                     <hr>
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-        <hr style="margin-bottom: 0" />
-        <h5 class="text-center" style="margin-top: 0">
-            Principals' Signature
-        </h5>
+            <br/><br/><br/><br/><br/><br/>
+            <img src="images/signature.jpg" style="padding-left: 250px; margin-bottom: 0" width="220px" height="50px" alt="">
+            <hr style="margin-bottom: 0; margin-top: 0" />
+            <h5 class="text-center" style="margin-top: 0">
+                Principals' Signature
+            </h5>
     </div>
 
 </body>

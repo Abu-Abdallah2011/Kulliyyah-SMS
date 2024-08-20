@@ -708,7 +708,7 @@ public function downloadAllReportSheets()
         ];
 
         // Generate PDF content
-        $pdfContent = PDF::loadView('PDFs.reportsheet', $data)->output();
+        $pdfContent = PDF::loadView('PDFs.reportSheet', $data)->output();
 
         // Add PDF content to merged PDF
         $tempPdfFile = tempnam(sys_get_temp_dir(), 'report');
