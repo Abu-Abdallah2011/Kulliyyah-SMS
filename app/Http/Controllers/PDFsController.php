@@ -1143,7 +1143,7 @@ $position = 1;
 $previousAverage = null;
 
 foreach ($orderedStudents as $student) {
-    if ($averageTotal !== null && $student->averageTotal < $previousAverage) {
+    if ($student->averageTotal !== null && $student->averageTotal < $previousAverage) {
         $position++;
     }
     $student->position = GuardianresultOrdinalSuffix($position);

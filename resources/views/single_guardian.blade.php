@@ -1,8 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        {{-- <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2> --}}
+        
     </x-slot>
 
     <div class="py-6">
@@ -21,7 +19,13 @@
 
                         <div>
                             <h3 class="text-2xl">
-                                @can('isAdmin') GUARDIANS' USER ID:<a href="/users_database/{{$guardian->user->id}}/edit_user"> {{$guardian->user->id}}</a>@endcan
+                                @can('isAdmin') 
+                                @if($guardian->user)
+                                GUARDIANS' USER ID:<a href="/users_database/{{$guardian->user->id}}/edit_user"> {{$guardian->user->id}}</a>
+                                @else
+                                NO ID SPECIFIED
+                                @endif
+                                @endcan
                             </h3>
                             
                        <div>
@@ -31,7 +35,11 @@
 
                         <div>
                             <h3 class="text-2xl">
+                                @if($guardian->user)
                                USERNAME: {{$user->username}}
+                               @else
+                               NO SPECIFIED USERNAME
+                               @endif
                             </h3>
                             
                         <div class="text-xl mb-4">
@@ -40,7 +48,11 @@
                             </h3>
                             <div class="text-xl mb-4">
                                 <h3 class="text-2xl">
+                                    @if($guardian->user)
                             EMAIL ADDRESS: {{$user->email}}
+                            @else
+                            NO SPECIFIED USER EMAIL
+                            @endif
                                 </h3>
                                 @can('isAssistant')
                             <div class="text-xl mb-4">
