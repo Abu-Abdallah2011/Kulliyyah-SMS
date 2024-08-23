@@ -948,37 +948,6 @@ foreach ($teacher->students as $student) {
     $student->averageTotal = $averageTotal;
 }
 
-// Initialize an array to store the Cummulative total scores for each student
-// $cummulativetotalScores = [];
-// $cummulativeaverageTotal = [];
-
-// foreach ($teacher->students as $student) {
-//     $cummulativetotalScores[$student->id] = 0;
-//     $cummulativeaverageTotal[$student->id] = 0; 
-    
-//     foreach ($student->exams as $subject) {
-
-//         $cummulativematchingSubjects = [];
-
-//         if ($subject->session == str_replace('_', '/', $session) && $subject->student_id == $student->id) {
-//             $cummulativematchingSubjects[] = $subject;
-
-//         // Calculate the total score for this subject and student
-//         $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
-//         $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
-//         $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
-//         $examss = is_numeric($subject->exams) ? $subject->exams : 0;
-
-//         $cummulativetotalScores[$student->id] +=  $first_cas + $second_cas + $third_cas + $examss;
-// }
-//     }
-
-//     $cummulativeaverageTotal[$student->id] = count($student->exams->where('session', str_replace('_', '/', $session))) > 0 
-//     ? $cummulativetotalScores[$student->id] / count($student->exams->where('session', str_replace('_', '/', $session))) : 0;
-
-//     $student->cummulativeaverageTotal = $cummulativeaverageTotal;
-// }
-
 // Initialize an array to store the Cumulative total scores for each student
 $cummulativetotalScores = [];
 $cummulativeaverageTotal = [];

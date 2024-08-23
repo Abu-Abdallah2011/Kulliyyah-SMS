@@ -1014,7 +1014,7 @@ public function downloadAllCleanSheets()
         //Download Report Sheet
 public function reportSheetForGuardians($id, $term, $session){
 
-    $exam = ExamsModel::where('student_id', $id)->where('term', $term)->where('session', $session)->get();
+    $exam = ExamsModel::where('student_id', $id)->where('term', $term)->where('session', str_replace('_', '/', $session))->get();
 
     $sessions = sessions::where('term', $term)->where('session', str_replace('_', '/', $session))->first();
 
@@ -1040,9 +1040,14 @@ public function reportSheetForGuardians($id, $term, $session){
     $totalCa = [];
 
     $totalCa[$id] = [];
+    $totalScores = [];
+    $totalExam = [];
+    $grandTotal = [];
+    $averageTotal = [];
+    $cummulativeAverageTotal = [];
 
     foreach ($dalibi->exams as $subject) {
-        if ($subject->term == $term && $subject->session == $session) {
+        if ($subject->term == $term && $subject->session == str_replace('_', '/', $session)) {
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
             
@@ -1055,16 +1060,20 @@ public function reportSheetForGuardians($id, $term, $session){
                 $grandTotal[$studentId] = 0;
             }
             $grandTotal[$studentId] += $totalScores[$subjectId];
-            $averageTotal[$studentId] = count($dalibi->exams) > 0 ? $grandTotal[$studentId] / count($dalibi->exams->where('term', $term)->where('session', $session)) : 0;
+            $averageTotal[$studentId] = count($dalibi->exams) > 0 ? $grandTotal[$studentId] / count($dalibi->exams->where('term', $term)->where('session', str_replace('_', '/', $session))) : 0;
         }
     }
 
-    $cummulativeTotalCa = [];
+    $cummulativematchingSubjects = $dalibi->exams
+        ->where('session', str_replace('_', '/', $session))
+        ->where('student_id', $dalibi->id)
+        ->filter(function ($exam) use ($term) {
+            // Ensure we only consider terms up to and including the selected term
+            return $this->termOrder($exam->term) <= $this->termOrder($term);
+        });
 
-    $cummulativeTotalCa[$id] = [];
+    foreach ($cummulativematchingSubjects as $subject) {
 
-    foreach ($dalibi->exams as $subject) {
-        if ($subject->session == $session) {
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
             
@@ -1077,18 +1086,24 @@ public function reportSheetForGuardians($id, $term, $session){
                 $cummulativeGrandTotal[$studentId] = 0;
             }
             $cummulativeGrandTotal[$studentId] += $cummulativeTotalScores[$subjectId];
-            $cummulativeAverageTotal[$studentId] = count($dalibi->exams) > 0 ? $cummulativeGrandTotal[$studentId] / count($dalibi->exams->where('session', $session)) : 0;
+            $cummulativeAverageTotal[$studentId] = count($cummulativematchingSubjects) > 0 ? $cummulativeGrandTotal[$studentId] / count($cummulativematchingSubjects) : 0;
         }
-    }
     
-    $attendanceRecords[$dalibi->id] = $dalibi->attendance->where('term', $term)->where('session', $session)->filter(function ($record) {
+    $attendanceRecords[$dalibi->id] = $dalibi->attendance->where('term', $term)->where('session', str_replace('_', '/', $session))->filter(function ($record) {
         return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
     });
 
-    $totalAttendanceRecords = $dalibi->attendance->where('term', $term)->where('session', $session)->count();
+    $totalAttendanceRecords = $dalibi->attendance->where('term', $term)->where('session', str_replace('_', '/', $session))->count();
     $presentAttendanceRecords = $attendanceRecords[$dalibi->id]->count();
     $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
     $dalibi->attendancePercentage = $percentage;
+
+    /**
+ * Convert term names to a comparable order value.
+ *
+ * @param string $term
+ * @return int
+ */
 
     // =====================================================
 // POSITION CODES
@@ -1191,6 +1206,16 @@ foreach ($student->exams as $jarabawa) {
  // Return a response with PDF content to download
  return $pdf->download($dalibi->fullname);
 
+}
+
+private function termOrder($term) {
+    $terms = [
+        '1st Term' => 1,
+        '2nd Term' => 2,
+        '3rd Term' => 3,
+    ];
+
+    return $terms[$term] ?? 0;
 }
 
 }
