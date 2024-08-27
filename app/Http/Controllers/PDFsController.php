@@ -279,14 +279,19 @@ public function reportSheet($id){
 
     $cummulativeTotalCa[$id] = [];
 
-    foreach ($dalibi->exams as $subject) {
+    foreach ($dalibi->exams()->where('session', $session)->cursor() as $subject) {
         if ($subject->session == $session) {
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
+
+            $firstCa = $subject->first_ca ?? 0;
+            $secondCa = $subject->second_ca ?? 0;
+            $thirdCa = $subject->third_ca ?? 0;
+            $examScore = $subject->exams ?? 0;
             
-            $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-            $cummulativeTotalScores[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca + $subject->exams;
-            $cummulativeTotalExam[$subjectId] = $subject->exams;
+            $cummulativeTotalCa[$subjectId] = $firstCa + $secondCa + $thirdCa;
+            $cummulativeTotalScores[$subjectId] = $firstCa + $secondCa + $thirdCa + $examScore;
+            $cummulativeTotalExam[$subjectId] = $examScore;
             
             // Calculate grand total and average total outside the loop
             if (!isset($cummulativeGrandTotal[$studentId])) {
