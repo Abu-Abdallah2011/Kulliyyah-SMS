@@ -284,10 +284,10 @@ public function reportSheet($id){
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
 
-            $firstCa = $subject->first_ca ?? 0;
-            $secondCa = $subject->second_ca ?? 0;
-            $thirdCa = $subject->third_ca ?? 0;
-            $examScore = $subject->exams ?? 0;
+            $firstCa = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+            $secondCa = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+            $thirdCa = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+            $examScore = is_numeric($subject->exams) ? $subject->exams : 0;
             
             $cummulativeTotalCa[$subjectId] = $firstCa + $secondCa + $thirdCa;
             $cummulativeTotalScores[$subjectId] = $firstCa + $secondCa + $thirdCa + $examScore;
