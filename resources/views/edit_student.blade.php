@@ -114,23 +114,12 @@
                                 </select>
                             <x-input-error :messages="$errors->get('status')" class="mt-2" />
                         </div>
-                    
-                            <!-- Guadian Id -->
-                            <div>
-                                <x-input-label for="guardian_id" :value="__('Guardian Id')" />
-                                <x-text-input id="guardian_id" class="block mt-1 w-full" type="text" name="guardian_id" value="{{$student->guardian_id}}" required autofocus autocomplete="guardian_id" />
-                                <x-input-error :messages="$errors->get('guardian_id')" class="mt-2" />
-                            </div>
-                            
-                            <!-- Relationship -->
-                            <div>
-                                <x-input-label for="relationship" :value="__('Relationship')" />
-                                <x-text-input id="relationship" class="block mt-1 w-full" type="text" name="relationship" value="{{$student->relationship}}" required autofocus autocomplete="relationship" />
-                                <x-input-error :messages="$errors->get('relationship')" class="mt-2" />
-                            </div>
 
-                            @if ($student->status === 'GRADUATE')
-                    
+                        {{-- GRADUATION FIELDS --}}
+                        {{-- THE JAVASCRIPT COMMAND FOR SHOWING AND HIDING THESE FIELDS IS IN THE text-input COMPONENT --}}
+
+                        <div id="graduateFields" style="display: none;">
+
                             <!-- Graduation Type -->
                             <div>
                                 <x-input-label for="grad_type" :value="__('Graduation Type')" />
@@ -171,7 +160,21 @@
                                 <x-input-error :messages="$errors->get('grad_yr')" class="mt-2" />
                             </div>
 
-                        @endif
+                            </div>
+                    
+                            <!-- Guadian Id -->
+                            <div>
+                                <x-input-label for="guardian_id" :value="__('Guardian Id')" />
+                                <x-text-input id="guardian_id" class="block mt-1 w-full" type="text" name="guardian_id" value="{{$student->guardian_id}}" required autofocus autocomplete="guardian_id" />
+                                <x-input-error :messages="$errors->get('guardian_id')" class="mt-2" />
+                            </div>
+                            
+                            <!-- Relationship -->
+                            <div>
+                                <x-input-label for="relationship" :value="__('Relationship')" />
+                                <x-text-input id="relationship" class="block mt-1 w-full" type="text" name="relationship" value="{{$student->relationship}}" required autofocus autocomplete="relationship" />
+                                <x-input-error :messages="$errors->get('relationship')" class="mt-2" />
+                            </div>
                     
                             <!-- Photo Upload -->
                             <div>
