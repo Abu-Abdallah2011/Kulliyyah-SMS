@@ -40,12 +40,12 @@ class TeachersController extends Controller
             $data['photo'] = $request->file('photo')->store('TeachersPhoto', 'public');
         }
 
-        if ($selectedOption) {
+        if ($selectedClass) {
 
             $data['class'] = $selectedClass->class;
     
             }
-            if ($selectedClass) {
+            if ($selectedOption) {
     
             $data['set'] = $selectedOption->set;
     
@@ -101,12 +101,12 @@ public function update(TeacherFormRequest $request, $id){
         $data['photo'] = $request->file('photo')->store('TeachersPhoto', 'public');
     }
 
-        if ($selectedOption) {
+    if ($selectedClass) {
 
         $data['class'] = $selectedClass->class;
 
         }
-        if ($selectedClass) {
+        if ($selectedOption) {
 
         $data['set'] = $selectedOption->set;
 

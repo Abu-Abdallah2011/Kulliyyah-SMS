@@ -42,16 +42,16 @@ class StudentsController extends Controller
             $data['photo'] = $request->file('photo')->store('StudentsPhoto', 'public');
         }
 
-        if ($selectedOption) {
+        if ($selectedClass) {
 
             $data['class'] = $selectedClass->class;
     
-            }
-            if ($selectedClass) {
+        }
+        if ($selectedOption) {
     
             $data['set'] = $selectedOption->set;
     
-            }
+        }
 
             $data['created_by'] = $adder->fullname;
 
@@ -105,12 +105,12 @@ public function update(StudentFormRequest $request, $id){
         $data['photo'] = $request->file('photo')->store('StudentsPhoto', 's3');
     }
 
-    if ($selectedOption) {
+    if ($selectedClass) {
 
         $data['class'] = $selectedClass->class;
 
         }
-        if ($selectedClass) {
+        if ($selectedOption) {
 
         $data['set'] = $selectedOption->set;
 
