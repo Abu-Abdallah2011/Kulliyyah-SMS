@@ -218,7 +218,7 @@
                 <x-input-label for="photo" :value="__('Photo')" />
                 <x-text-input id="file" class="block mt-1 w-full" type="file" name="photo" value="{{ Storage::disk('s3')->url($teacher->photo) }}" autofocus autocomplete="photo" />
                 <x-input-error :messages="$errors->get('photo')" class="mt-2" />
-                    <img class="hidden w-48 mr-6 md:block" src="{{ Storage::url($teacher->photo) }}" alt="" />
+                    <img class="hidden w-48 mr-6 md:block" src="{{ Storage::disk('s3')->url($teacher->photo) }}" alt="" />
             </div>
 
             @endcan
