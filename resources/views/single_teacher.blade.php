@@ -10,7 +10,7 @@
                 <div class="flex">
                     <div class="">
                         <div class="grid grid-flow-col col-md-6 text-right">
-                            <img class="w-48 mr-6 md:block" src="{{ asset('storage/' . $teacher->photo) }}" alt="" />
+                            <img class="w-48 mr-6 md:block" src="{{ Storage::url($teacher->photo) }}" alt="" />
                         </div>
                             <div>
                                 <h5 class="text-base">

@@ -37,7 +37,7 @@ class TeachersController extends Controller
     $selectedClass = classes::find($selectedClassId);
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('TeachersPhoto', 'public');
+            $data['photo'] = $request->file('photo')->store('TeachersPhoto', 's3');
         }
 
         if ($selectedClass) {
@@ -98,7 +98,7 @@ public function update(TeacherFormRequest $request, $id){
     $selectedClass = classes::find($selectedClassId);
 
     if ($request->hasFile('photo')) {
-        $data['photo'] = $request->file('photo')->store('TeachersPhoto', 'public');
+        $data['photo'] = $request->file('photo')->store('TeachersPhoto', 's3');
     }
 
     if ($selectedClass) {

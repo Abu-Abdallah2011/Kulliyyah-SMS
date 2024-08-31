@@ -39,7 +39,7 @@ class StudentsController extends Controller
     $selectedClass = classes::find($selectedClassId);
         
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('StudentsPhoto', 'public');
+            $data['photo'] = $request->file('photo')->store('StudentsPhoto', 's3');
         }
 
         if ($selectedClass) {

@@ -8,7 +8,11 @@
 
     <div class="bg-gray-50 border border-gray-200 rounded p-6">
         <div class="flex">
-           @can('isAdGuardian') <img class="hidden w-48 mr-6 md:block" src="{{ asset('storage/' . $student->photo) }}" alt="" />@endcan
+           @can('isAdGuardian') 
+           @if ($student->photo)
+           <img class="hidden w-48 mr-6 md:block" src="{{ Storage::url($student->photo) }}" alt="" />
+           @endif
+           @endcan
             <div class="font-bold">
                 <h3 class="text-2xl">
                     {{$student->id}}

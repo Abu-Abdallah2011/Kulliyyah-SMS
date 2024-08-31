@@ -8,7 +8,9 @@
 
     <div class="bg-gray-50 border border-gray-200 rounded p-6">
         <div class="flex">
-            <img class="hidden w-48 mr-6 md:block" src="{{ asset('storage/' . $student->photo) }}" alt="" />
+            @if ($student->photo)
+            <img class="hidden w-48 mr-6 md:block" src="{{ Storage::url($student->photo) }}" alt="" />
+            @endif
             <div class="font-bold">
                 <h3 class="text-2xl">
                     {{$student->id}}

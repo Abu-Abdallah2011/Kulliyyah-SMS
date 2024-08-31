@@ -29,7 +29,9 @@
                         @endif
                 <div class="flex">
                     @can('isAdmin')
-                    <img class="hidden w-48 mr-6 md:block" src="{{asset('storage/' . $student->photo) }}" alt="" />
+                    @if ($student->photo)
+                    <img class="hidden w-48 mr-6 md:block" src="{{ Storage::url($student->photo) }}" alt="" />
+                    @endif
                     @endcan
 
                     <div class="font-bold">

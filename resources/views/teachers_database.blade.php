@@ -24,7 +24,7 @@
                 <div class="bg-red-300 border border-gray-200 rounded p-6">
                     @endif
                 <div class="flex">
-                    <img class="hidden w-48 mr-6 md:block" src="{{ asset('storage/' . $teacher->photo) }}" alt="" />
+                    <img class="hidden w-48 mr-6 md:block" src="{{ Storage::url($teacher->photo) }}" alt="" />
                     
                     <div class="font-bold">
                         <h3 class="text-2xl">
