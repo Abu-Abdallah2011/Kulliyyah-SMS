@@ -12,7 +12,7 @@
                         $teacherPhoto = $teacher->photo;
                         @endphp
                         @if ($teacherPhoto)
-                        <div class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200">{{ $teacherPhoto }}</div>
+                        <img class="block h-9 w-auto" src="{{ Storage::disk('s3')->url($teacherPhoto) }}" alt="Teacher Photo">
                         @else
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                         @endif
