@@ -6,16 +6,16 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> --}}
-                        @php
-                        $teacher = register_teacher::where('id', Auth::user()->id)->first();
+                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                        {{-- @php
+                        $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
                         $teacherPhoto = $teacher->photo;
                         @endphp
                         @if ($teacherPhoto)
                         <img class="block h-9 w-auto" src="{{ Storage::disk('s3')->url($teacherPhoto) }}" alt="Teacher Photo">
                         @else
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                        @endif
+                        @endif --}}
                     </a>
                 </div>
 
