@@ -39,9 +39,9 @@
                             </div>
                             @else
                             <div>
-                               @can('isExecutive') <a href="{{ $unPaidUrl }}"> @endcan
+                               @can('isFinance') <a href="{{ $unPaidUrl }}"> @endcan
                             <x-danger-button>{{$PreviousSession->term}} {{$PreviousSession->session}} Academic Session</x-danger-button>
-                            @can('isExecutive') </a> @endcan
+                            @can('isFinance') </a> @endcan
                         </div>
                             @endif
                         </a>
