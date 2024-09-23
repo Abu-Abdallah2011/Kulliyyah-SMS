@@ -284,10 +284,15 @@ public function reportSheet($id){
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
 
-            $firstCa = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
-            $secondCa = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
-            $thirdCa = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
-            $examScore = is_numeric($subject->exams) ? $subject->exams : 0;
+            // $firstCa = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+            // $secondCa = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+            // $thirdCa = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+            // $examScore = is_numeric($subject->exams) ? $subject->exams : 0;
+
+            $firstCa = $subject->first_ca;
+            $secondCa = $subject->second_ca;
+            $thirdCa = $subject->third_ca;
+            $examScore = $subject->exams;
             
             $cummulativeTotalCa[$subjectId] = $firstCa + $secondCa + $thirdCa;
             $cummulativeTotalScores[$subjectId] = $firstCa + $secondCa + $thirdCa + $examScore;
@@ -1016,7 +1021,7 @@ public function downloadAllCleanSheets()
             }
         }
 
-        //Download Report Sheet
+        //Download Report Sheet For Guardians
 public function reportSheetForGuardians($id, $term, $session){
 
     $exam = ExamsModel::where('student_id', $id)->where('term', $term)->where('session', str_replace('_', '/', $session))->get();
