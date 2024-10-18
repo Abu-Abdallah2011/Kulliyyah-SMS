@@ -67,8 +67,8 @@ Route::get('/dashboard', [DashboardController::class, 'view'])
 Route::controller(App\Http\Controllers\DashboardController::class)->group(function () {
 
 //Show Dashboard after Authentication
-// Route::get('/dashboard', 'view')
-// ->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', 'view')
+->middleware(['auth', 'verified'])->name('dashboard');
 
 //Show Dashboard of selected user/Guardian
 Route::get('/dashboard/guardians/{guardian_id}', 'show')
