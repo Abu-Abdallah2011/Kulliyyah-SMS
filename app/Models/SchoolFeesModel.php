@@ -30,6 +30,7 @@ class SchoolFeesModel extends Model
         'description',
         'added_by',
         'edited_by',
+        'reciept_no',
         
     ];
 }
