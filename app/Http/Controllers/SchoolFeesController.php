@@ -217,6 +217,7 @@ public function update(SchoolFeesRequest $request, $studentId, $term, $session){
         'term',
         'session',
         'description',
+        'reciept_no',
     ]);
         
     $data = array_merge($formData, [ 
