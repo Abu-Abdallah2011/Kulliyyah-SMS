@@ -85,6 +85,13 @@
                             <x-input-error :messages="$errors->get('balance')" class="mt-2" />
                         </div>
 
+                        <!-- Reciept Number -->
+                        <div>
+                            <x-input-label class="font-bold" for="reciept_no" :value="__('Reciept Number')" />
+                            <x-text-input id="reciept_no" class="block mt-1 w-full" type="text" name="reciept_no" value="{{ $studentTermFees->reciept_no }}"/>
+                            <x-input-error :messages="$errors->get('reciept_no')" class="mt-2" />
+                        </div>
+
                             <!-- Term -->
                             <div>
                             <x-input-label class="font-bold" for="term" :value="__('Term')" />

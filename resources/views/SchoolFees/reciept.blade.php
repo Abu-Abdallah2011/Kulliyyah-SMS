@@ -43,6 +43,10 @@
                         <td class="w-full lg:w-auto p-3 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600">For</td>
                         <td class="w-full lg:w-auto p-3 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600">{{ $studentFees->term }} {{ $studentFees->session }} Academic Session</td>
                     </tr>
+                    <tr>
+                        <td class="w-full lg:w-auto p-3 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600">Reciept Number</td>
+                        <td class="w-full lg:w-auto p-3 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600">{{ $studentFees->reciept_no }}</td>
+                    </tr>
                     @can('isFinance');
                     <tr>
                         <td class="w-full lg:w-auto p-3 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600">Description</td>

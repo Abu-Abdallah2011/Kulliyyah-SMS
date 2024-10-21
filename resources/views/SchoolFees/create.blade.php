@@ -24,17 +24,6 @@
                                 <x-input-error :messages="$errors->get('date')" class="mt-2" />
                             </div>
                     
-                            <!-- Surah -->
-                            {{-- <div>
-                                <x-input-label for="sura" :value="__('Select a Surah')" />
-                                <select name="dynamic_select" id="dynamic_select" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" type="text">
-                                    
-                                @foreach ($sura as $sura)
-                                <option value="{{ $sura->id }}">{{ $sura->sura }}</option>
-                                @endforeach
-                                </select>
-                            </div> --}}
-                           
                            <!-- Name -->
                            <div>
                             <x-input-label class="font-bold" for="name" :value="__('Name')" />
@@ -90,6 +79,13 @@
                             <x-input-label class="font-bold" for="balance" :value="__('Balance')" />
                             <x-text-input id="balance" class="block mt-1 w-full" type="text" name="balance"/>
                             <x-input-error :messages="$errors->get('balance')" class="mt-2" />
+                        </div>
+
+                        <!-- Reciept Number -->
+                        <div>
+                            <x-input-label class="font-bold" for="reciept_no" :value="__('Reciept Number')" />
+                            <x-text-input id="reciept_no" class="block mt-1 w-full" type="text" name="reciept_no"/>
+                            <x-input-error :messages="$errors->get('reciept_no')" class="mt-2" />
                         </div>
 
                             <!-- Term -->
