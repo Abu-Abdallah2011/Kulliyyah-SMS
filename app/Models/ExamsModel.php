@@ -34,6 +34,7 @@ class ExamsModel extends Model
         'term',
         'session',
         'comment',
+        'class',
 
         
     ];

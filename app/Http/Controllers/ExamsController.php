@@ -847,12 +847,21 @@ public function examsForPreviousTerms($class){
     }, 'students.exams'])
     ->first();
 
-$students = $teacher->students;
+$students = register_student::where('class', $class)
+->where('status', 'IN SCHOOL')
+->orWhere('grad_type', 'TARTEEL ZALLA')
+->with('exams')->get();
+
 
 $exam = collect(); // Initialize an empty collection
 
-foreach ($students as $student) {
-    $exam = $exam->merge($student->exams); // Merge exams of all students into a single collection
+foreach ($students as $dalibi) {
+    $student = $dalibi->exams->filter(function ($exam) use ($class) {
+        return $exam->class == $class;
+    });
+
+    // Merge the filtered exams into the main collection
+    $exam = $exam->merge($student);
 }
 
 
@@ -877,14 +886,19 @@ public function PreviousTermsCleansheet($term, $session){
         {
             $query->where('status', 'IN SCHOOL')
             ->orWhere('grad_type', 'TARTEEL ZALLA');
-        }, 'students.attendance'])
+        }, 'students.attendance', 'students.exams' => function ($query) use ($class) {
+            // Filter the exams to only include those where the class matches the teacher's class
+            $query->where('class', $class);
+        }])
         ->first();
+
+        $students = $teacher->students;
 
         $totalCa = [];
 
         $attendanceRecords = [];
 
-foreach ($teacher->students as $student) {
+foreach ($students as $student) {
     $totalCa[$student->id] = [];
 
     $attendanceRecords[$student->id] = $student->attendance
@@ -902,6 +916,8 @@ foreach ($teacher->students as $student) {
     $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
     $student->attendancePercentage = $percentage;
     
+    $matchingSubjects = [];
+
     foreach ($student->exams as $subjects) {
 
         $matchingSubjects = $subjects->where('session', str_replace('_', '/', $session))
@@ -927,7 +943,7 @@ foreach ($teacher->students as $student) {
 $totalScores = [];
 $averageTotal = [];
 
-foreach ($teacher->students as $student) {
+foreach ($students as $student) {
     $totalScores[$student->id] = 0;
     $averageTotal[$student->id] = 0; 
     
@@ -958,7 +974,7 @@ foreach ($teacher->students as $student) {
 $cummulativetotalScores = [];
 $cummulativeaverageTotal = [];
 
-foreach ($teacher->students as $student) {
+foreach ($students as $student) {
     $cummulativetotalScores[$student->id] = 0;
     $cummulativeaverageTotal[$student->id] = 0; 
     
@@ -1020,7 +1036,7 @@ function previousTermOrdinalSuffix($position) {
 $matchingSubjects = [];
 $cummulativematchingSubjects = [];
 
-$orderedStudents = $teacher->students->map(function ($student) use ($sessions,  &$matchingSubjects) {
+$orderedStudents = $students->map(function ($student) use ($sessions,  &$matchingSubjects) {
 
     $matchingSubjects = $student->exams->where('session', $sessions->session)
     ->where('term', $sessions->term)
