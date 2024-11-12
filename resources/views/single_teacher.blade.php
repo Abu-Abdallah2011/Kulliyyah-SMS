@@ -1,4 +1,4 @@
-<x-app-layout>
+{{-- <x-app-layout>
     <x-slot name="header">
     </x-slot>
 
@@ -142,4 +142,114 @@
         @endcan
     </div>
     
+</x-app-layout> --}}
+
+
+<x-app-layout>
+    <x-slot name="header">
+    </x-slot>
+
+    <div class="py-8 bg-gradient-to-r from-blue-50 via-teal-50 to-indigo-50">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Profile Container -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+
+                <!-- Profile Header Section (Image and Basic Info) -->
+                <div class="flex items-center space-x-8 p-6 bg-indigo-100">
+                    <!-- Photo Section -->
+                    <div class="flex-shrink-0">
+                        <img class="w-32 h-32 rounded-full border-4 border-indigo-300 shadow-xl" src="{{ Storage::disk('s3')->url($teacher->photo) }}" alt="Teacher Photo" />
+                    </div>
+
+                    <!-- Info Section -->
+                    <div class="space-y-4">
+                        <h1 class="text-3xl font-extrabold text-gray-900">{{$teacher->fullname}}</h1>
+                        <p class="text-lg text-gray-600">ID: {{$teacher->id}}</p>
+
+                        @if($teacher->user)
+                            @can('isAdmin')
+                                <p class="text-sm text-indigo-600">TEACHER'S USER ID: <a href="/users_database/{{$teacher->user->id}}/edit_user" class="underline hover:text-indigo-800">{{$teacher->user->id}}</a></p>
+                            @endcan
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Personal Information Section -->
+                <div class="bg-gray-50 p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Personal Information</h2>
+                    <div class="grid grid-cols-2 gap-6">
+                        <p class="text-md text-gray-700">Gender: <span class="text-indigo-600">{{$teacher->gender}}</span></p>
+                        <p class="text-md text-gray-700">Class: <span class="text-indigo-600">{{$teacher->class}}</span></p>
+                        <p class="text-md text-gray-700">Set: <span class="text-indigo-600">{{$teacher->set}}</span></p>
+                        <p class="text-md text-gray-700">Date of Birth: <span class="text-indigo-600">{{$teacher->dob}}</span></p>
+                        <p class="text-md text-gray-700">Marital Status: <span class="text-indigo-600">{{$teacher->marital_status}}</span></p>
+                        <p class="text-md text-gray-700">Status: <span class="text-indigo-600">{{$teacher->status}}</span></p>
+                        <p class="text-md text-gray-700">Rank: <span class="text-indigo-600">{{$teacher->rank}}</span></p>
+                        <p class="text-md text-gray-700">Promotion Year: <span class="text-indigo-600">{{$teacher->promotion_yr}}</span></p>
+                    </div>
+                </div>
+
+                <!-- Contact & Bank Information Section -->
+                <div class="bg-white p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Contact & Banking Information</h2>
+                    <div class="grid grid-cols-2 gap-6">
+                        <p class="text-md text-gray-700">Phone: <span class="text-indigo-600">{{$teacher->contact_no}}</span></p>
+                        @if($teacher->user)
+                            <p class="text-md text-gray-700">Email: <span class="text-indigo-600">{{$teacher->user->email}}</span></p>
+                        @endif
+                        <p class="text-md text-gray-700">Bank Branch: <span class="text-indigo-600">{{$teacher->bank_branch}}</span></p>
+                        <p class="text-md text-gray-700">Account Name: <span class="text-indigo-600">{{$teacher->acct_name}}</span></p>
+                        <p class="text-md text-gray-700">Account Number: <span class="text-indigo-600">{{$teacher->acct_no}}</span></p>
+                        <p class="text-md text-gray-700">Monthly Allowance: <span class="text-indigo-600">{{$teacher->allowance}}</span></p>
+                    </div>
+                </div>
+
+                <!-- Hometown & Next of Kin Information Section -->
+                <div class="bg-gray-50 p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Hometown & Next of Kin</h2>
+                    <div class="grid grid-cols-2 gap-6">
+                        <p class="text-md text-gray-700">Hometown: <span class="text-indigo-600">{{$teacher->hometown}}</span></p>
+                        <p class="text-md text-gray-700">Next of Kin: <span class="text-indigo-600">{{$teacher->nok}}</span></p>
+                        <p class="text-md text-gray-700">Relationship: <span class="text-indigo-600">{{$teacher->relationship}}</span></p>
+                        <p class="text-md text-gray-700">Next of Kin Phone: <span class="text-indigo-600">{{$teacher->contact}}</span></p>
+                    </div>
+                </div>
+
+                <!-- Address Section -->
+                <div class="bg-white p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Address</h2>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-location-dot text-indigo-600"></i>
+                        <p class="text-md text-gray-700">{{$teacher->address}}</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons Section -->
+                <div class="bg-gray-50 p-6 flex justify-end space-x-4">
+                    @can('isExecutive')
+                        <a href="/teachers_database/{{$teacher->id}}/edit_teacher">
+                            <x-primary-button class="bg-indigo-600 text-white hover:bg-indigo-700 transition duration-200">
+                                <i class="fa-solid fa-pencil"></i> Edit
+                            </x-primary-button>
+                        </a>
+                    @endcan
+
+                    @can('isAdmin')
+                        <form method="POST" action="/teachers_database/{{$teacher->id}}">
+                            @csrf
+                            @method('DELETE')
+                            <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')" class="bg-red-600 text-white hover:bg-red-700 transition duration-200">
+                                <i class="fa-solid fa-trash"></i> Delete
+                            </x-danger-button>
+                        </form>
+
+                        <x-primary-button class="bg-green-600 text-white hover:bg-green-700 transition duration-200" onclick="window.print()">
+                            <i class="fa-solid fa-download"></i> Print
+                        </x-primary-button>
+                    @endcan
+                </div>
+
+            </div>
+        </div>
+    </div>
 </x-app-layout>
