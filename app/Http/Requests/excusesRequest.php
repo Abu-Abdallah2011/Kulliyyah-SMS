@@ -31,13 +31,16 @@ class excusesRequest extends FormRequest
             ],
             'description' => [
                 'required',
-                'string'
+                'string',
+                'max:255'
             ],
             'start_date' => [
-                'string'
+                'string',
+                'max:255'
             ],
             'end_date' => [
-                'string'
+                'string',
+                'max:255'
             ],
             'supporting_document' => [
                 'nullable',
@@ -54,10 +57,12 @@ class excusesRequest extends FormRequest
                 'exists:teachers_details,id'
             ],
             'added_by' => [
-                'string'
+                'string',
+                'max:255'
             ],
             'edited_by' => [
-                'string'
+                'string',
+                'max:255'
             ],
         ];
     }
