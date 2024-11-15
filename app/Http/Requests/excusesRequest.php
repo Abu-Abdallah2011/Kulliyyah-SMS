@@ -56,7 +56,7 @@ class excusesRequest extends FormRequest
             'added_by' => [
                 'string'
             ],
-            'jedited_by' => [
+            'edited_by' => [
                 'string'
             ],
         ];
