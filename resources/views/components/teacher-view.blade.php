@@ -133,6 +133,41 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    {{-- Disciplinary actions database for both teachers and students --}}
+                                    <!-- Card: Disciplinary actions database for Students -->
+                                    {{-- @can('isDiscipline')
+                                    <a href="attendance/show">
+                                        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0">
+                                                    <i class="fas fa-chart-pie fa-2x text-primary"></i>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-900">Attendance</h3>
+                                                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">{{ number_format($percentageclasspresent, 2) }}%</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    @endcan
+
+                                    <!-- Card: Disciplinary actions database for Teachers -->
+                                    @can('isExecutive')
+                                    <a href="attendance/show">
+                                        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0">
+                                                    <i class="fas fa-chart-pie fa-2x text-primary"></i>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-900">Attendance</h3>
+                                                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">{{ number_format($percentageclasspresent, 2) }}%</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    @endcan --}}
                                 
                                 </div>
                                 </div>

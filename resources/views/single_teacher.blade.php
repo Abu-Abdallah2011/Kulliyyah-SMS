@@ -224,6 +224,108 @@
                     </div>
                 </div>
 
+                 <!-- Teacher Excuses for Absentism or Lateness section -->
+                 <div class="bg-gray-300 p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Excuses (if any)</h2>
+                
+                    <!-- Button to Add a New Excuse Record -->
+                    @can('isExecutive')
+                    <a href="{{ url('excuses/create/' . $teacher->id) }}">
+                        <x-primary-button class="mb-4 bg-blue-500 hover:bg-blue-600">
+                            <i class="fa-solid fa-plus"></i> Add Excuse Record
+                        </x-primary-button>
+                    </a>
+                    @endcan
+                
+                    @if ($teacher->excuses->isNotEmpty())
+                        @foreach ($teacher->excuses as $teacherExcuse)
+                            <div class="bg-white p-4 mb-4 border rounded shadow-sm">
+                                <h3 class="font-bold">{{ $teacherExcuse->title }}</h3>
+                                <p>{{ $teacherExcuse->description }}</p>
+                                <p><strong>Date Submitted:</strong> {{ $teacherExcuse->start_date }}</p>
+                                <p><strong>Termination Date(if any):</strong> {{ ucfirst($teacherExcuse->end_date) }}</p>
+                                
+                                @if ($teacherExcuse->supporting_documents)
+                                    <a href="{{ asset('storage/' . $teacherExcuse->supporting_documents) }}" target="_blank" class="text-blue-500">View Supporting Documents</a>
+                                @endif
+                                
+                                <!-- Button to Edit & delete this Disciplinary Record -->
+                                @can('isExecutive')
+                                <div class="flex space-x-4">
+                                <a href="{{ url('excuses/edit/' . $teacherExcuse->id) }}" class="inline-block mt-4">
+                                    <x-primary-button class="bg-yellow-500 hover:bg-yellow-600">
+                                        <i class="fa-solid fa-pencil"></i> Edit Record
+                                    </x-primary-button>
+                                </a>
+                                <form method="POST" action="/excuses/delete/{{$teacherExcuse->id}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')" class="bg-red-600 text-white hover:bg-red-700 transition duration-200 inline-block mt-4">
+                                        <i class="fa-solid fa-trash"></i> Delete
+                                    </x-danger-button>
+                                </form>
+                                </div>
+                                @endcan
+                            </div>
+                        @endforeach
+                    @else
+                        <div>No Excuse has been recorded for this teacher.</div>
+                    @endif
+                </div>
+
+                <!-- Disciplinary Actions against the teacher section -->
+                <div class="bg-red-300 p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Disciplinary Actions (if any)</h2>
+                
+                    <!-- Button to Add a New Disciplinary Record -->
+                    @can('isExecutive')
+                    <a href="{{ url('disciplinary/create/' . $teacher->id) }}">
+                        <x-primary-button class="mb-4 bg-blue-500 hover:bg-blue-600">
+                            <i class="fa-solid fa-plus"></i> Add Disciplinary Record
+                        </x-primary-button>
+                    </a>
+                    @endcan
+                
+                    @if ($teacher->disciplinaryActions->isNotEmpty())
+                        @foreach ($teacher->disciplinaryActions as $action)
+                            <div class="bg-white p-4 mb-4 border rounded shadow-sm">
+                                <h3 class="font-bold">{{ $action->title }}</h3>
+                                <p>{{ $action->description }}</p>
+                                <p><strong>Action Taken:</strong> {{ $action->action_taken }}</p>
+                                <p><strong>Status:</strong> {{ ucfirst($action->status) }}</p>
+                                
+                                @if ($action->school_issued_document)
+                                    <a href="{{ asset('storage/' . $action->school_issued_document) }}" target="_blank" class="text-blue-500">View School-Issued Document</a>
+                                @endif
+                                
+                                @if ($action->offender_issued_document)
+                                    <a href="{{ asset('storage/' . $action->offender_issued_document) }}" target="_blank" class="text-blue-500 ml-4">View Offender-Issued Document</a>
+                                @endif
+                                
+                                <!-- Button to Edit & delete this Disciplinary Record -->
+                                @can('isExecutive')
+                                <div class="flex space-x-4">
+                                <a href="{{ url('disciplinary/edit/' . $action->id) }}" class="inline-block mt-4">
+                                    <x-primary-button class="bg-yellow-500 hover:bg-yellow-600">
+                                        <i class="fa-solid fa-pencil"></i> Edit Record
+                                    </x-primary-button>
+                                </a>
+                                <form method="POST" action="/disciplinary/delete/{{$action->id}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')" class="bg-red-600 text-white hover:bg-red-700 transition duration-200 inline-block mt-4">
+                                        <i class="fa-solid fa-trash"></i> Delete
+                                    </x-danger-button>
+                                </form>
+                                </div>
+                                @endcan
+                            </div>
+                        @endforeach
+                    @else
+                        <div>No Disciplinary Action has been recorded against this teacher.</div>
+                    @endif
+                </div>
+
                 <!-- Action Buttons Section -->
                 <div class="bg-gray-50 p-6 flex justify-end space-x-4">
                     @can('isExecutive')

@@ -27,6 +27,7 @@
            <option>FINXAM</option>
            <option>FINANCE</option>
            <option>EXAM</option>
+           <option>DISCIPLINE</option>
            <option>TEACHER</option>
            <option>ASSISTANT</option>
            <option>DAN T.P</option>

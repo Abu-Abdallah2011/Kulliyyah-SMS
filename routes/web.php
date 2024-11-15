@@ -21,6 +21,8 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\SchoolFeesController;
 use App\Http\Controllers\classesCrudController;
+use App\Http\Controllers\DisciplinaryActionController;
+use App\Http\Controllers\excusesController;
 use App\Http\Controllers\teachersAttendanceController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -117,7 +119,7 @@ require __DIR__.'/auth.php';
         // Show Teacher Data in Database
         Route::get('/teachers_database', 'show')->middleware('can:isAdmin');
         // View Single Teacher Data
-        Route::get('/teachers_database/{id}', 'view')->middleware('can:isAssistant');
+        Route::get('/teachers_database/{id}', 'view')->middleware('can:isAssistant')->name('singleTeacher.show');
         // Edit Teacher Data
         Route::get('/teachers_database/{id}/edit_teacher', 'edit')->middleware('can:isAssistant');
         // Update Teacher
@@ -463,5 +465,41 @@ require __DIR__.'/auth.php';
 
         // Download Report Sheet For Guardians
         Route::get('/reportSheet/{id}/{term}/{session}', 'reportSheetForGuardians');
+    });
+
+    // Discipline
+    Route::middleware('can:isExecutive')->controller(DisciplinaryActionController::class)->group(function () {
+        // Show Create Form
+        Route::get('/disciplinary/create/{id}', 'create')->name('disciplinary.create');
+
+        // Store Discilinary Action
+        Route::post('/disciplinary/store/{id}', 'store')->name('disciplinary.store');
+
+        // Show Edit Form
+        Route::get('/disciplinary/edit/{id}', 'edit')->name('disciplinary.edit');
+
+        // Update Disciplinary action
+        Route::put('/disciplinary/update/{id}', 'update')->name('disciplinary.update');
+
+        // Delete Disciplinary action
+        Route::delete('/disciplinary/delete/{id}', 'destroy')->name('disciplinary.delete');
+    });
+
+    // Excuses
+    Route::middleware('can:isExecutive')->controller(excusesController::class)->group(function () {
+        // Show Create Form
+        Route::get('/excuses/create/{id}', 'create')->name('excuses.create');
+
+        // Store Excuse Data
+        Route::post('/excuses/store/{id}', 'store')->name('excuses.store');
+
+        // Show Edit Form
+        Route::get('/excuses/edit/{id}', 'edit')->name('excuses.edit');
+
+        // Update excuses action
+        Route::put('/excuses/update/{id}', 'update')->name('excuses.update');
+
+        // Delete excuses action
+        Route::delete('/excuses/delete/{id}', 'destroy')->name('excuses.delete');
     });
    

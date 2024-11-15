@@ -39,6 +39,18 @@ class register_teacher extends Model
        return $this->hasMany(teachersAttendanceModel::class, 'teacher_id', 'id');
     }
 
+    //  Link this model to Teachers Disciplinary action model
+    public function disciplinaryActions()
+    {
+       return $this->hasMany(DisciplinaryActionModel::class, 'teacher_id', 'id');
+    }
+
+    //  Link this model to Excuses model
+    public function excuses()
+    {
+       return $this->hasMany(excusesModel::class, 'teacher_id', 'id');
+    }
+
 
     protected $table = 'teachers_details';
 

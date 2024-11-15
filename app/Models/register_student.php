@@ -52,6 +52,18 @@ class register_student extends Model
         return $this->hasMany(SchoolFeesModel::class, 'student_id', 'id');
     }
 
+    //  Link this model to Students Disciplinary action model
+    public function disciplinaryActions()
+    {
+       return $this->hasMany(DisciplinaryActionModel::class, 'student_id', 'id');
+    }
+
+    //  Link this model to Excuses model
+    public function excuses()
+    {
+       return $this->hasMany(excusesModel::class, 'student_id', 'id');
+    }
+
     protected $table = 'students_details_tables';
 
     protected $fillable = [
