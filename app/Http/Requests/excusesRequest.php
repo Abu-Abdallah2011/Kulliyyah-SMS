@@ -32,7 +32,7 @@ class excusesRequest extends FormRequest
             'description' => [
                 'required',
                 'string',
-                'max:255'
+                // 'max:255'
             ],
             'start_date' => [
                 'string',
@@ -40,21 +40,22 @@ class excusesRequest extends FormRequest
             ],
             'end_date' => [
                 'string',
+                'nullable',
                 'max:255'
             ],
             'supporting_document' => [
                 'nullable',
-                'file',
+                // 'file',
                 'mimes:pdf,jpg,jpeg,png',
                 'max:5000'
             ],
             'student_id' => [
                 'nullable',
-                'exists:students_details_tables,id'
+                // 'exists:students_details_tables,id'
             ],
             'teacher_id' => [
                 'nullable',
-                'exists:teachers_details,id'
+                // 'exists:teachers_details,id'
             ],
             'added_by' => [
                 'string',

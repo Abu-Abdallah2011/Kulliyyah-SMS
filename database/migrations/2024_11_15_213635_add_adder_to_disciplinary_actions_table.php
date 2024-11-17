@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('disciplinary_actions', function (Blueprint $table) {
-            $table->string('added_by');
-            $table->string('edited_by');
+            $table->string('added_by')->nullable();
+            $table->string('edited_by')->nullable();
         });
     }
 

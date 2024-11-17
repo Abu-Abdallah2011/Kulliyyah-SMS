@@ -52,7 +52,7 @@
 
                         <!-- Supporting Document Upload -->
                         <div class="mb-4">
-                            <label for="supporting_document" class="block text-sm font-medium text-gray-700">Supporting Document (optional)</label>
+                            <label for="supporting_document" class="block text-sm font-medium text-gray-700">Supporting Document (if any)</label>
                             <input type="file" id="supporting_document" name="supporting_document" class="mt-1 block w-full">
                         </div>
 
