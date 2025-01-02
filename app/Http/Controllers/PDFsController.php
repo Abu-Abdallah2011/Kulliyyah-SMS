@@ -419,206 +419,206 @@ foreach ($student->exams as $jarabawa) {
 }
 
 // DOWNLOAD ALL REPORT SHEETS OF STUDENTS
-public function downloadAllReportSheets()
-    {
-        $session = Sessions::latest('created_at')->first();
-        $term = $session->term;
-        $sessionName = $session->session;
+// public function downloadAllReportSheets()
+//     {
+//         $session = Sessions::latest('created_at')->first();
+//         $term = $session->term;
+//         $sessionName = $session->session;
 
-        $students = register_student::where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->where('class', '!=', '#')
-            ->get()
-            ->groupBy('class');
+//         $students = register_student::where('status', 'IN SCHOOL')
+//             ->orWhere('grad_type', 'TARTEEL ZALLA')
+//             ->where('class', '!=', '#')
+//             ->get()
+//             ->groupBy('class');
 
 
-        $mergedPdf = new \setasign\Fpdi\Fpdi();
-        $mergedPdfFileName = storage_path('app/' . $term . ' ' . str_replace('/', '_', $sessionName) . ' ' . 'Academic Session' . '.pdf');
+//         $mergedPdf = new \setasign\Fpdi\Fpdi();
+//         $mergedPdfFileName = storage_path('app/' . $term . ' ' . str_replace('/', '_', $sessionName) . ' ' . 'Academic Session' . '.pdf');
 
-        foreach ($students as $aji => $classStudents) {
-        foreach ($classStudents as $student) {
-            $exam = ExamsModel::where('student_id', $student->id)
-                ->where('term', $term)
-                ->where('session', $sessionName)
-                ->get();
+//         foreach ($students as $aji => $classStudents) {
+//         foreach ($classStudents as $student) {
+//             $exam = ExamsModel::where('student_id', $student->id)
+//                 ->where('term', $term)
+//                 ->where('session', $sessionName)
+//                 ->get();
 
-            $subjects = SubjectsModel::whereIn('subject', $exam->pluck('subject_id'))->get();
-            $class = $classStudents->count();
+//             $subjects = SubjectsModel::whereIn('subject', $exam->pluck('subject_id'))->get();
+//             $class = $classStudents->count();
 
-            $totalCa = [];
-            $totalScores = [];
-            $totalExam = [];
-            $grandTotal = [];
+//             $totalCa = [];
+//             $totalScores = [];
+//             $totalExam = [];
+//             $grandTotal = [];
 
-            foreach ($exam as $subject) {
-                $subjectId = $subject->subject_id;
-                $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-                $totalScores[$subjectId] = $totalCa[$subjectId] + $subject->exams;
-                $totalExam[$subjectId] = $subject->exams;
+//             foreach ($exam as $subject) {
+//                 $subjectId = $subject->subject_id;
+//                 $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
+//                 $totalScores[$subjectId] = $totalCa[$subjectId] + $subject->exams;
+//                 $totalExam[$subjectId] = $subject->exams;
 
-                // Calculate grand total
-                if (!isset($grandTotal[$student->id])) {
-                    $grandTotal[$student->id] = 0;
-                }
-                $grandTotal[$student->id] += $totalScores[$subjectId];
-            }
+//                 // Calculate grand total
+//                 if (!isset($grandTotal[$student->id])) {
+//                     $grandTotal[$student->id] = 0;
+//                 }
+//                 $grandTotal[$student->id] += $totalScores[$subjectId];
+//             }
 
-            $averageTotal[$student->id] = count($exam) > 0 ? $grandTotal[$student->id] / count($exam) : 0;
+//             $averageTotal[$student->id] = count($exam) > 0 ? $grandTotal[$student->id] / count($exam) : 0;
 
-            $attendanceRecords[$student->id] = $student->attendance->where('term', $term)->where('session', $sessionName)->filter(function ($record) {
-                return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
-            });
+//             $attendanceRecords[$student->id] = $student->attendance->where('term', $term)->where('session', $sessionName)->filter(function ($record) {
+//                 return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
+//             });
 
-            // CALCULATE CUMMULATIVE SCORES
-            $cummulativeExam = ExamsModel::where('student_id', $student->id)
-            ->where('session', $sessionName)
-            ->get();
+//             // CALCULATE CUMMULATIVE SCORES
+//             $cummulativeExam = ExamsModel::where('student_id', $student->id)
+//             ->where('session', $sessionName)
+//             ->get();
 
-            $cummulativeTotalCa = [];
-            $cummulativeTotalScores = [];
-            $cummulativeTotalExam = [];
-            $cummulativeGrandTotal = [];
+//             $cummulativeTotalCa = [];
+//             $cummulativeTotalScores = [];
+//             $cummulativeTotalExam = [];
+//             $cummulativeGrandTotal = [];
 
-            foreach ($cummulativeExam as $subject) {
-                $subjectId = $subject->subject_id;
-                $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
-                $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $subject->exams;
-                $cummulativeTotalExam[$subjectId] = $subject->exams;
+//             foreach ($cummulativeExam as $subject) {
+//                 $subjectId = $subject->subject_id;
+//                 $cummulativeTotalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
+//                 $cummulativeTotalScores[$subjectId] = $cummulativeTotalCa[$subjectId] + $subject->exams;
+//                 $cummulativeTotalExam[$subjectId] = $subject->exams;
 
-                // Calculate grand total
-                if (!isset($cummulativeGrandTotal[$student->id])) {
-                    $cummulativeGrandTotal[$student->id] = 0;
-                }
-                $cummulativeGrandTotal[$student->id] += $cummulativeTotalScores[$subjectId];
-            }
+//                 // Calculate grand total
+//                 if (!isset($cummulativeGrandTotal[$student->id])) {
+//                     $cummulativeGrandTotal[$student->id] = 0;
+//                 }
+//                 $cummulativeGrandTotal[$student->id] += $cummulativeTotalScores[$subjectId];
+//             }
 
-            $cummulativeAverageTotal[$student->id] = count($cummulativeExam) > 0 ? $cummulativeGrandTotal[$student->id] / count($cummulativeExam) : 0;
+//             $cummulativeAverageTotal[$student->id] = count($cummulativeExam) > 0 ? $cummulativeGrandTotal[$student->id] / count($cummulativeExam) : 0;
 
-            $attendanceRecords[$student->id] = $student->attendance->where('term', $term)->where('session', $sessionName)->filter(function ($record) {
-                return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
-            });
+//             $attendanceRecords[$student->id] = $student->attendance->where('term', $term)->where('session', $sessionName)->filter(function ($record) {
+//                 return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
+//             });
         
-            $totalAttendanceRecords = $student->attendance->where('term', $term)->where('session', $sessionName)->count();
-            $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
-            $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
-            $student->attendancePercentage = $percentage;
+//             $totalAttendanceRecords = $student->attendance->where('term', $term)->where('session', $sessionName)->count();
+//             $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
+//             $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
+//             $student->attendancePercentage = $percentage;
 
-            $data = [
-                'sessions' => $session,
-                'class' => $class,
-                'exam' => $exam,
-                'subjects' => $subjects,
-                'totalCa' => $totalCa,
-                'totalScores' => $totalScores,
-                'totalExam' => $totalExam,
-                'grandTotal' => $grandTotal,
-                'averageTotal' => $averageTotal,
-                'cummulativeAverageTotal' => $cummulativeAverageTotal,
-                'dalibi' => $student,
-                'studentPosition' => $this->getStudentPosition($student->id, $sessionName, $term, $averageTotal)
-            ];
+//             $data = [
+//                 'sessions' => $session,
+//                 'class' => $class,
+//                 'exam' => $exam,
+//                 'subjects' => $subjects,
+//                 'totalCa' => $totalCa,
+//                 'totalScores' => $totalScores,
+//                 'totalExam' => $totalExam,
+//                 'grandTotal' => $grandTotal,
+//                 'averageTotal' => $averageTotal,
+//                 'cummulativeAverageTotal' => $cummulativeAverageTotal,
+//                 'dalibi' => $student,
+//                 'studentPosition' => $this->getStudentPosition($student->id, $sessionName, $term, $averageTotal)
+//             ];
 
-            // Generate PDF content
-            $pdfContent = PDF::loadView('PDFs.reportsheet', $data)->output();
+//             // Generate PDF content
+//             $pdfContent = PDF::loadView('PDFs.reportsheet', $data)->output();
 
-            // Add PDF content to merged PDF
-            $tempPdfFile = tempnam(sys_get_temp_dir(), 'report');
-            file_put_contents($tempPdfFile, $pdfContent);
+//             // Add PDF content to merged PDF
+//             $tempPdfFile = tempnam(sys_get_temp_dir(), 'report');
+//             file_put_contents($tempPdfFile, $pdfContent);
 
-            $pageCount = $mergedPdf->setSourceFile($tempPdfFile);
-            for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-                $templateId = $mergedPdf->importPage($pageNo);
-                $size = $mergedPdf->getTemplateSize($templateId);
+//             $pageCount = $mergedPdf->setSourceFile($tempPdfFile);
+//             for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+//                 $templateId = $mergedPdf->importPage($pageNo);
+//                 $size = $mergedPdf->getTemplateSize($templateId);
 
-                $mergedPdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
-                $mergedPdf->useTemplate($templateId);
-            }
+//                 $mergedPdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+//                 $mergedPdf->useTemplate($templateId);
+//             }
 
-            unlink($tempPdfFile);
-        }
-    }
+//             unlink($tempPdfFile);
+//         }
+//     }
 
-            // Output merged PDF file
-            $mergedPdf->Output('F', $mergedPdfFileName);
+//             // Output merged PDF file
+//             $mergedPdf->Output('F', $mergedPdfFileName);
 
-            // Download the merged PDF file
-            return response()->download($mergedPdfFileName);
-    }
+//             // Download the merged PDF file
+//             return response()->download($mergedPdfFileName);
+//     }
 
-    private function getStudentPosition($studentId, $session, $term, $averageTotal)
-    {
+//     private function getStudentPosition($studentId, $session, $term, $averageTotal)
+//     {
 
-        $studentClass = register_student::find($studentId)->class;
-        $teacher = register_teacher::where('class', $studentClass)
-            ->where('user_id', auth()->user()->id)
-            ->with(['students' => function ($query) {
-                $query->where('status', 'IN SCHOOL')
-                    ->orWhere('grad_type', 'TARTEEL ZALLA');
-            }, 'students.exams'])
-            ->first();
+//         $studentClass = register_student::find($studentId)->class;
+//         $teacher = register_teacher::where('class', $studentClass)
+//             ->where('user_id', auth()->user()->id)
+//             ->with(['students' => function ($query) {
+//                 $query->where('status', 'IN SCHOOL')
+//                     ->orWhere('grad_type', 'TARTEEL ZALLA');
+//             }, 'students.exams'])
+//             ->first();
 
-            if ($teacher === null) {
-                return('1st');
-            }
+//             if ($teacher === null) {
+//                 return('1st');
+//             }
 
-        $orderedStudents = $teacher->students->map(function ($student) use ($session, $term, $averageTotal) {
-            $matchingSubjects = $student->exams->where('session', str_replace('_', '/', $session))
-                // ->where('term', $term)
-                ->where('student_id', $student->id);
+//         $orderedStudents = $teacher->students->map(function ($student) use ($session, $term, $averageTotal) {
+//             $matchingSubjects = $student->exams->where('session', str_replace('_', '/', $session))
+//                 // ->where('term', $term)
+//                 ->where('student_id', $student->id);
 
-            $totalScores = 0;
-            $examCount = count($matchingSubjects);
+//             $totalScores = 0;
+//             $examCount = count($matchingSubjects);
 
-            foreach ($matchingSubjects as $subject) {
-                $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
-                $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
-                $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
-                $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+//             foreach ($matchingSubjects as $subject) {
+//                 $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+//                 $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+//                 $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+//                 $examss = is_numeric($subject->exams) ? $subject->exams : 0;
 
-                $totalScores +=  $first_cas + $second_cas + $third_cas + $examss;
-            }
+//                 $totalScores +=  $first_cas + $second_cas + $third_cas + $examss;
+//             }
 
-            $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
-            $student->averageTotal = $averageTotal;
+//             $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
+//             $student->averageTotal = $averageTotal;
 
-            return $student;
-        })->sortByDesc('averageTotal');
+//             return $student;
+//         })->sortByDesc('averageTotal');
 
-        $position = 1;
-        $previousAverage = null;
+//         $position = 1;
+//         $previousAverage = null;
 
-        foreach ($orderedStudents as $student) {
-            if ($averageTotal !== null && $student->averageTotal < $previousAverage) {
-                $position++;
-            }
-            $student->position = $this->allresultOrdinalSuffix($position);
-            if ($student->id == $studentId) {
-                return $student->position;
-            }
-            $previousAverage = $student->averageTotal;
-        }
+//         foreach ($orderedStudents as $student) {
+//             if ($averageTotal !== null && $student->averageTotal < $previousAverage) {
+//                 $position++;
+//             }
+//             $student->position = $this->allresultOrdinalSuffix($position);
+//             if ($student->id == $studentId) {
+//                 return $student->position;
+//             }
+//             $previousAverage = $student->averageTotal;
+//         }
 
-        return null;
-    }
+//         return null;
+//     }
 
-    // Function to add ordinal suffix
-    private function allresultOrdinalSuffix($position)
-    {
-        if ($position % 100 >= 11 && $position % 100 <= 13) {
-            return $position . 'th';
-        } else {
-            switch ($position % 10) {
-                case 1:
-                    return $position . 'st';
-                case 2:
-                    return $position . 'nd';
-                case 3:
-                    return $position . 'rd';
-                default:
-                    return $position . 'th';
-            }
-        }
-    }
+//     // Function to add ordinal suffix
+//     private function allresultOrdinalSuffix($position)
+//     {
+//         if ($position % 100 >= 11 && $position % 100 <= 13) {
+//             return $position . 'th';
+//         } else {
+//             switch ($position % 10) {
+//                 case 1:
+//                     return $position . 'st';
+//                 case 2:
+//                     return $position . 'nd';
+//                 case 3:
+//                     return $position . 'rd';
+//                 default:
+//                     return $position . 'th';
+//             }
+//         }
+//     }
 
     // DOWNLOAD ALL REPORT SHEETS FOR A CLASS
     public function reportSheets()
@@ -638,8 +638,13 @@ public function downloadAllReportSheets()
 
     $students = $teacher->students;
 
-    $mergedPdf = new \setasign\Fpdi\Fpdi();
+    $tempDir = storage_path('app/temp_pdfs');
+    if (!file_exists($tempDir)) {
+        mkdir($tempDir, 0755, true);
+    }
+
     $mergedPdfFileName = storage_path('app/' . $term . ' ' . str_replace('/', '_', $sessionName) . ' ' . 'Academic Session' . '.pdf');
+    $mergedPdf = new \setasign\Fpdi\Fpdi();
 
     foreach ($students as $student) {
         $exam = ExamsModel::where('student_id', $student->id)
@@ -816,210 +821,210 @@ private function classresultOrdinalSuffix($position)
 }
 
 // DOWNLOAD ALL CLEANSHEETS FOR THE TERM FOR ALL THE CLASSES
-public function downloadAllCleanSheets()
-{
-    $sessions = sessions::orderBy('created_at', 'desc')->first();
-    $exam = ExamsModel::get();
-    $teachers = register_teacher::where('status', 'IN SCHOOL')
-    ->where('rank', ['TEACHER', 'CLASS TEACHER'])
-    ->with(['students' => function ($query) {
-        $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA');
-    }, 'students.attendance'])->get();
+// public function downloadAllCleanSheets()
+// {
+//     $sessions = sessions::orderBy('created_at', 'desc')->first();
+//     $exam = ExamsModel::get();
+//     $teachers = register_teacher::where('status', 'IN SCHOOL')
+//     ->where('rank', ['TEACHER', 'CLASS TEACHER'])
+//     ->with(['students' => function ($query) {
+//         $query->where('status', 'IN SCHOOL')
+//             ->orWhere('grad_type', 'TARTEEL ZALLA');
+//     }, 'students.attendance'])->get();
 
-    // Initialize a PDF instance for merging
-    $mergedPdf = new \setasign\Fpdi\Fpdi();
+//     // Initialize a PDF instance for merging
+//     $mergedPdf = new \setasign\Fpdi\Fpdi();
 
-    foreach ($teachers as $teacher) {
-        $classId = $teacher->class_id;
-        $classData = [
-            'teacher' => $teacher,
-            'students' => [],
-            'totalCa' => [],
-            'attendanceRecords' => [],
-            'totalScores' => [],
-            'averageTotal' => [],
-            'cummulativetotalScores' => [],
-            'cummulativeaverageTotal' => [],
-        ];
+//     foreach ($teachers as $teacher) {
+//         $classId = $teacher->class_id;
+//         $classData = [
+//             'teacher' => $teacher,
+//             'students' => [],
+//             'totalCa' => [],
+//             'attendanceRecords' => [],
+//             'totalScores' => [],
+//             'averageTotal' => [],
+//             'cummulativetotalScores' => [],
+//             'cummulativeaverageTotal' => [],
+//         ];
 
-        foreach ($teacher->students as $student) {
-            if (!isset($classData['students'][$student->id])) {
-                $classData['students'][$student->id] = $student;
-                $classData['totalCa'][$student->id] = [];
-                $classData['attendanceRecords'][$student->id] = $student->attendance
-                    ->where('session', $sessions->session)
-                    ->where('term', $sessions->term)
-                    ->filter(function ($record) {
-                        return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
-                    });
+//         foreach ($teacher->students as $student) {
+//             if (!isset($classData['students'][$student->id])) {
+//                 $classData['students'][$student->id] = $student;
+//                 $classData['totalCa'][$student->id] = [];
+//                 $classData['attendanceRecords'][$student->id] = $student->attendance
+//                     ->where('session', $sessions->session)
+//                     ->where('term', $sessions->term)
+//                     ->filter(function ($record) {
+//                         return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
+//                     });
 
-                $totalAttendanceRecords = $student->attendance
-                    ->where('session', $sessions->session)
-                    ->where('term', $sessions->term)
-                    ->count();
-                $presentAttendanceRecords = $classData['attendanceRecords'][$student->id]->count();
-                $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
-                $student->attendancePercentage = $percentage;
-            }
+//                 $totalAttendanceRecords = $student->attendance
+//                     ->where('session', $sessions->session)
+//                     ->where('term', $sessions->term)
+//                     ->count();
+//                 $presentAttendanceRecords = $classData['attendanceRecords'][$student->id]->count();
+//                 $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
+//                 $student->attendancePercentage = $percentage;
+//             }
 
-            foreach ($student->exams as $subjects) {
-                $matchingSubjects = $subjects->where('session', $sessions->session)
-                    ->where('term', $sessions->term)
-                    ->where('student_id', $student->id)
-                    ->get();
+//             foreach ($student->exams as $subjects) {
+//                 $matchingSubjects = $subjects->where('session', $sessions->session)
+//                     ->where('term', $sessions->term)
+//                     ->where('student_id', $student->id)
+//                     ->get();
 
-                foreach ($matchingSubjects as $subject) {
-                    $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
-                    $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
-                    $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+//                 foreach ($matchingSubjects as $subject) {
+//                     $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+//                     $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+//                     $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
 
-                    $classData['totalCa'][$student->id][$subject->subject_id] = $first_cas + $second_cas + $third_cas;
-                }
-            }
-        }
+//                     $classData['totalCa'][$student->id][$subject->subject_id] = $first_cas + $second_cas + $third_cas;
+//                 }
+//             }
+//         }
 
-        foreach ($classData['students'] as $student) {
-            $classData['totalScores'][$student->id] = 0;
-            $classData['averageTotal'][$student->id] = 0;
+//         foreach ($classData['students'] as $student) {
+//             $classData['totalScores'][$student->id] = 0;
+//             $classData['averageTotal'][$student->id] = 0;
 
-            foreach ($student->exams as $subject) {
-                if ($subject->session == $sessions->session && $subject->term == $sessions->term && $subject->student_id == $student->id) {
-                    $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
-                    $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
-                    $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
-                    $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+//             foreach ($student->exams as $subject) {
+//                 if ($subject->session == $sessions->session && $subject->term == $sessions->term && $subject->student_id == $student->id) {
+//                     $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+//                     $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+//                     $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+//                     $examss = is_numeric($subject->exams) ? $subject->exams : 0;
 
-                    $classData['totalScores'][$student->id] += $first_cas + $second_cas + $third_cas + $examss;
-                }
-            }
+//                     $classData['totalScores'][$student->id] += $first_cas + $second_cas + $third_cas + $examss;
+//                 }
+//             }
 
-            $classData['averageTotal'][$student->id] = count($student->exams->where('session', $sessions->session)->where('term', $sessions->term)) > 0
-                ? $classData['totalScores'][$student->id] / count($student->exams->where('session', $sessions->session)->where('term', $sessions->term))
-                : 0;
+//             $classData['averageTotal'][$student->id] = count($student->exams->where('session', $sessions->session)->where('term', $sessions->term)) > 0
+//                 ? $classData['totalScores'][$student->id] / count($student->exams->where('session', $sessions->session)->where('term', $sessions->term))
+//                 : 0;
 
-            $student->averageTotal = $classData['averageTotal'][$student->id];
-        }
+//             $student->averageTotal = $classData['averageTotal'][$student->id];
+//         }
 
-        foreach ($classData['students'] as $student) {
-            $classData['cummulativetotalScores'][$student->id] = 0;
-            $classData['cummulativeaverageTotal'][$student->id] = 0;
+//         foreach ($classData['students'] as $student) {
+//             $classData['cummulativetotalScores'][$student->id] = 0;
+//             $classData['cummulativeaverageTotal'][$student->id] = 0;
 
-            foreach ($student->exams as $subject) {
+//             foreach ($student->exams as $subject) {
 
-                $cummulativematchingSubjects = [];
+//                 $cummulativematchingSubjects = [];
         
-                if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
-                    $cummulativematchingSubjects[] = $subject;
-        }
+//                 if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
+//                     $cummulativematchingSubjects[] = $subject;
+//         }
 
-                if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
-                    $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
-                    $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
-                    $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
-                    $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+//                 if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
+//                     $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+//                     $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+//                     $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+//                     $examss = is_numeric($subject->exams) ? $subject->exams : 0;
 
-                    $classData['cummulativetotalScores'][$student->id] += $first_cas + $second_cas + $third_cas + $examss;
-                }
-            }
+//                     $classData['cummulativetotalScores'][$student->id] += $first_cas + $second_cas + $third_cas + $examss;
+//                 }
+//             }
 
-            $classData['cummulativeaverageTotal'][$student->id] = count($student->exams->where('session', $sessions->session)) > 0
-                ? $classData['cummulativetotalScores'][$student->id] / count($student->exams->where('session', $sessions->session))
-                : 0;
+//             $classData['cummulativeaverageTotal'][$student->id] = count($student->exams->where('session', $sessions->session)) > 0
+//                 ? $classData['cummulativetotalScores'][$student->id] / count($student->exams->where('session', $sessions->session))
+//                 : 0;
 
-            $student->cummulativeaverageTotal = $classData['cummulativeaverageTotal'][$student->id];
-        }
+//             $student->cummulativeaverageTotal = $classData['cummulativeaverageTotal'][$student->id];
+//         }
 
-        $orderedStudents = collect($classData['students'])->map(function ($student) use ($sessions) {
-            $matchingSubjects = $student->exams->where('session', $sessions->session)->where('student_id', $student->id);
-            $totalScores = 0;
-            $examCount = count($matchingSubjects);
+//         $orderedStudents = collect($classData['students'])->map(function ($student) use ($sessions) {
+//             $matchingSubjects = $student->exams->where('session', $sessions->session)->where('student_id', $student->id);
+//             $totalScores = 0;
+//             $examCount = count($matchingSubjects);
 
-            foreach ($matchingSubjects as $subject) {
-                $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
-                $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
-                $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
-                $examss = is_numeric($subject->exams) ? $subject->exams : 0;
+//             foreach ($matchingSubjects as $subject) {
+//                 $first_cas = is_numeric($subject->first_ca) ? $subject->first_ca : 0;
+//                 $second_cas = is_numeric($subject->second_ca) ? $subject->second_ca : 0;
+//                 $third_cas = is_numeric($subject->third_ca) ? $subject->third_ca : 0;
+//                 $examss = is_numeric($subject->exams) ? $subject->exams : 0;
 
-                $totalScores += $first_cas + $second_cas + $third_cas + $examss;
-            }
+//                 $totalScores += $first_cas + $second_cas + $third_cas + $examss;
+//             }
 
-            $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
-            $student->averageTotal = $averageTotal;
+//             $averageTotal = $examCount > 0 ? $totalScores / $examCount : 0;
+//             $student->averageTotal = $averageTotal;
 
-            return $student;
-        })->sortByDesc('averageTotal');
+//             return $student;
+//         })->sortByDesc('averageTotal');
 
-        $position = 1;
-        $previousAverage = null;
+//         $position = 1;
+//         $previousAverage = null;
 
-        foreach ($orderedStudents as $student) {
-            if ($previousAverage !== null && $student->averageTotal < $previousAverage) {
-                $position++;
-            }
+//         foreach ($orderedStudents as $student) {
+//             if ($previousAverage !== null && $student->averageTotal < $previousAverage) {
+//                 $position++;
+//             }
 
-            $student->position = $this->cleanSheetsOrdinalSuffix($position);
-            $previousAverage = $student->averageTotal;
-        }
+//             $student->position = $this->cleanSheetsOrdinalSuffix($position);
+//             $previousAverage = $student->averageTotal;
+//         }
 
-        $data = [
-            'exam' => $exam,
-            'sessions' => $sessions,
-            'class' => $classData['teacher']->class,
-            'teacher' => $classData['teacher'],
-            'totalCa' => $classData['totalCa'],
-            'totalScores' => $classData['totalScores'],
-            'averageTotal' => $classData['averageTotal'],
-            'orderedStudents' => $orderedStudents,
-            'matchingSubjects' => $matchingSubjects,
-            'cummulativematchingSubjects' => $cummulativematchingSubjects,
-            'session' => $sessions->session,
-            'term' => $sessions->term,
-            'cummulativeaverageTotal' => $classData['cummulativeaverageTotal'],
-        ];
+//         $data = [
+//             'exam' => $exam,
+//             'sessions' => $sessions,
+//             'class' => $classData['teacher']->class,
+//             'teacher' => $classData['teacher'],
+//             'totalCa' => $classData['totalCa'],
+//             'totalScores' => $classData['totalScores'],
+//             'averageTotal' => $classData['averageTotal'],
+//             'orderedStudents' => $orderedStudents,
+//             'matchingSubjects' => $matchingSubjects,
+//             'cummulativematchingSubjects' => $cummulativematchingSubjects,
+//             'session' => $sessions->session,
+//             'term' => $sessions->term,
+//             'cummulativeaverageTotal' => $classData['cummulativeaverageTotal'],
+//         ];
 
-        // Generate PDF content for the current class
-        $pdfContent = PDF::loadView('PDFs.cleanSheet', $data)->output();
+//         // Generate PDF content for the current class
+//         $pdfContent = PDF::loadView('PDFs.cleanSheet', $data)->output();
 
-        // Add PDF content to merged PDF
-        $tempPdfFile = tempnam(sys_get_temp_dir(), 'cleanSheet');
-        file_put_contents($tempPdfFile, $pdfContent);
+//         // Add PDF content to merged PDF
+//         $tempPdfFile = tempnam(sys_get_temp_dir(), 'cleanSheet');
+//         file_put_contents($tempPdfFile, $pdfContent);
 
-        $pageCount = $mergedPdf->setSourceFile($tempPdfFile);
-        for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-            $templateId = $mergedPdf->importPage($pageNo);
-            $size = $mergedPdf->getTemplateSize($templateId);
+//         $pageCount = $mergedPdf->setSourceFile($tempPdfFile);
+//         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+//             $templateId = $mergedPdf->importPage($pageNo);
+//             $size = $mergedPdf->getTemplateSize($templateId);
 
-            $mergedPdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
-            $mergedPdf->useTemplate($templateId);
-        }
+//             $mergedPdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+//             $mergedPdf->useTemplate($templateId);
+//         }
 
-        unlink($tempPdfFile);
-    }
+//         unlink($tempPdfFile);
+//     }
 
-    // Output merged PDF file
-    $mergedPdfFileName = 'all_clean_sheets.pdf';
-    $mergedPdf->Output($mergedPdfFileName, 'D');
-}
+//     // Output merged PDF file
+//     $mergedPdfFileName = 'all_clean_sheets.pdf';
+//     $mergedPdf->Output($mergedPdfFileName, 'D');
+// }
 
 
-// ADD ORDINAL SUFFIX FOR ALL CLEANSHEETS
-        function cleanSheetsOrdinalSuffix($position) {
-            if ($position % 100 >= 11 && $position % 100 <= 13) {
-                return $position . 'th';
-            } else {
-                switch ($position % 10) {
-                    case 1:
-                        return $position . 'st';
-                    case 2:
-                        return $position . 'nd';
-                    case 3:
-                        return $position . 'rd';
-                    default:
-                        return $position . 'th';
-                }
-            }
-        }
+// // ADD ORDINAL SUFFIX FOR ALL CLEANSHEETS
+//         function cleanSheetsOrdinalSuffix($position) {
+//             if ($position % 100 >= 11 && $position % 100 <= 13) {
+//                 return $position . 'th';
+//             } else {
+//                 switch ($position % 10) {
+//                     case 1:
+//                         return $position . 'st';
+//                     case 2:
+//                         return $position . 'nd';
+//                     case 3:
+//                         return $position . 'rd';
+//                     default:
+//                         return $position . 'th';
+//                 }
+//             }
+//         }
 
         //Download Report Sheet For Guardians
 public function reportSheetForGuardians($id, $term, $session){

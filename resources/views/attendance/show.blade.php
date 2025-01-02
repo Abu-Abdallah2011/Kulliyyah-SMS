@@ -50,10 +50,10 @@
              </tr>
          </thead>
          <tbody>
-             @foreach ($teacher->students as $student)
+             @foreach ($teacher->students as $index => $student)
                  <tr class="bg-white lg:hover:bg-gray-100 lg:table-row mb-10 lg:mb-0">
-                     <td class="w-full lg:w-auto p-2 md:p-3 lg:p-3 text-gray-800 border border-b lg:table-cell relative lg:static font-bold">{{ $student->id }}</td>
-                     <td class="w-full lg:w-auto p-2 md:p-3 lg:p-3 text-gray-800 border border-b lg:table-cell relative lg:static font-bold">{{ $student->fullname }}</td>
+                     <td class="w-full lg:w-auto p-2 md:p-3 lg:p-3 text-gray-800 border border-b lg:table-cell relative lg:static font-bold">{{ $index + 1 }}</td>
+                     <td class="w-full lg:w-auto p-2 md:p-3 lg:p-3 text-gray-800 border border-b lg:table-cell relative lg:static font-bold"><a href="{{ url('/attendance/guardian_view/' . $student->id) }}">{{ $student->fullname }}</a></td>
                      @foreach($datesDisplayed as $date)
                          @php
                              $statusesForDate = $attendance->where('date', $date)
