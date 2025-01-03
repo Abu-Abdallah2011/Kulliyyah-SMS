@@ -257,14 +257,51 @@ public function reportSheet($id){
 
     $totalCa[$id] = [];
 
+    $first_cas = [];
+    $first_cas[$id] = [];
+
+    $second_cas = [];
+    $second_cas[$id] = [];
+
     foreach ($dalibi->exams as $subject) {
         if ($subject->term == $term && $subject->session == $session) {
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
+
+            $first_cas[$subjectId] = $subject->first_ca;
+            $second_cas[$subjectId] = $subject->second_ca;
             
             $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
             $totalScores[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca + $subject->exams;
             $totalExam[$subjectId] = $subject->exams;
+
+            if (!isset($totalScores[$subjectId])) {
+                $totalScores[$subjectId] = 0; 
+            }
+
+            if ($totalScores[$subjectId] >= 80) {
+                $grade[$subjectId] = 'A';
+                $remark[$subjectId] = 'Excellent';
+            } elseif ($totalScores[$subjectId] >= 70 && $totalScores[$subjectId] < 80) {
+                $grade[$subjectId] = 'B';
+                $remark[$subjectId] = 'V. Good';
+            } elseif ($totalScores[$subjectId] >= 60 && $totalScores[$subjectId] < 70) { 
+                $grade[$subjectId] = 'C';
+                $remark[$subjectId] = 'Good';
+            } elseif ($totalScores[$subjectId] >= 50 && $totalScores[$subjectId] < 60) {
+                $grade[$subjectId] = 'D';
+                $remark[$subjectId] = 'Pass';
+            } elseif ($totalScores[$subjectId] >= 0 && $totalScores[$subjectId] < 50) {
+                $grade[$subjectId] = 'F';
+                $remark[$subjectId] = 'Fail';
+            } else {
+                $grade[$subjectId] = '-';
+                $remark[$subjectId] = 'Invalid Score'; 
+            }
+            
+            // Assign the values to the subject
+            $subject->grade = $grade[$subjectId];
+            $subject->remark = $remark[$subjectId];
             
             // Calculate grand total and average total outside the loop
             if (!isset($grandTotal[$studentId])) {
@@ -272,6 +309,27 @@ public function reportSheet($id){
             }
             $grandTotal[$studentId] += $totalScores[$subjectId];
             $averageTotal[$studentId] = count($dalibi->exams) > 0 ? $grandTotal[$studentId] / count($dalibi->exams->where('term', $term)->where('session', $session)) : 0;
+
+            if ($averageTotal[$studentId] >= 80) {
+                $TeachersRemark[$studentId] = 'Outstanding performance! Keep aiming higher.';
+                $PrincipalsRemark[$studentId] = 'Excellent achievement! Continue to strive for greatness.';
+            } elseif ($averageTotal[$studentId] >= 70 && $averageTotal[$studentId] < 80) {
+                $TeachersRemark[$studentId] = 'Great job! You are doing very well.';
+                $PrincipalsRemark[$studentId] = 'Impressive work! Maintain this momentum and aim for excellence.';
+            } elseif ($averageTotal[$studentId] >= 60 && $averageTotal[$studentId] < 70) {
+                $TeachersRemark[$studentId] = 'Good effort! You have the potential to achieve even more.';
+                $PrincipalsRemark[$studentId] = 'Solid performance! With a little more effort, you can excel further.';
+            } elseif ($averageTotal[$studentId] >= 50 && $averageTotal[$studentId] < 60) {
+                $TeachersRemark[$studentId] = 'A fair result. You can achieve better with consistent effort.';
+                $PrincipalsRemark[$studentId] = 'You’re on the right track. Focus and push yourself to improve.';
+            } elseif ($averageTotal[$studentId] >= 0 && $averageTotal[$studentId] < 50) {
+                $TeachersRemark[$studentId] = 'Keep trying. You have the ability to improve with hard work.';
+                $PrincipalsRemark[$studentId] = 'Do not give up! Hard work and determination will lead to better results.';
+            } else {
+                $TeachersRemark[$studentId] = 'No remarks available.';
+                $PrincipalsRemark[$studentId] = 'No remarks available.'; // Handles any unexpected scores
+            }
+            
         }
     }
 
@@ -403,15 +461,26 @@ foreach ($student->exams as $jarabawa) {
     'class' => $class,
     'exam' => $exam,
     'subjects' => $subjects,
+    'second_cas' => $second_cas,
+    'first_cas' => $first_cas,
     'totalCa' => $totalCa,
     'totalScores' => $totalScores,
     'totalExam' => $totalExam,
     'grandTotal' => $grandTotal,
     'averageTotal' => $averageTotal,
+    'grade' => $grade,
+    'remark' => $remark,
+    'TeachersRemark' => $TeachersRemark,
+    'PrincipalsRemark' => $PrincipalsRemark,
     'dalibi' => $dalibi,
     'studentPosition' => $studentPosition,
     'cummulativeAverageTotal' => $cummulativeAverageTotal,
-]);
+])
+->setPaper('a4')
+        ->setOption('isHtml5ParserEnabled', true)
+        ->setOption('isPhpEnabled', true)
+        ->setOption('isRemoteEnabled', true)
+        ->setOption('chroot', public_path('/'));
 
  // Return a response with PDF content to download
  return $pdf->download($dalibi->fullname);
@@ -655,6 +724,8 @@ foreach ($student->exams as $jarabawa) {
         $subjects = SubjectsModel::whereIn('subject', $exam->pluck('subject_id'))->get();
         $classCount = $students->count();
 
+        $first_cas = [];
+        $second_cas = [];
         $totalCa = [];
         $totalScores = [];
         $totalExam = [];
@@ -662,9 +733,39 @@ foreach ($student->exams as $jarabawa) {
 
         foreach ($exam as $subject) {
             $subjectId = $subject->subject_id;
+            $first_cas[$subjectId] = $subject->first_ca;
+            $second_cas[$subjectId] = $subject->second_ca;
             $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
             $totalScores[$subjectId] = $totalCa[$subjectId] + $subject->exams;
             $totalExam[$subjectId] = $subject->exams;
+
+            if (!isset($totalScores[$subjectId])) {
+                $totalScores[$subjectId] = 0; // Default to 0 if not set
+            }
+
+            if ($totalScores[$subjectId] >= 80) {
+                $grade[$subjectId] = 'A';
+                $remark[$subjectId] = 'Excellent';
+            } elseif ($totalScores[$subjectId] >= 70 && $totalScores[$subjectId] < 80) {
+                $grade[$subjectId] = 'B';
+                $remark[$subjectId] = 'V. Good';
+            } elseif ($totalScores[$subjectId] >= 60 && $totalScores[$subjectId] < 70) { 
+                $grade[$subjectId] = 'C';
+                $remark[$subjectId] = 'Good';
+            } elseif ($totalScores[$subjectId] >= 50 && $totalScores[$subjectId] < 60) {
+                $grade[$subjectId] = 'D';
+                $remark[$subjectId] = 'Pass';
+            } elseif ($totalScores[$subjectId] >= 0 && $totalScores[$subjectId] < 50) {
+                $grade[$subjectId] = 'F';
+                $remark[$subjectId] = 'Fail';
+            } else {
+                $grade[$subjectId] = '-';
+                $remark[$subjectId] = 'Invalid Score'; // Handles any unexpected scores
+            }
+            
+            // Assign the values to the subject
+            $subject->grade = $grade[$subjectId];
+            $subject->remark = $remark[$subjectId];
 
             if (!isset($grandTotal[$student->id])) {
                 $grandTotal[$student->id] = 0;
@@ -673,6 +774,26 @@ foreach ($student->exams as $jarabawa) {
         }
 
         $averageTotal[$student->id] = count($exam) > 0 ? $grandTotal[$student->id] / count($exam) : 0;
+
+        if ($averageTotal[$student->id] >= 80) {
+            $TeachersRemark[$student->id] = 'Outstanding performance! Keep aiming higher.';
+            $PrincipalsRemark[$student->id] = 'Excellent achievement! Continue to strive for greatness.';
+        } elseif ($averageTotal[$student->id] >= 70 && $averageTotal[$student->id] < 80) {
+            $TeachersRemark[$student->id] = 'Great job! You are doing very well.';
+            $PrincipalsRemark[$student->id] = 'Impressive work! Maintain this momentum and aim for excellence.';
+        } elseif ($averageTotal[$student->id] >= 60 && $averageTotal[$student->id] < 70) {
+            $TeachersRemark[$student->id] = 'Good effort! You have the potential to achieve even more.';
+            $PrincipalsRemark[$student->id] = 'Solid performance! With a little more effort, you can excel further.';
+        } elseif ($averageTotal[$student->id] >= 50 && $averageTotal[$student->id] < 60) {
+            $TeachersRemark[$student->id] = 'A fair result. You can achieve better with consistent effort.';
+            $PrincipalsRemark[$student->id] = 'You’re on the right track. Focus and push yourself to improve.';
+        } elseif ($averageTotal[$student->id] >= 0 && $averageTotal[$student->id] < 50) {
+            $TeachersRemark[$student->id] = 'Keep trying. You have the ability to improve with hard work.';
+            $PrincipalsRemark[$student->id] = 'Do not give up! Hard work and determination will lead to better results.';
+        } else {
+            $TeachersRemark[$student->id] = 'No remarks available.';
+            $PrincipalsRemark[$student->id] = 'No remarks available.'; // Handles any unexpected scores
+        }
 
         $attendanceRecords[$student->id] = $student->attendance->where('term', $term)->where('session', $sessionName)->filter(function ($record) {
             return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
@@ -712,11 +833,17 @@ foreach ($student->exams as $jarabawa) {
             'class' => $classCount,
             'exam' => $exam,
             'subjects' => $subjects,
+            'first_cas' => $first_cas,
+            'second_cas' => $second_cas,
             'totalCa' => $totalCa,
             'totalScores' => $totalScores,
             'totalExam' => $totalExam,
             'grandTotal' => $grandTotal,
             'averageTotal' => $averageTotal,
+            'grade' => $grade,
+            'remark' => $remark,
+            'TeachersRemark' => $TeachersRemark,
+            'PrincipalsRemark' => $PrincipalsRemark,
             'cummulativeAverageTotal' => $cummulativeAverageTotal,
             'dalibi' => $student,
             'studentPosition' => $this->getClassStudentPosition($student->id, $sessionName, $term, $averageTotal)
@@ -1052,6 +1179,11 @@ public function reportSheetForGuardians($id, $term, $session){
     ->orwhere('status', 'TARTEEL ZALLA')
     ->count();
 
+    $first_cas = [];
+    $first_cas[$id] = [];
+
+    $second_cas = [];
+    $second_cas[$id] = [];
     $totalCa = [];
 
     $totalCa[$id] = [];
@@ -1065,10 +1197,41 @@ public function reportSheetForGuardians($id, $term, $session){
         if ($subject->term == $term && $subject->session == str_replace('_', '/', $session)) {
             $subjectId = $subject->subject_id;
             $studentId = $subject->student_id;
+
+            $first_cas[$subjectId] = $subject->first_ca;
+            $second_cas[$subjectId] = $subject->second_ca;
             
             $totalCa[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca;
             $totalScores[$subjectId] = $subject->first_ca + $subject->second_ca + $subject->third_ca + $subject->exams;
             $totalExam[$subjectId] = $subject->exams;
+
+            if (!isset($totalScores[$subjectId])) {
+                $totalScores[$subjectId] = 0; 
+            }
+
+            if ($totalScores[$subjectId] >= 80) {
+                $grade[$subjectId] = 'A';
+                $remark[$subjectId] = 'Excellent';
+            } elseif ($totalScores[$subjectId] >= 70 && $totalScores[$subjectId] < 80) {
+                $grade[$subjectId] = 'B';
+                $remark[$subjectId] = 'V. Good';
+            } elseif ($totalScores[$subjectId] >= 60 && $totalScores[$subjectId] < 70) { 
+                $grade[$subjectId] = 'C';
+                $remark[$subjectId] = 'Good';
+            } elseif ($totalScores[$subjectId] >= 50 && $totalScores[$subjectId] < 60) {
+                $grade[$subjectId] = 'D';
+                $remark[$subjectId] = 'Pass';
+            } elseif ($totalScores[$subjectId] >= 0 && $totalScores[$subjectId] < 50) {
+                $grade[$subjectId] = 'F';
+                $remark[$subjectId] = 'Fail';
+            } else {
+                $grade[$subjectId] = '-';
+                $remark[$subjectId] = 'Invalid Score'; 
+            }
+            
+            // Assign the values to the subject
+            $subject->grade = $grade[$subjectId];
+            $subject->remark = $remark[$subjectId];
             
             // Calculate grand total and average total outside the loop
             if (!isset($grandTotal[$studentId])) {
@@ -1076,6 +1239,26 @@ public function reportSheetForGuardians($id, $term, $session){
             }
             $grandTotal[$studentId] += $totalScores[$subjectId];
             $averageTotal[$studentId] = count($dalibi->exams) > 0 ? $grandTotal[$studentId] / count($dalibi->exams->where('term', $term)->where('session', str_replace('_', '/', $session))) : 0;
+
+            if ($averageTotal[$studentId] >= 80) {
+                $TeachersRemark[$studentId] = 'Outstanding performance! Keep aiming higher.';
+                $PrincipalsRemark[$studentId] = 'Excellent achievement! Continue to strive for greatness.';
+            } elseif ($averageTotal[$studentId] >= 70 && $averageTotal[$studentId] < 80) {
+                $TeachersRemark[$studentId] = 'Great job! You are doing very well.';
+                $PrincipalsRemark[$studentId] = 'Impressive work! Maintain this momentum and aim for excellence.';
+            } elseif ($averageTotal[$studentId] >= 60 && $averageTotal[$studentId] < 70) {
+                $TeachersRemark[$studentId] = 'Good effort! You have the potential to achieve even more.';
+                $PrincipalsRemark[$studentId] = 'Solid performance! With a little more effort, you can excel further.';
+            } elseif ($averageTotal[$studentId] >= 50 && $averageTotal[$studentId] < 60) {
+                $TeachersRemark[$studentId] = 'A fair result. You can achieve better with consistent effort.';
+                $PrincipalsRemark[$studentId] = 'You’re on the right track. Focus and push yourself to improve.';
+            } elseif ($averageTotal[$studentId] >= 0 && $averageTotal[$studentId] < 50) {
+                $TeachersRemark[$studentId] = 'Keep trying. You have the ability to improve with hard work.';
+                $PrincipalsRemark[$studentId] = 'Do not give up! Hard work and determination will lead to better results.';
+            } else {
+                $TeachersRemark[$studentId] = 'No remarks available.';
+                $PrincipalsRemark[$studentId] = 'No remarks available.'; // Handles any unexpected scores
+            }
         }
     }
 
@@ -1208,11 +1391,17 @@ foreach ($student->exams as $jarabawa) {
     'class' => $class,
     'exam' => $exam,
     'subjects' => $subjects,
+    'second_cas' => $second_cas,
+    'first_cas' => $first_cas,
     'totalCa' => $totalCa,
     'totalScores' => $totalScores,
     'totalExam' => $totalExam,
     'grandTotal' => $grandTotal,
     'averageTotal' => $averageTotal,
+    'grade' => $grade,
+    'remark' => $remark,
+    'TeachersRemark' => $TeachersRemark,
+    'PrincipalsRemark' => $PrincipalsRemark,
     'dalibi' => $dalibi,
     'studentPosition' => $studentPosition,
     'cummulativeAverageTotal' => $cummulativeAverageTotal,
