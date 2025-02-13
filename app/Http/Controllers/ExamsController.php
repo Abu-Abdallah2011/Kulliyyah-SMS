@@ -19,46 +19,78 @@ class ExamsController extends Controller
     //Show/Display Exams Clean Sheet
 public function show(){
 
-    $sessions = sessions::orderBy('created_at', 'desc')->first();
+    // $sessions = sessions::orderBy('created_at', 'desc')->first();
+    $sessions = sessions::latest()->first();
+
 
     $exam = ExamsModel::get();
 
     $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
 
-        $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
-        ->with(['students' => function ($query) 
-        {
+        // $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
+        // ->with(['students' => function ($query) 
+        // {
+        //     $query->where('status', 'IN SCHOOL')
+        //     ->orWhere('grad_type', 'TARTEEL ZALLA');
+        // }, 'students.attendance'])
+        // ->first();
+
+        $teacher = register_teacher::where('class', $class)
+    ->where('user_id', Auth::id())
+    ->with([
+        'students' => function ($query) {
             $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA');
-        }, 'students.attendance'])
-        ->first();
+                  ->orWhere('grad_type', 'TARTEEL ZALLA');
+        },
+        'students.attendance' => function ($query) use ($sessions) {
+            $query->where('session', $sessions->session)
+                  ->where('term', $sessions->term);
+        },
+        'students.exams' => function ($query) use ($sessions) {
+            $query->where('session', $sessions->session)
+                  ->where('term', $sessions->term);
+        }
+    ])
+    ->first();
+
 
         $totalCa = [];
 
-        $attendanceRecords = [];
+        // $attendanceRecords = [];
 
 foreach ($teacher->students as $student) {
     $totalCa[$student->id] = [];
 
-    $attendanceRecords[$student->id] = $student->attendance
-    ->where('session', $sessions->session)
-    ->where('term', $sessions->term)
-    ->filter(function ($record) {
-        return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
-    });
+    // $attendanceRecords[$student->id] = $student->attendance
+    // ->where('session', $sessions->session)
+    // ->where('term', $sessions->term)
+    // ->filter(function ($record) {
+    //     return in_array($record->status, ['Present', 'present', 'Late', 'late', 'excused', 'Excused']);
+    // });
 
-    $totalAttendanceRecords = $student->attendance
-    ->where('session', $sessions->session)
-    ->where('term', $sessions->term)
-    ->count();
-    $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
-    $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
-    $student->attendancePercentage = $percentage;
+    // $totalAttendanceRecords = $student->attendance
+    // ->where('session', $sessions->session)
+    // ->where('term', $sessions->term)
+    // ->count();
+    // $presentAttendanceRecords = $attendanceRecords[$student->id]->count();
+    // $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
+    // $student->attendancePercentage = $percentage;
+
+    $totalAttendanceRecords = $student->attendance->count();
+    $presentAttendanceRecords = $student->attendance->whereIn('status', ['Present', 'present', 'Late', 'late', 'excused', 'Excused'])->count();
+
+    $student->attendancePercentage = ($totalAttendanceRecords > 0) 
+    ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 
+    : 0;
+
+    $percentage = $student->attendancePercentage;
+
     
     foreach ($student->exams as $subjects) {
 
-        $matchingSubjects = $subjects->where('session', $sessions->session)
-                                  ->where('term', $sessions->term)
+        $matchingSubjects = $subjects
+                                // ->where('session', $sessions->session)
+                                //   ->where('term', $sessions->term)
                                   ->where('student_id', $student->id)
                                   ->get();
 
@@ -168,7 +200,8 @@ $orderedStudents = $teacher->students->map(function ($student) use ($sessions,  
     $totalScores = 0;
     $examCount = count($matchingSubjects);
 
-    $sessions = sessions::orderBy('created_at', 'desc')->first();
+    // $sessions = sessions::orderBy('created_at', 'desc')->first();
+    $sessions = sessions::latest()->first();
 
 foreach ($matchingSubjects as $subject) {
 
