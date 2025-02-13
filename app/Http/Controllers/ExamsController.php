@@ -814,16 +814,21 @@ public function update(Request $request, $id){
     $term = $request->input('term');
     $session = $request->input('session');
 
-    $session = sessions::pluck('session')->last();
-    $term = sessions::pluck('term')->last();
+    // $session = sessions::pluck('session')->last();
+    // $term = sessions::pluck('term')->last();
+
+    $latestSession = sessions::latest('id')->first(['session', 'term']);
+        $session = $latestSession->session ?? null;
+        $term = $latestSession->term ?? null;
+
 
     foreach($studentIds as $studentId) {
     foreach ($selectedSubject as $subject) {
 
-        $firstCA = $scores[$studentId][$subject]['1st_ca'];
-        $secondCA = $scores[$studentId][$subject]['2nd_ca'];
-        $thirdCA = $scores[$studentId][$subject]['3rd_ca'];
-        $exams = $scores[$studentId][$subject]['exams'];
+        $firstCA = $scores[$studentId][$subject]['1st_ca'] ?? null;
+        $secondCA = $scores[$studentId][$subject]['2nd_ca'] ?? null;
+        $thirdCA = $scores[$studentId][$subject]['3rd_ca'] ?? null;
+        $exams = $scores[$studentId][$subject]['exams'] ?? null;
             $existingRecord = ExamsModel::where([
                 ['subject_id', '=', $subject],
                 ['student_id', '=', $studentId],
@@ -833,11 +838,18 @@ public function update(Request $request, $id){
 
             if ($existingRecord) {
 
-            $existingRecord->first_ca = $firstCA;
-            $existingRecord->second_ca = $secondCA;
-            $existingRecord->third_ca = $thirdCA;
-            $existingRecord->exams = $exams;
-            $existingRecord->update();
+            // $existingRecord->first_ca = $firstCA;
+            // $existingRecord->second_ca = $secondCA;
+            // $existingRecord->third_ca = $thirdCA;
+            // $existingRecord->exams = $exams;
+            // $existingRecord->update();
+
+            $existingRecord->update([
+                'first_ca' => $firstCA,
+                'second_ca' => $secondCA,
+                'third_ca' => $thirdCA,
+                'exams' => $exams,
+            ]);
             } else{
                 return redirect('/exams/show')->with('message', 'Record Not found!');
             }
