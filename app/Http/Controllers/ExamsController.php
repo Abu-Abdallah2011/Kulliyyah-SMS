@@ -47,8 +47,8 @@ public function show(){
                   ->where('term', $sessions->term);
         },
         'students.exams' => function ($query) use ($sessions) {
-            $query->where('session', $sessions->session)
-                  ->where('term', $sessions->term);
+            $query->where('session', $sessions->session);
+                //   ->where('term', $sessions->term);
         }
     ])
     ->first();
@@ -76,8 +76,8 @@ foreach ($teacher->students as $student) {
     // $percentage = $totalAttendanceRecords > 0 ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 : 0;
     // $student->attendancePercentage = $percentage;
 
-    $totalAttendanceRecords = $student->attendance->count();
-    $presentAttendanceRecords = $student->attendance->whereIn('status', ['Present', 'present', 'Late', 'late', 'excused', 'Excused'])->count();
+    $totalAttendanceRecords = $student->attendance->where('term', $sessions->term)->count();
+    $presentAttendanceRecords = $student->attendance->where('term', $sessions->term)->whereIn('status', ['Present', 'present', 'Late', 'late', 'excused', 'Excused'])->count();
 
     $student->attendancePercentage = ($totalAttendanceRecords > 0) 
     ? ($presentAttendanceRecords / $totalAttendanceRecords) * 100 
@@ -90,7 +90,7 @@ foreach ($teacher->students as $student) {
 
         $matchingSubjects = $subjects
                                 // ->where('session', $sessions->session)
-                                //   ->where('term', $sessions->term)
+                                  ->where('term', $sessions->term)
                                   ->where('student_id', $student->id)
                                   ->get();
 
@@ -117,7 +117,8 @@ foreach ($teacher->students as $student) {
 
         $matchingSubjects = [];
 
-        if ($subject->session == $sessions->session && $subject->term == $sessions->term && $subject->student_id == $student->id) {
+        // if ($subject->session == $sessions->session && $subject->term == $sessions->term && $subject->student_id == $student->id) {
+        if ($subject->term == $sessions->term && $subject->student_id == $student->id) {
             $matchingSubjects[] = $subject;
 
         // Calculate the total score for this subject and student
@@ -130,8 +131,10 @@ foreach ($teacher->students as $student) {
 }
     }
 
-    $averageTotal[$student->id] = count($student->exams->where('session', $sessions->session)->where('term', $sessions->term)) > 0 
-    ? $totalScores[$student->id] / count($student->exams->where('session', $sessions->session)->where('term', $sessions->term)) : 0;
+    // $averageTotal[$student->id] = count($student->exams->where('session', $sessions->session)->where('term', $sessions->term)) > 0 
+    // ? $totalScores[$student->id] / count($student->exams->where('session', $sessions->session)->where('term', $sessions->term)) : 0;
+    $averageTotal[$student->id] = count($student->exams->where('term', $sessions->term)) > 0 
+    ? $totalScores[$student->id] / count($student->exams->where('term', $sessions->term)) : 0;
 
     $student->averageTotal = $averageTotal;
 }
@@ -147,7 +150,8 @@ foreach ($teacher->students as $student) {
 
         $cummulativematchingSubjects = [];
 
-        if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
+        // if ($subject->session == $sessions->session && $subject->student_id == $student->id) {
+        if ($subject->student_id == $student->id) {
             $cummulativematchingSubjects[] = $subject;
 
         // Calculate the total score for this subject and student
@@ -160,8 +164,10 @@ foreach ($teacher->students as $student) {
 }
     }
 
-    $cummulativeaverageTotal[$student->id] = count($student->exams->where('session', $sessions->session)) > 0 
-    ? $cummulativetotalScores[$student->id] / count($student->exams->where('session', $sessions->session)) : 0;
+    // $cummulativeaverageTotal[$student->id] = count($student->exams->where('session', $sessions->session)) > 0 
+    // ? $cummulativetotalScores[$student->id] / count($student->exams->where('session', $sessions->session)) : 0;
+    $cummulativeaverageTotal[$student->id] = count($student->exams) > 0 
+    ? $cummulativetotalScores[$student->id] / count($student->exams) : 0;
 
     $student->cummulativeaverageTotal = $cummulativeaverageTotal;
 }
@@ -193,7 +199,8 @@ $cummulativematchingSubjects = [];
 
 $orderedStudents = $teacher->students->map(function ($student) use ($sessions,  &$matchingSubjects) {
 
-    $matchingSubjects = $student->exams->where('session', $sessions->session)
+    // $matchingSubjects = $student->exams->where('session', $sessions->session)
+    $matchingSubjects = $student->exams
     ->where('term', $sessions->term)
     ->where('student_id', $student->id);
 
@@ -218,7 +225,8 @@ foreach ($matchingSubjects as $subject) {
 
     // ADD CUMMULATIVES
 
-    $cummulativematchingSubjects = $student->exams->where('session', $sessions->session)
+    // $cummulativematchingSubjects = $student->exams->where('session', $sessions->session)
+    $cummulativematchingSubjects = $student->exams
     ->where('student_id', $student->id);
 
     $cummulativeTotalScores = 0;
