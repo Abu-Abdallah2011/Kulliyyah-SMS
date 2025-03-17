@@ -38,8 +38,8 @@
                                             <div class="inline-block relative w-64">
                                                 @foreach($studentExams[$student->id] as $subject)
                                                 <input type="hidden" name="subjects[]" value="{{$subject->subject_id}}" />
-                                                <input type="hidden" name="term" value="{{$subject->term}}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
-                                                <input type="hidden" name="session" value="{{$subject->session}}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+                                                <input type="hidden" name="term" value="{{$subject->term}}" />
+                                                <input type="hidden" name="session" value="{{$subject->session}}" />
                                                 @endforeach
                                                 <input name="scores[{{ $student->id }}][{{ $subject->subject_id }}][1st_ca]" value="{{ $subject->first_ca }}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
                                             </div>
