@@ -818,7 +818,7 @@ public function update(Request $request, $id){
     $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
 
     // $selectedSubject = $request->input('subjects');
-    $selectedSubject = $id;
+    // $selectedSubject = $id;
     $studentIds = $request->input('student_ids');
     $scores = $request->input('scores');
     $term = $request->input('term');

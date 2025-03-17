@@ -10,9 +10,9 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="table-responsive">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    @foreach($exam as $subject)
-                    <form action="/exams/{{$subject->subject_id}}" method="POST">
-                        @endforeach
+                    {{-- @foreach($exam as $subject) --}}
+                    <form action="/exams/{{$selectedSubject->subject_id}}" method="POST">
+                        {{-- @endforeach --}}
                         @csrf
                         @method('PUT')
 
