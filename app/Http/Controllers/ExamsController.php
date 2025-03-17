@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Intervention\Image\Facades\Image as PDFMerger;
+use setasign\Fpdi\Fpdi;
 use App\Models\sessions;
 use App\Models\ExamsModel;
 use Illuminate\Http\Request;
 use App\Models\subjectsModel;
 use App\Models\register_student;
 use App\Models\register_teacher;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\PDF as PDF;
-use setasign\Fpdi\Fpdi;
+use Intervention\Image\Facades\Image as PDFMerger;
 
 
 class ExamsController extends Controller
@@ -829,6 +830,9 @@ public function update(Request $request, $id){
         $session = $latestSession->session ?? null;
         $term = $latestSession->term ?? null;
 
+        DB::transaction(function () use ($studentIds, $selectedSubject, $scores, $term, $session) {
+            $updates = [];
+            $inserts = [];
 
     foreach($studentIds as $studentId) {
     foreach ($selectedSubject as $subject) {
@@ -852,17 +856,42 @@ public function update(Request $request, $id){
             // $existingRecord->exams = $exams;
             // $existingRecord->update();
 
-            $existingRecord->update([
-                'first_ca' => $firstCA,
-                'second_ca' => $secondCA,
-                'third_ca' => $thirdCA,
-                'exams' => $exams,
-            ]);
+            // $existingRecord->update([
+            //     'first_ca' => $firstCA,
+            //     'second_ca' => $secondCA,
+            //     'third_ca' => $thirdCA,
+            //     'exams' => $exams,
+            // ]);
+
+            if ($existingRecord) {
+                $updates[] = [
+                    'id' => $existingRecord->id,
+                    'first_ca' => $firstCA,
+                    'second_ca' => $secondCA,
+                    'third_ca' => $thirdCA,
+                    'exams' => $exams,
+                ];
+
             } else{
                 return redirect('/exams/show')->with('message', 'Record Not found!');
             }
         }
     }
+}
+
+    // Perform bulk updates
+    foreach ($updates as $update) {
+        ExamsModel::where('id', $update['id'])->update([
+            'first_ca' => $update['first_ca'],
+            'second_ca' => $update['second_ca'],
+            'third_ca' => $update['third_ca'],
+            'exams' => $update['exams'],
+        ]);
+    }
+
+    // Perform bulk inserts
+    ExamsModel::insert($inserts);
+});
 
     return redirect('/exams/show')->with('message', 'Score Updated Successfully!');
 }
