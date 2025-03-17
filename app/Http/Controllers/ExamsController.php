@@ -815,85 +815,100 @@ public function subjectsCreate(Request $request){
 //Update Exams Record
 public function update(Request $request, $id){
 
-    $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
+    // $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
 
-    $selectedSubject = $request->input('subjects');
-    $studentIds = $request->input('student_ids');
-    $scores = $request->input('scores');
-    $term = $request->input('term');
-    $session = $request->input('session');
+    // $selectedSubject = $request->input('subjects');
+    // $studentIds = $request->input('student_ids');
+    // $scores = $request->input('scores');
+    // $term = $request->input('term');
+    // $session = $request->input('session');
 
-    // $session = sessions::pluck('session')->last();
-    // $term = sessions::pluck('term')->last();
+    // $latestSession = sessions::latest('id')->first(['session', 'term']);
+    //     $session = $latestSession->session ?? null;
+    //     $term = $latestSession->term ?? null;
 
+
+    // foreach($studentIds as $studentId) {
+    // foreach ($selectedSubject as $subject) {
+
+    //     $firstCA = $scores[$studentId][$subject]['1st_ca'] ?? null;
+    //     $secondCA = $scores[$studentId][$subject]['2nd_ca'] ?? null;
+    //     $thirdCA = $scores[$studentId][$subject]['3rd_ca'] ?? null;
+    //     $exams = $scores[$studentId][$subject]['exams'] ?? null;
+    //         $existingRecord = ExamsModel::where([
+    //             ['subject_id', '=', $subject],
+    //             ['student_id', '=', $studentId],
+    //             ['term', '=', $term],
+    //             ['session', '=', $session],
+    //         ])->first();
+
+    //         if ($existingRecord) {
+    //         $existingRecord->update([
+    //             'first_ca' => $firstCA,
+    //             'second_ca' => $secondCA,
+    //             'third_ca' => $thirdCA,
+    //             'exams' => $exams,
+    //         ]);
+    //         } else{
+    //             return redirect('/exams/show')->with('message', 'Record Not found!');
+    //         }
+    //     }
+    // }
+
+    // return redirect('/exams/show')->with('message', 'Score Updated Successfully!');
+
+    $class = register_teacher::where('user_id', Auth::id())->value('class');
+    
+    // Fetch Inputs
+    $selectedSubjects = $request->input('subjects', []);
+    $studentIds = $request->input('student_ids', []);
+    $scores = $request->input('scores', []);
     $latestSession = sessions::latest('id')->first(['session', 'term']);
-        $session = $latestSession->session ?? null;
-        $term = $latestSession->term ?? null;
-
-        DB::transaction(function () use ($studentIds, $selectedSubject, $scores, $term, $session) {
-            $updates = [];
-            $inserts = [];
-
-    foreach($studentIds as $studentId) {
-    foreach ($selectedSubject as $subject) {
-
-        $firstCA = $scores[$studentId][$subject]['1st_ca'] ?? null;
-        $secondCA = $scores[$studentId][$subject]['2nd_ca'] ?? null;
-        $thirdCA = $scores[$studentId][$subject]['3rd_ca'] ?? null;
-        $exams = $scores[$studentId][$subject]['exams'] ?? null;
-            $existingRecord = ExamsModel::where([
-                ['subject_id', '=', $subject],
-                ['student_id', '=', $studentId],
-                ['term', '=', $term],
-                ['session', '=', $session],
-            ])->first();
-
-            if ($existingRecord) {
-
-            // $existingRecord->first_ca = $firstCA;
-            // $existingRecord->second_ca = $secondCA;
-            // $existingRecord->third_ca = $thirdCA;
-            // $existingRecord->exams = $exams;
-            // $existingRecord->update();
-
-            // $existingRecord->update([
-            //     'first_ca' => $firstCA,
-            //     'second_ca' => $secondCA,
-            //     'third_ca' => $thirdCA,
-            //     'exams' => $exams,
-            // ]);
-
-            if ($existingRecord) {
-                $updates[] = [
-                    'id' => $existingRecord->id,
-                    'first_ca' => $firstCA,
-                    'second_ca' => $secondCA,
-                    'third_ca' => $thirdCA,
-                    'exams' => $exams,
-                ];
-
-            } else{
-                return redirect('/exams/show')->with('message', 'Record Not found!');
-            }
+    $session = $latestSession->session ?? null;
+    $term = $latestSession->term ?? null;
+    
+    // Fetch all existing records in one query
+    $existingRecords = ExamsModel::whereIn('student_id', $studentIds)
+        ->whereIn('subject_id', $selectedSubjects)
+        ->where('term', $term)
+        ->where('session', $session)
+        ->get()
+        ->keyBy(fn($record) => "{$record->student_id}_{$record->subject_id}"); // Index by student_subject for quick lookup
+    
+    $updates = [];
+    
+    foreach ($studentIds as $studentId) {
+        foreach ($selectedSubjects as $subject) {
+            $key = "{$studentId}_{$subject}";
+    
+            $updates[] = [
+                'id' => $existingRecords[$key]->id ?? null, // If record exists, use its ID
+                'student_id' => $studentId,
+                'subject_id' => $subject,
+                'term' => $term,
+                'session' => $session,
+                'class' => $class,
+                'first_ca' => $scores[$studentId][$subject]['1st_ca'] ?? null,
+                'second_ca' => $scores[$studentId][$subject]['2nd_ca'] ?? null,
+                'third_ca' => $scores[$studentId][$subject]['3rd_ca'] ?? null,
+                'exams' => $scores[$studentId][$subject]['exams'] ?? null,
+                'updated_at' => now(),
+                'created_at' => now(), // Ensure created_at is set for inserts
+            ];
         }
     }
-}
-
-    // Perform bulk updates
-    foreach ($updates as $update) {
-        ExamsModel::where('id', $update['id'])->update([
-            'first_ca' => $update['first_ca'],
-            'second_ca' => $update['second_ca'],
-            'third_ca' => $update['third_ca'],
-            'exams' => $update['exams'],
-        ]);
+    
+    // Batch Insert or Update
+    if (!empty($updates)) {
+        DB::table('exams')->upsert(
+            $updates,
+            ['student_id', 'subject_id', 'term', 'session', 'class'], // Unique constraint for update
+            ['first_ca', 'second_ca', 'third_ca', 'exams', 'updated_at'] // Fields to update
+        );
     }
-
-    // Perform bulk inserts
-    ExamsModel::insert($inserts);
-});
-
-    return redirect('/exams/show')->with('message', 'Score Updated Successfully!');
+    
+    return redirect('/exams/show')->with('message', 'Scores Updated Successfully!');
+    
 }
 
 // Delete Subject
