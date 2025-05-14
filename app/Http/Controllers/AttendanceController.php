@@ -210,32 +210,64 @@ $sessions = sessions::orderBy('created_at', 'desc')->first();
     
         $totalattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
         ->where('term', $sessions->term)
+        ->where('student_id', $id)
+        ->count();
+
+        $totalattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
+        ->where('student_id', $id)
         ->count();
 
         $presentattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
         ->where('term', $sessions->term)
+        ->where('student_id', $id)
+        ->where('status', 'present')
+        ->count();
+
+        $presentattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
+        ->where('student_id', $id)
         ->where('status', 'present')
         ->count();
 
         $absentattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
         ->where('term', $sessions->term)
+        ->where('student_id', $id)
+        ->where('status', 'absent')
+        ->count();
+
+        $absentattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
+        ->where('student_id', $id)
         ->where('status', 'absent')
         ->count();
 
         $excusedattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
         ->where('term', $sessions->term)
+        ->where('student_id', $id)
+        ->where('status', 'excused')
+        ->count();
+
+        $excusedattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
+        ->where('student_id', $id)
         ->where('status', 'excused')
         ->count();
 
         $lateattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
         ->where('term', $sessions->term)
+        ->where('student_id', $id)
         ->where('status', 'late')
         ->count();
 
+        $lateattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
+        ->where('student_id', $id)
+        ->where('status', 'late')
+        ->count();
+
+        $percentageAttendanceForTerm = ($presentattendancerecordsforterm + $excusedattendancerecordsforterm + $lateattendancerecordsforterm) / $totalattendancerecordsforterm * 100;
         $presentpercentage = $presentattendancerecordsforterm > 0 ? ($presentattendancerecordsforterm / $totalattendancerecordsforterm) * 100 : 0;
         $absentpercentage = $absentattendancerecordsforterm > 0 ? ($absentattendancerecordsforterm / $totalattendancerecordsforterm) * 100 : 0;
         $excusedpercentage = $excusedattendancerecordsforterm > 0 ? ($excusedattendancerecordsforterm / $totalattendancerecordsforterm) * 100 : 0;
         $latepercentage = $lateattendancerecordsforterm > 0 ? ($lateattendancerecordsforterm / $totalattendancerecordsforterm) * 100 : 0;
+
+        $percentageAttendanceForSession = ($presentattendancerecordsforSession + $excusedattendancerecordsforSession + $lateattendancerecordsforSession) / $totalattendancerecordsforSession * 100;
 
     $statusIcons = [
         'present' => '<i class="fas fa-check text-green-500"></i>',
@@ -254,6 +286,8 @@ $sessions = sessions::orderBy('created_at', 'desc')->first();
             'absentattendancerecordsforterm',
             'excusedattendancerecordsforterm',
             'lateattendancerecordsforterm',
+            'percentageAttendanceForTerm',
+            'percentageAttendanceForSession',
         ));
 }
 

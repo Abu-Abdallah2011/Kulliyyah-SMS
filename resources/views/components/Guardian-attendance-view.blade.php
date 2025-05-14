@@ -2,6 +2,31 @@
 
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-3 text-gray-900 dark:text-gray-100">
+
+            <table>
+                <thead>
+                <tr>
+                    <th class="p-2 md:p-3 font-bold uppercase text-gray-600 border border-gray-300 lg:table-cell">Total Days</th>
+                    <th class="p-2 md:p-3 font-bold uppercase text-gray-600 border border-gray-300 lg:table-cell">Present</th>
+                    <th class="p-2 md:p-3 font-bold uppercase text-gray-600 border border-gray-300 lg:table-cell">Absent</th>
+                    <th class="p-2 md:p-3 font-bold uppercase text-gray-600 border border-gray-300 lg:table-cell">Late</th>
+                    <th class="p-2 md:p-3 font-bold uppercase text-gray-600 border border-gray-300 lg:table-cell">Excuse</th>
+                    <th class="p-2 md:p-3 font-bold uppercase text-gray-600 border border-gray-300 lg:table-cell">Term %</th>
+                    <th class="p-2 md:p-3 font-bold uppercase text-gray-600 border border-gray-300 lg:table-cell">Session %</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ $totalattendancerecordsforterm }}</td>
+                        <td>{{ $presentattendancerecordsforterm }}</td>
+                        <td>{{ $absentattendancerecordsforterm }}</td>
+                        <td>{{ $excusedattendancerecordsforterm }}</td>
+                        <td>{{ $lateattendancerecordsforterm }}</td>
+                        <td>{{ $percentageAttendanceForTerm }}%</td>
+                        <td>{{ $percentageAttendanceForSession }}%</td>
+                    </tr>
+                </tbody>
+            </table>
         
       <div class="table-responsive">
       <table class="border-collapse w-full">
@@ -33,7 +58,6 @@
                                                          ->where('student_id', $student->id)
                                                          ->pluck('status')
                                                          ->toArray();
-                                                        //  echo "Student ID: $student->id, Date: $date, Statuses: " . implode(', ', $statusesForDate) . '<br>';
                          @endphp
                          <td class="text-center w-full lg:w-auto p-2 md:p-3 lg:p-3 text-gray-800 border border-b lg:table-cell relative lg:static font-bold">                           
                              

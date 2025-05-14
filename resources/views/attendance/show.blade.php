@@ -86,7 +86,11 @@
   @endif
 
   @if(Request::is('attendance/guardian_view/*'))
-  <x-Guardian-attendance-view :attendance="$attendance" :statusIcons="$statusIcons" :student="$student" />
+  <x-Guardian-attendance-view :attendance="$attendance" :statusIcons="$statusIcons" :student="$student"
+   :totalattendancerecordsforterm="$totalattendancerecordsforterm" :presentattendancerecordsforterm="$presentattendancerecordsforterm" 
+    :absentattendancerecordsforterm="$absentattendancerecordsforterm" :excusedattendancerecordsforterm="$excusedattendancerecordsforterm" 
+     :lateattendancerecordsforterm="$lateattendancerecordsforterm" :percentageAttendanceForTerm="$percentageAttendanceForTerm"
+     :percentageAttendanceForSession="$percentageAttendanceForSession" />
   @endif
 
   <div class="mt-6 p-4">
