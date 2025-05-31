@@ -31,7 +31,7 @@
             </div>
             <div class="flex justify-between text-purple-600">
                 <span>% Attendance:</span>
-                <span class="font-semibold">{{ $percentageAttendanceForTerm }}%</span>
+                <span class="font-semibold">{{ number_format($percentageAttendanceForTerm) }}%</span>
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@
             </div>
             <div class="flex justify-between text-purple-600">
                 <span>% Attendance:</span>
-                <span class="font-semibold">{{ $percentageAttendanceForSession }}%</span>
+                <span class="font-semibold">{{ number_format($percentageAttendanceForSession) }}%</span>
             </div>
         </div>
     </div>
