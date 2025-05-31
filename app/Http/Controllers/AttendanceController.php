@@ -288,6 +288,11 @@ $sessions = sessions::orderBy('created_at', 'desc')->first();
             'lateattendancerecordsforterm',
             'percentageAttendanceForTerm',
             'percentageAttendanceForSession',
+            'totalattendancerecordsforSession',
+            'presentattendancerecordsforSession',
+            'absentattendancerecordsforSession',
+            'excusedattendancerecordsforSession',
+            'lateattendancerecordsforSession',
         ));
 }
 

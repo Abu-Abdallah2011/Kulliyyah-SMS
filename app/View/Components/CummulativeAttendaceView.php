@@ -14,6 +14,11 @@ class CummulativeAttendaceView extends Component
     public $lateattendancerecordsforterm;
     public $percentageAttendanceForTerm;
     public $percentageAttendanceForSession;
+    public $totalattendancerecordsforSession;
+    public $presentattendancerecordsforSession;
+    public $absentattendancerecordsforSession;
+    public $excusedattendancerecordsforSession;
+    public $lateattendancerecordsforSession;
     /**
      * Create a new component instance.
      *
@@ -27,6 +32,11 @@ class CummulativeAttendaceView extends Component
         $lateattendancerecordsforterm,
         $percentageAttendanceForTerm,
         $percentageAttendanceForSession,
+        $totalattendancerecordsforSession,
+        $presentattendancerecordsforSession,
+        $absentattendancerecordsforSession,
+        $excusedattendancerecordsforSession,
+        $lateattendancerecordsforSession,
     )
     {
        $this->totalattendancerecordsforterm = $totalattendancerecordsforterm; 
@@ -36,6 +46,11 @@ class CummulativeAttendaceView extends Component
        $this->lateattendancerecordsforterm = $lateattendancerecordsforterm; 
        $this->percentageAttendanceForTerm = $percentageAttendanceForTerm; 
        $this->percentageAttendanceForSession = $percentageAttendanceForSession; 
+       $this->totalattendancerecordsforSession = $totalattendancerecordsforSession; 
+       $this->presentattendancerecordsforSession = $presentattendancerecordsforSession; 
+       $this->absentattendancerecordsforSession = $absentattendancerecordsforSession; 
+       $this->excusedattendancerecordsforSession = $excusedattendancerecordsforSession; 
+       $this->lateattendancerecordsforSession = $lateattendancerecordsforSession; 
     }
 
     /**

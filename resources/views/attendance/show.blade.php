@@ -90,7 +90,9 @@
    :totalattendancerecordsforterm="$totalattendancerecordsforterm" :presentattendancerecordsforterm="$presentattendancerecordsforterm" 
     :absentattendancerecordsforterm="$absentattendancerecordsforterm" :excusedattendancerecordsforterm="$excusedattendancerecordsforterm" 
      :lateattendancerecordsforterm="$lateattendancerecordsforterm" :percentageAttendanceForTerm="$percentageAttendanceForTerm"
-     :percentageAttendanceForSession="$percentageAttendanceForSession" />
+     :percentageAttendanceForSession="$percentageAttendanceForSession" :totalattendancerecordsforSession="$totalattendancerecordsforSession"
+     :presentattendancerecordsforSession="$presentattendancerecordsforSession" :absentattendancerecordsforSession="$absentattendancerecordsforSession"
+     :excusedattendancerecordsforSession="$excusedattendancerecordsforSession" :lateattendancerecordsforSession="$lateattendancerecordsforSession" />
   @endif
 
   <div class="mt-6 p-4">
