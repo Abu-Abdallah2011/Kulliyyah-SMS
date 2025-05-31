@@ -125,7 +125,7 @@
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">{{ isset($totalCa[$student->id][$subjects->subject_id]) ? $totalCa[$student->id][$subjects->subject_id] : 0 }}</td>
                                     <td class="w-full lg:w-auto p-3 text-gray-800 border border-b lg:table-cell relative lg:static">
                                         @foreach($subjective as $exam)
-                                        {{ $exam->exams }}</td>
+                                        {{ !is_null($exam->exams) ? $exam->exams : "-"}}</td>
                                         @endforeach
                                     @php
                              $columnsDisplayed[] = $subjects->subject_id;

@@ -187,11 +187,11 @@
         <table class="grades-table" style="border: 1px solid #000; margin: 0 auto;">
             <thead>
                 <tr style="background-color: #f0f0f0;">
-                    <th>0-49</th>
+                    <th>0-39</th>
+                    <th>40-49</th>
                     <th>50-59</th>
                     <th>60-69</th>
-                    <th>70-79</th>
-                    <th>80-100</th>
+                    <th>70-100</th>
                 </tr>
             </thead>
             <tbody>
