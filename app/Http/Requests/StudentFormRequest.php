@@ -67,15 +67,9 @@ class StudentFormRequest extends FormRequest
             'grad_yr' => [
                 'max:255'
             ],
-            // 'photo' => [
-            //     'max:5000'
-            // ],
             'photo' => [
-                'image', 
-                'max:5000', 
-                'mimes:jpg,jpeg,png'
+                'max:10000'
             ],
-
             'relationship' => [
                 'max:255'
             ],
