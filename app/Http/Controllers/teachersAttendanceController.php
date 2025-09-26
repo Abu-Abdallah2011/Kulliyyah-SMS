@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\register_teacher;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Models\teachersAttendanceModel;
 
 class teachersAttendanceController extends Controller
@@ -53,7 +54,8 @@ class teachersAttendanceController extends Controller
 // Show Attendance Report
 public function show()
 {
-    if (Auth::user()->can('isExecutive')) {
+    // if (Auth::user()->can('isExecutive')) {
+    if (Gate::allows('isExecutive')) {
     $teachers = register_teacher::where('status', 'IN SCHOOL')
     ->get(); 
     } else {
@@ -81,7 +83,8 @@ $attendance = teachersAttendanceModel::latest()
  public function edit($date)
  {
 
-    if (Auth::user()->can('isExecutive')) {
+    // if (Auth::user()->can('isExecutive')) {
+    if (Gate::allows('isExecutive')) {
         $teachers = register_teacher::where('status', 'IN SCHOOL')
         ->get(); 
         } else {
@@ -100,9 +103,8 @@ $attendance = teachersAttendanceModel::latest()
  }
 
   // Update Attendance to database
-  public function update(Request $request)
+  public function update(Request $request, $date)
   {
-    $date = $request->input('date');
     $attendanceData = $request->input('attendance');
     $teacherIds = $request->input('teacher_ids');
     $times = $request->input('time');
