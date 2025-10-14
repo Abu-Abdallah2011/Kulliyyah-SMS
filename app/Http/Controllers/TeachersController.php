@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\sets;
 use App\Models\classes;
+use App\Models\sessions;
 use App\Models\surasModel;
 use Illuminate\Http\Request;
 use App\Models\register_teacher;
@@ -69,7 +70,38 @@ class TeachersController extends Controller
     public function view($id) {
         $teacher = register_teacher::find($id);
         $user = $teacher->user;
-        return view('single_teacher', compact('teacher', 'user'));
+
+        $attendanceRecords = $teacher->attendance()
+        ->select('term', 'session', 'status')
+        ->get()
+        ->map(function ($record) {
+            // Normalize status to lowercase and trim spaces
+            $record->status = strtolower(trim($record->status));
+            return $record;
+        })
+        ->groupBy(['session', 'term'])
+        ->map(function ($recordsBySession) {
+            return $recordsBySession->map(function ($recordsByTerm) {
+                // Group similar statuses under the same category
+                $presents = $recordsByTerm->whereIn('status', ['present', 'Closed early', 'closed early'])->count();
+                $absents  = $recordsByTerm->whereIn('status', ['absent', 'Absent'])->count();
+                $lates    = $recordsByTerm->whereIn('status', ['late', 'late with an excuse', 'came late and closed early'])->count();
+                $excuses  = $recordsByTerm->whereIn('status', ['excused', 'Excused'])->count();
+
+                $total = $recordsByTerm->count();
+
+                return [
+                    'presents' => $presents,
+                    'absents'  => $absents,
+                    'lates'    => $lates,
+                    'excuses'  => $excuses,
+                    'total'    => $total,
+                ];
+            });
+        });
+
+
+        return view('single_teacher', compact('teacher', 'user', 'attendanceRecords'));
     }
 
 

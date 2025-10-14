@@ -1,150 +1,3 @@
-{{-- <x-app-layout>
-    <x-slot name="header">
-    </x-slot>
-
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                  
-            
-            <div class="bg-gray-50 border border-gray-200 rounded p-6">
-                <div class="flex">
-                    <div class="">
-                        <div class="grid grid-flow-col col-md-6 text-right">
-                            <img class="w-48 mr-6 md:block" src="{{ Storage::disk('s3')->url($teacher->photo) }}" alt="" />
-                        </div>
-                            <div>
-                                <h5 class="text-base">
-                                   ID: {{$teacher->id}}
-                                </h5>
-
-                                @if($teacher->user)
-                                @can('isAdmin') TEACHERS' USER ID:<a href="/users_database/{{$teacher->user->id}}/edit_user"> {{$teacher->user->id}}</a>@endcan
-                                @endif
-                       
-                        <div>
-                        <h5 class="text-base">
-                           NAME: {{$teacher->fullname}}
-                        </h5>
-                    
-                        <div class="text-xl mb-4">
-                            <h5 class="text-base">
-                           GENDER: {{$teacher->gender}}
-                            </h5>
-                            
-                        <div class="text-xl mb-4">
-                            <h5 class="text-base">
-                           CLASS: {{$teacher->class}}
-                            </h5>
-                            <div class="text-xl mb-4">
-                                <h5 class="text-base">
-                               SET: {{$teacher->set}}
-                                </h5>
-                            <div class="text-xl mb-4">
-                                <h5 class="text-base">
-                            DATE OF BIRTH: {{$teacher->dob}}
-                                </h5>
-                                <div class="text-xl mb-4">
-                                    <h5 class="text-base">
-                                MARITAL STATUS: {{$teacher->marital_status}}
-                                    </h5>
-                                <div class="text-xl mb-4">
-                                    <h5 class="text-base">
-                                DATE OF FIRST APPOINTMENT: {{$teacher->dofa}}
-                                    </h5>
-                                    <div class="text-xl mb-4">
-                                        <h5 class="text-base">
-                                    STATUS: {{$teacher->status}}
-                                        </h5>
-                                    <h5 class="text-base">
-                                        RANK: {{$teacher->rank}}
-                                            </h5>
-                                    <h5 class="text-base">
-                                        YEAR OF PROMOTION: {{$teacher->promotion_yr}}
-                                    </h5>
-                                    <h5 class="text-base">
-                                        PHONE NUMBER: {{$teacher->contact_no}}
-                                            </h5>
-                                    @if($teacher->user)
-                                    <h5 class="text-base">
-                                        EMAIL: {{$user->email}}
-                                            </h5>
-                                    @endif
-                                    <h5 class="text-base">
-                                        BANK BRANCH: {{$teacher->bank_branch}}
-                                            </h5>
-                                    <h5 class="text-base">
-                                        ACCOUNT NAME: {{$teacher->acct_name}}
-                                            </h5>
-                                    <h5 class="text-base">
-                                        ACCOUNT NUMBER: {{$teacher->acct_no}}
-                                            </h5>
-                                    <h5 class="text-base">
-                                        MONTHLY ALLOWANCE: {{$teacher->allowance}}
-                                            </h5>
-                                    <h5 class="text-base">
-                                        HOMETOWN: {{$teacher->hometown}}
-                                            </h5>
-                                    <h5 class="text-base">
-                                        NEXT OF KIN: {{$teacher->nok}}
-                                            </h5>
-                                    <h5 class="text-base">
-                                        RELATIONSHIP: {{$teacher->relationship}}
-                                            </h5>
-                                    <h5 class="text-base">
-                                        NEXT OF KIN PHONE NUMBER: {{$teacher->contact}}
-                                            </h5>
-                            <div class="text-lg mt-4">
-                                <i class="fa-solid fa-location-dot"></i>
-                                {{$teacher->address}}
-                                
-                            </div>
-                            
-                        </div>
-                    </div>
-                                
-                </div>
-            </div>
-            </div>
-            </div>
-                    </div>
-                </div>
-            </div>
-              
-                </div>
-        </div>
-
-        @can('isExecutive')
-        <div class="bg-gray-50 border border-gray-200 rounded">
-        <div class="mt-4 p-2 flex space-x-6"><a href="/teachers_database/{{$teacher->id}}/edit_teacher"><x-primary-button class="ml-3">
-            <i class="fa-solid fa-pencil">  {{ __('') }} </i>
-        </x-primary-button></a>
-        @endcan
-
-        @can('isAdmin')
-        <form method="POST" action="/teachers_database/{{$teacher->id}}">
-            @csrf
-            @method('DELETE')
-            <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')">
-            <i class="fa-solid fa-trash"> 
-                 {{ __('') }}
-                 </i>
-        </x-danger-button> 
-</form>
-
-<x-primary-button class="ml-3" onclick="window.print()">
-    <i class="fa-solid fa-download">  {{ __('') }} </i>
-</x-primary-button>
-    
-    </div>
-
-
-        </div>
-        @endcan
-    </div>
-    
-</x-app-layout> --}}
-
-
 <x-app-layout>
     <x-slot name="header">
     </x-slot>
@@ -325,6 +178,98 @@
                         <div>No Disciplinary Action has been recorded against this teacher.</div>
                     @endif
                 </div>
+
+                              <!-- Attendance Summary Section -->
+                <div class="bg-gradient-to-r from-green-50 to-green-100 p-6 mt-6 rounded-xl shadow-inner">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    Attendance Summary
+                </h2>
+
+                @if($attendanceRecords->isNotEmpty())
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach($attendanceRecords as $session => $terms)
+                            @foreach($terms as $term => $summary)
+                                @php
+                                    $total = $summary['total'] ?: 1; // avoid division by zero
+                                    $percentages = [
+                                        'presents' => round(($summary['presents'] / $total) * 100, 1),
+                                        'absents'  => round(($summary['absents'] / $total) * 100, 1),
+                                        'lates'    => round(($summary['lates'] / $total) * 100, 1),
+                                        'excuses'  => round(($summary['excuses'] / $total) * 100, 1),
+                                    ];
+                                @endphp
+
+                                <div class="bg-white p-5 border rounded-2xl shadow-md hover:shadow-lg transition duration-300 ease-in-out">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <h3 class="text-lg font-semibold text-indigo-700">{{ ucfirst($term) }}</h3>
+                                        <span class="text-sm bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">{{ $session }}</span>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        {{-- Present --}}
+                                        <div>
+                                            <div class="flex justify-between text-sm font-medium">
+                                                <span class="text-green-500">Present</span>
+                                                <span class="text-green-500">{{ $percentages['presents'] }}% ({{ $summary['presents'] }})</span>
+                                            </div>
+                                            <div class="w-full bg-gray-100 rounded-full h-2">
+                                                <div class="bg-green-500 h-2 rounded-full" style="width: {{ $percentages['presents'] }}%"></div>
+                                            </div>
+                                        </div>
+
+                                        {{-- Absent --}}
+                                        <div>
+                                            <div class="flex justify-between text-sm font-medium">
+                                                <span class="text-red-500">Absent</span>
+                                                <span class="text-red-500">{{ $percentages['absents'] }}% ({{ $summary['absents'] }})</span>
+                                            </div>
+                                            <div class="w-full bg-gray-100 rounded-full h-2">
+                                                <div class="bg-red-500 h-2 rounded-full" style="width: {{ $percentages['absents'] }}%"></div>
+                                            </div>
+                                        </div>
+
+                                        {{-- Late --}}
+                                        <div>
+                                            <div class="flex justify-between text-sm font-medium">
+                                                <span class="text-yellow-500">Late</span>
+                                                <span class="text-yellow-500">{{ $percentages['lates'] }}% ({{ $summary['lates'] }})</span>
+                                            </div>
+                                            <div class="w-full bg-gray-100 rounded-full h-2">
+                                                <div class="bg-yellow-400 h-2 rounded-full" style="width: {{ $percentages['lates'] }}%"></div>
+                                            </div>
+                                        </div>
+
+                                        {{-- Excused --}}
+                                        <div>
+                                            <div class="flex justify-between text-sm font-medium">
+                                                <span class="text-purple-500">Excused</span>
+                                                <span class="text-purple-500">{{ $percentages['excuses'] }}% ({{ $summary['excuses'] }})</span>
+                                            </div>
+                                            <div class="w-full bg-gray-100 rounded-full h-2">
+                                                <div class="bg-purple-500 h-2 rounded-full" style="width: {{ $percentages['excuses'] }}%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            @endforeach
+                        @endforeach
+                    </div>
+                @else
+                    <p class="text-gray-600">No attendance record available for this teacher yet.</p>
+                @endif
+            </div>
+
+            @can('isAdmin')
+            <div class="mt-6 text-right">
+    <a href="{{ route('teacher.attendance.pdf', $teacher->id) }}" 
+       class="inline-flex items-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+        <i class="fa-solid fa-file-pdf mr-2"></i> Download PDF Summary
+    </a>
+</div>
+@endcan
+
+
 
                 <!-- Action Buttons Section -->
                 <div class="bg-gray-50 p-6 flex justify-end space-x-4">

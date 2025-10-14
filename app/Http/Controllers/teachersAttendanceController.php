@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\sessions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\register_teacher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -54,7 +55,6 @@ class teachersAttendanceController extends Controller
 // Show Attendance Report
 public function show()
 {
-    // if (Auth::user()->can('isExecutive')) {
     if (Gate::allows('isExecutive')) {
     $teachers = register_teacher::where('status', 'IN SCHOOL')
     ->get(); 
@@ -155,5 +155,37 @@ $attendance = teachersAttendanceModel::where('date', $date)
 
     return redirect('/teachersAttendance/show')->with('message', 'Maa Shaa Allaah! Attendance Record Deleted Successfully!');
 }
+
+public function downloadAttendanceSummaryPDF($id)
+{
+    $teacher = register_teacher::with('attendance')->findOrFail($id);
+
+    // Group and normalize statuses
+    $attendanceRecords = $teacher->attendance
+        ->groupBy(['session', 'term'])
+        ->map(function ($recordsBySession) {
+            return $recordsBySession->map(function ($recordsByTerm) {
+                $normalized = $recordsByTerm->map(function ($record) {
+                    $record->status = strtolower(trim($record->status));
+                    return $record;
+                });
+
+                return [
+                    'presents' => $normalized->whereIn('status', ['present', 'Closed early', 'closed early'])->count(),
+                    'absents'  => $normalized->whereIn('status', ['absent', 'Absent'])->count(),
+                    'lates'    => $normalized->whereIn('status', ['late', 'late with an excuse', 'came late and closed early'])->count(),
+                    'excuses'  => $normalized->whereIn('status', ['excused', 'Excused'])->count(),
+                    'total'    => $normalized->count(),
+                ];
+            });
+        });
+
+    // Generate PDF
+    $pdf = Pdf::loadView('PDFs.teacher_attendance_summary', compact('teacher', 'attendanceRecords'))
+        ->setPaper('A4', 'portrait');
+
+    return $pdf->download("Attendance_Summary_{$teacher->fullname}.pdf");
+}
+
 
 }

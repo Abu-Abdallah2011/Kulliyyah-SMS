@@ -417,6 +417,9 @@ require __DIR__.'/auth.php';
 
         // Delete Attendance
         Route::delete('/teachersAttendance/{date}', 'delete')->middleware('can:isExecutive');
+
+        // Download Attendance as PDF
+        Route::get('/teacher/{id}/attendance-summary-pdf', 'downloadAttendanceSummaryPDF')->name('teacher.attendance.pdf');
         });
 
             // CRUD for Attendance
