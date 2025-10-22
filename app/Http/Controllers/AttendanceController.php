@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\sessions;
 use Illuminate\Http\Request;
 use App\Models\AttendanceModel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\register_student;
 use App\Models\register_teacher;
 use Illuminate\Pagination\Paginator;
@@ -207,67 +208,35 @@ $attendance = AttendanceModel::where('student_id', $id)
 ->paginate(12); 
 
 $sessions = sessions::orderBy('created_at', 'desc')->first();
-    
-        $totalattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
-        ->where('term', $sessions->term)
-        ->where('student_id', $id)
-        ->count();
 
-        $totalattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
-        ->where('student_id', $id)
-        ->count();
+$attendanceRecords = $student->attendance()
+        ->select('term', 'session', 'status')
+        ->get()
+        ->map(function ($record) {
+            // Normalize status to lowercase and trim spaces
+            $record->status = strtolower(trim($record->status));
+            return $record;
+        })
+        ->groupBy(['session', 'term'])
+        ->map(function ($recordsBySession) {
+            return $recordsBySession->map(function ($recordsByTerm) {
+                // Group similar statuses under the same category
+                $presents = $recordsByTerm->whereIn('status', ['present', 'Present'])->count();
+                $absents  = $recordsByTerm->whereIn('status', ['absent', 'Absent'])->count();
+                $lates    = $recordsByTerm->whereIn('status', ['late', 'Late'])->count();
+                $excuses  = $recordsByTerm->whereIn('status', ['excused', 'Excused'])->count();
 
-        $presentattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
-        ->where('term', $sessions->term)
-        ->where('student_id', $id)
-        ->where('status', 'present')
-        ->count();
+                $total = $recordsByTerm->count();
 
-        $presentattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
-        ->where('student_id', $id)
-        ->where('status', 'present')
-        ->count();
-
-        $absentattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
-        ->where('term', $sessions->term)
-        ->where('student_id', $id)
-        ->where('status', 'absent')
-        ->count();
-
-        $absentattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
-        ->where('student_id', $id)
-        ->where('status', 'absent')
-        ->count();
-
-        $excusedattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
-        ->where('term', $sessions->term)
-        ->where('student_id', $id)
-        ->where('status', 'excused')
-        ->count();
-
-        $excusedattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
-        ->where('student_id', $id)
-        ->where('status', 'excused')
-        ->count();
-
-        $lateattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
-        ->where('term', $sessions->term)
-        ->where('student_id', $id)
-        ->where('status', 'late')
-        ->count();
-
-        $lateattendancerecordsforSession = AttendanceModel::where('session', $sessions->session)
-        ->where('student_id', $id)
-        ->where('status', 'late')
-        ->count();
-
-        $percentageAttendanceForTerm = ($presentattendancerecordsforterm + $excusedattendancerecordsforterm + $lateattendancerecordsforterm) / $totalattendancerecordsforterm * 100;
-        $presentpercentage = $presentattendancerecordsforterm > 0 ? ($presentattendancerecordsforterm / $totalattendancerecordsforterm) * 100 : 0;
-        $absentpercentage = $absentattendancerecordsforterm > 0 ? ($absentattendancerecordsforterm / $totalattendancerecordsforterm) * 100 : 0;
-        $excusedpercentage = $excusedattendancerecordsforterm > 0 ? ($excusedattendancerecordsforterm / $totalattendancerecordsforterm) * 100 : 0;
-        $latepercentage = $lateattendancerecordsforterm > 0 ? ($lateattendancerecordsforterm / $totalattendancerecordsforterm) * 100 : 0;
-
-        $percentageAttendanceForSession = ($presentattendancerecordsforSession + $excusedattendancerecordsforSession + $lateattendancerecordsforSession) / $totalattendancerecordsforSession * 100;
+                return [
+                    'presents' => $presents,
+                    'absents'  => $absents,
+                    'lates'    => $lates,
+                    'excuses'  => $excuses,
+                    'total'    => $total,
+                ];
+            });
+        });
 
     $statusIcons = [
         'present' => '<i class="fas fa-check text-green-500"></i>',
@@ -281,19 +250,49 @@ $sessions = sessions::orderBy('created_at', 'desc')->first();
             'attendance',
             'statusIcons', 
             'student',
-            'totalattendancerecordsforterm',
-            'presentattendancerecordsforterm',
-            'absentattendancerecordsforterm',
-            'excusedattendancerecordsforterm',
-            'lateattendancerecordsforterm',
-            'percentageAttendanceForTerm',
-            'percentageAttendanceForSession',
-            'totalattendancerecordsforSession',
-            'presentattendancerecordsforSession',
-            'absentattendancerecordsforSession',
-            'excusedattendancerecordsforSession',
-            'lateattendancerecordsforSession',
+            'attendanceRecords',
         ));
+}
+
+// Download Student Attendance Summary as PDF
+public function downloadAttendanceSummaryPDF($id)
+{
+
+    $student = register_student::where('id', $id)->first();
+  $attendanceRecords = $student->attendance()
+        ->select('term', 'session', 'status')
+        ->get()
+        ->map(function ($record) {
+            // Normalize status to lowercase and trim spaces
+            $record->status = strtolower(trim($record->status));
+            return $record;
+        })
+        ->groupBy(['session', 'term'])
+        ->map(function ($recordsBySession) {
+            return $recordsBySession->map(function ($recordsByTerm) {
+                // Group similar statuses under the same category
+                $presents = $recordsByTerm->whereIn('status', ['present', 'Present'])->count();
+                $absents  = $recordsByTerm->whereIn('status', ['absent', 'Absent'])->count();
+                $lates    = $recordsByTerm->whereIn('status', ['late', 'Late'])->count();
+                $excuses  = $recordsByTerm->whereIn('status', ['excused', 'Excused'])->count();
+
+                $total = $recordsByTerm->count();
+
+                return [
+                    'presents' => $presents,
+                    'absents'  => $absents,
+                    'lates'    => $lates,
+                    'excuses'  => $excuses,
+                    'total'    => $total,
+                ];
+            });
+        }); 
+        
+            // Generate PDF
+    $pdf = Pdf::loadView('PDFs.student_attendance_summary', compact('student', 'attendanceRecords'))
+        ->setPaper('A4', 'portrait');
+
+    return $pdf->download("Attendance_Summary_{$student->fullname}.pdf");
 }
 
 }

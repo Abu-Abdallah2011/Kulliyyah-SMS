@@ -271,6 +271,8 @@ require __DIR__.'/auth.php';
         }); 
             // Show Attendance Page to Guardian
             Route::get('/attendance/guardian_view/{id}', [AttendanceController::class, 'attendanceGuardian']); 
+            Route::get('/student/{id}/attendance-summary-pdf', [AttendanceController::class, 'downloadAttendanceSummaryPDF'])
+            ->name('student.attendance.pdf')->middleware('can:isAdmin'); 
 
             // CRUD for Sets
     Route::middleware('can:isExecutive')->controller(setsController::class)->group(function () {
@@ -419,7 +421,8 @@ require __DIR__.'/auth.php';
         Route::delete('/teachersAttendance/{date}', 'delete')->middleware('can:isExecutive');
 
         // Download Attendance as PDF
-        Route::get('/teacher/{id}/attendance-summary-pdf', 'downloadAttendanceSummaryPDF')->name('teacher.attendance.pdf');
+        Route::get('/teacher/{id}/attendance-summary-pdf', 'downloadAttendanceSummaryPDF')
+        ->name('teacher.attendance.pdf')->middleware('can:isAdmin');
         });
 
             // CRUD for Attendance

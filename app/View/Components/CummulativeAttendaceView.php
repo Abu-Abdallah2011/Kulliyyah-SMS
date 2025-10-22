@@ -7,50 +7,17 @@ use Illuminate\View\Component;
 class CummulativeAttendaceView extends Component
 {
 
-    public $totalattendancerecordsforterm;
-    public $presentattendancerecordsforterm;
-    public $absentattendancerecordsforterm;
-    public $excusedattendancerecordsforterm;
-    public $lateattendancerecordsforterm;
-    public $percentageAttendanceForTerm;
-    public $percentageAttendanceForSession;
-    public $totalattendancerecordsforSession;
-    public $presentattendancerecordsforSession;
-    public $absentattendancerecordsforSession;
-    public $excusedattendancerecordsforSession;
-    public $lateattendancerecordsforSession;
+    public $attendanceRecords;
     /**
      * Create a new component instance.
      *
      * @return void
      */
     public function __construct(
-        $totalattendancerecordsforterm,
-        $presentattendancerecordsforterm,
-        $absentattendancerecordsforterm,
-        $excusedattendancerecordsforterm,
-        $lateattendancerecordsforterm,
-        $percentageAttendanceForTerm,
-        $percentageAttendanceForSession,
-        $totalattendancerecordsforSession,
-        $presentattendancerecordsforSession,
-        $absentattendancerecordsforSession,
-        $excusedattendancerecordsforSession,
-        $lateattendancerecordsforSession,
+        $attendanceRecords,
     )
     {
-       $this->totalattendancerecordsforterm = $totalattendancerecordsforterm; 
-       $this->presentattendancerecordsforterm = $presentattendancerecordsforterm; 
-       $this->absentattendancerecordsforterm = $absentattendancerecordsforterm; 
-       $this->excusedattendancerecordsforterm = $excusedattendancerecordsforterm; 
-       $this->lateattendancerecordsforterm = $lateattendancerecordsforterm; 
-       $this->percentageAttendanceForTerm = $percentageAttendanceForTerm; 
-       $this->percentageAttendanceForSession = $percentageAttendanceForSession; 
-       $this->totalattendancerecordsforSession = $totalattendancerecordsforSession; 
-       $this->presentattendancerecordsforSession = $presentattendancerecordsforSession; 
-       $this->absentattendancerecordsforSession = $absentattendancerecordsforSession; 
-       $this->excusedattendancerecordsforSession = $excusedattendancerecordsforSession; 
-       $this->lateattendancerecordsforSession = $lateattendancerecordsforSession; 
+       $this->attendanceRecords = $attendanceRecords; 
     }
 
     /**

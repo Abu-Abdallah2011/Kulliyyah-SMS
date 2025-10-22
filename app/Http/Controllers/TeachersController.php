@@ -83,9 +83,9 @@ class TeachersController extends Controller
         ->map(function ($recordsBySession) {
             return $recordsBySession->map(function ($recordsByTerm) {
                 // Group similar statuses under the same category
-                $presents = $recordsByTerm->whereIn('status', ['present', 'Closed early', 'closed early'])->count();
+                $presents = $recordsByTerm->whereIn('status', ['present', 'Present', 'Closed early', 'closed early'])->count();
                 $absents  = $recordsByTerm->whereIn('status', ['absent', 'Absent'])->count();
-                $lates    = $recordsByTerm->whereIn('status', ['late', 'late with an excuse', 'came late and closed early'])->count();
+                $lates    = $recordsByTerm->whereIn('status', ['late', 'Late', 'late with an excuse', 'came late and closed early'])->count();
                 $excuses  = $recordsByTerm->whereIn('status', ['excused', 'Excused'])->count();
 
                 $total = $recordsByTerm->count();
