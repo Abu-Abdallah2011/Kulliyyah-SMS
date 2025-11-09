@@ -129,7 +129,7 @@
                         <thead class="bg-gray-200 dark:bg-gray-700 sticky top-0">
                             <tr>
                                 @foreach ([
-                                    'Date', 'Term', 'Session', 'From Surah', 'Verse', 
+                                    'Date', 'Class', 'Term', 'Session', 'From Surah', 'Verse', 
                                     'To Surah', 'Verse', 'Score', 'Grade', 'Teacher', 'Comment'
                                 ] as $col)
                                     <th class="p-3 font-semibold uppercase text-gray-600 dark:text-gray-300 border border-gray-300 text-left hidden lg:table-cell">
@@ -160,6 +160,7 @@
                                     </td>
 
                                     <!-- Term -->
+                                    <td class="p-3 border-b lg:border">{{ $item->class }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->term }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->session }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->sura }}</td>
@@ -167,7 +168,7 @@
                                     <td class="p-3 border-b lg:border">{{ $item->to_surah }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->to }}</td>
                                     <td class="p-3 border-b lg:border font-bold">{{ $item->score }}</td>
-                                    <td class="p-3 border-b lg:border text-green-600 dark:text-green-400 font-semibold">{{ $item->grade }}</td>
+                                    <td class="p-3 border-b lg:border font-bold">{{ $item->grade }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->teacher }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->comment }}</td>
 
