@@ -30,6 +30,8 @@ class Hadda extends Model
         'term',
         'session',
         'student_id',        
+        'to_surah',        
+        'score',        
     ];
 
     public function scopeFilter($query, array $filters){
@@ -46,6 +48,8 @@ class Hadda extends Model
             ->orWhere('term', 'like', '%' . request('search') . '%')
             ->orWhere('session', 'like', '%' . request('search') . '%')
             ->orWhere('student_id', 'like', '%' . request('search') . '%')
+            ->orWhere('to_surah', 'like', '%' . request('search') . '%')
+            ->orWhere('score', 'like', '%' . request('search') . '%')
             ;
         }
 

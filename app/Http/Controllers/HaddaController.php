@@ -67,10 +67,10 @@ class HaddaController extends Controller
     public function create($student_id)
     {
         $sura = surasModel::all();
+        $surah = surasModel::all();
         $student = register_student::where('id', $student_id)->first();
-        return view('Hadda.HaddaForm',[
-            'student' => $student, 'sura' => $sura   
-            ]);
+        return view('Hadda.HaddaForm', ['student' => $student, 'sura' => $sura, 'surah' => $surah]
+        );
     }
 
        //Store Hadda Information
@@ -78,19 +78,22 @@ class HaddaController extends Controller
 
     $data = $request->validated();
 
-    $selectedOptionId = $request->input('dynamic_select');
+    $selectedOptionId = $request->input('from_surah');
+    $to_selectedOptionId = $request->input('to_surah');
     
     $student = register_student::where('id', $student_id)->first();
     $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
     $sessions = sessions::orderBy('created_at', 'desc')->first();
     $selectedOption = surasModel::find($selectedOptionId);
+    $to_selectedOption = surasModel::find($to_selectedOptionId);
     
     $formData = $request->only([
         'date',
         'from',
         'to',
         'grade',
-        'comment'
+        'comment',
+        'score'
     ]);
         
     $data = array_merge($formData, [ 
@@ -101,10 +104,11 @@ class HaddaController extends Controller
         'term' => $sessions->term,
         'student_id' => $student->id,
         'sura' => $selectedOption->sura,
+        'to_surah' => $to_selectedOption->sura,
     ]);
     
     $save = Hadda::create($data);
-$hadda = Hadda::where('student_id', $student_id)->get();
+    $hadda = Hadda::where('student_id', $student_id)->get();
 
     return redirect('studentsHadda/{teacher_id}')->with(['message' => 'Hadda Recorded Successfully!']);
     
@@ -113,15 +117,17 @@ $hadda = Hadda::where('student_id', $student_id)->get();
  // Show Edit Form
 public function edit($id){
     $sura = surasModel::all();
+    $surah = surasModel::all();
     $hadda = Hadda::find($id);
-    return view('Hadda.edit_hadda', compact('hadda', 'sura'));
+    return view('Hadda.edit_hadda', compact('hadda', 'sura', 'surah'));
 }
 
       //update Hadda Information
       public function update(HaddaFormRequest $request, $id){
 
         $data = $request->validated();
-        $selectedOptionId = $request->input('dynamic_select');
+        $selectedOptionId = $request->input('from_surah');
+        $to_selectedOptionId = $request->input('to_surah');
         
         $entry = Hadda::find($id);
         $student = register_student::where('id', $entry->student_id)->first();
@@ -130,13 +136,15 @@ public function edit($id){
         $sessions = sessions::orderBy('created_at', 'desc')->first();
 
         $selectedOption = surasModel::find($selectedOptionId);
+        $to_selectedOption = surasModel::find($to_selectedOptionId);
         
         $formData = $request->only([
             'date',
             'from',
             'to',
             'grade',
-            'comment'
+            'comment',
+            'score'
         ]);
             
         $data = array_merge($formData, [
@@ -149,13 +157,15 @@ public function edit($id){
         ]);
 
         if ($selectedOption) {
-
             $data['sura'] = $selectedOption->sura;
-    
+            }
+
+        if ($to_selectedOption) {
+            $data['to_surah'] = $to_selectedOption->sura;
             }
         
         $save = Hadda::where('id', $id)->update($data);
-    $hadda = Hadda::where('student_id', $id)->get();
+        $hadda = Hadda::where('student_id', $id)->get();
     
         return redirect('studentsHadda/{teacher_id}')->with(['message' => 'Hadda Record Updated Successfully!']);
         

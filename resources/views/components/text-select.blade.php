@@ -5,5 +5,5 @@
     <option>ممتاز</option>
     <option>جيدجدا</option>
     <option>جيد</option>
-    <option>لابأس</option>
+    <option>مقبول</option>
 </select>
