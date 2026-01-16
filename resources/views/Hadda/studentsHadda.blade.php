@@ -1,10 +1,22 @@
  <x-app-layout>
+    
+   <x-slot name="header">
+    <div class="flex items-center justify-between">
+        <!-- Page Title -->
+        <h2 class="font-bold text-2xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Hadda') }}
+        </h2>
 
-    <x-slot name="header">
-       <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-           {{ __('Hadda Conduit') }}
-       </h2>
-   </x-slot>
+        <!-- Download PDF Button -->
+        <a href="{{ route('hadda_class.pdf', ['class' => $teacher->class]) }}">
+            <x-primary-button class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-md transition duration-200">
+                <i class="fa-solid fa-file-pdf text-white"></i>
+                <span class="hidden sm:inline">Download PDF</span>
+            </x-primary-button>
+        </a>
+    </div>
+</x-slot>
+
    
    <x-success-status class="mb-4" :status="session('message')" />
 

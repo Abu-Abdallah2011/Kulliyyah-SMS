@@ -103,12 +103,22 @@
             </h2>
 
             @can('isAssistant')
-            <a href="{{ url('hadda_page/' . $student->id . '/HaddaForm') }}">
-                <x-primary-button class="bg-green-500 hover:bg-green-700 flex items-center gap-2">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Add Record</span>
-                </x-primary-button>
-            </a>
+            <div class="flex items-center gap-2">
+    <a href="{{ url('hadda_page/' . $student->id . '/HaddaForm') }}"
+       title="Add New Hadda Record">
+        <x-primary-button class="bg-green-600 hover:bg-green-700 p-2">
+            <i class="fa-solid fa-plus"></i>
+        </x-primary-button>
+    </a>
+
+    <a href="{{ url('hadda_page/' . $student->id . '/pdf') }}"
+       title="Download Hadda PDF">
+        <x-primary-button class="bg-gray-200 hover:bg-gray-300 text-gray-800 p-2">
+            <i class="fa-solid fa-file-pdf text-red-600"></i>
+        </x-primary-button>
+    </a>
+</div>
+
             @endcan
         </div>
     </x-slot>

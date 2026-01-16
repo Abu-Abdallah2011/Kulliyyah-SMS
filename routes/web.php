@@ -240,6 +240,11 @@ require __DIR__.'/auth.php';
         Route::put('/hadda_page/{id}', 'update')->middleware('can:isAssistant');
         // Delete Hadda
         Route::delete('hadda_page/{id}', 'delete')->middleware('can:isAssistant')->name('hadda.delete');
+
+        // Download Hadda record for student for a term as pdf
+        Route::get('hadda_page/{id}/pdf', 'haddaPdf')->middleware('can:isAssistant')->name('hadda.pdf');
+        // Download Hadda record for all students in a class for a term
+        Route::get('/hadda_class/{class}/pdf', 'classHaddaPdfMerged')->middleware('can:isAssistant')->name('hadda_class.pdf');
         });
 
 
