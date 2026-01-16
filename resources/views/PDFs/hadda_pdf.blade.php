@@ -112,6 +112,12 @@
     <p><strong>Student ID:</strong> {{ $student->id }}</p>
     <p><strong>Class:</strong> {{ $student->class }}</p>
     <p><strong>Term:</strong> {{ $term . ' ' . $session }} Academic session</p>
+    <p>
+    <strong>Total Hadda Records:</strong>
+    <span style="color:#1e3a8a; font-weight:600;">
+        {{ $haddaCount }}
+    </span>
+</p>
     <p><strong>Date Generated:</strong> {{ now()->format('d M, Y h:i A') }}</p>
 </div>
 
