@@ -273,6 +273,10 @@ require __DIR__.'/auth.php';
 
             // Show Attendance Record for Previous Terms
             Route::get('attendanceForPreviousTerms/attendance/{teacher_id}', 'selectedCreate');
+
+            // Download the attendance summary for a class in a single file
+            Route::get('/attendance/class/{class}/pdf', 'downloadClassAttendanceSummaryPDF')->name('attendance.class.pdf');
+
         }); 
             // Show Attendance Page to Guardian
             Route::get('/attendance/guardian_view/{id}', [AttendanceController::class, 'attendanceGuardian']); 

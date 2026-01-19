@@ -11,6 +11,8 @@ use App\Models\register_teacher;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AttendanceFormRequest;
+use setasign\Fpdi\Fpdi;
+// use Barryvdh\DomPDF\Facade\Pdf;
 
 class AttendanceController extends Controller
 {
@@ -294,5 +296,90 @@ public function downloadAttendanceSummaryPDF($id)
 
     return $pdf->download("Attendance_Summary_{$student->fullname}.pdf");
 }
+
+// Download attendace summary for all students in a class in one pdf file
+public function downloadClassAttendanceSummaryPDF($class)
+{
+    $students = register_student::where('class', $class)
+        ->where('status', 'IN SCHOOL')
+        ->get();
+
+    if ($students->isEmpty()) {
+        return back()->with('error', 'No students found in this class.');
+    }
+
+    $mergedPdf = new Fpdi();
+    $mergedPdf->SetAutoPageBreak(false);
+
+    foreach ($students as $student) {
+
+        $attendanceRecords = $student->attendance()
+            ->select('term', 'session', 'status')
+            ->get()
+            ->map(function ($record) {
+                $record->status = strtolower(trim($record->status));
+                return $record;
+            })
+            ->groupBy(['session', 'term'])
+            ->map(function ($recordsBySession) {
+                return $recordsBySession->map(function ($recordsByTerm) {
+
+                    return [
+                        'presents' => $recordsByTerm->whereIn('status', ['present'])->count(),
+                        'absents'  => $recordsByTerm->whereIn('status', ['absent'])->count(),
+                        'lates'    => $recordsByTerm->whereIn('status', ['late'])->count(),
+                        'excuses'  => $recordsByTerm->whereIn('status', ['excused'])->count(),
+                        'total'    => $recordsByTerm->count(),
+                    ];
+                });
+            });
+
+        if ($attendanceRecords->isEmpty()) {
+            continue; // Skip students without records
+        }
+
+        // Generate individual PDF
+        $pdfContent = Pdf::loadView(
+            'PDFs.student_attendance_summary',
+            compact('student', 'attendanceRecords')
+        )->setPaper('A4', 'portrait')->output();
+
+        // Temporary file
+        $tempFile = tempnam(sys_get_temp_dir(), 'attendance_');
+        file_put_contents($tempFile, $pdfContent);
+
+        // Import pages
+        $pageCount = $mergedPdf->setSourceFile($tempFile);
+
+        for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+            $tplId = $mergedPdf->importPage($pageNo);
+            $size = $mergedPdf->getTemplateSize($tplId);
+
+            $mergedPdf->AddPage(
+                $size['orientation'],
+                [$size['width'], $size['height']]
+            );
+
+            $mergedPdf->useTemplate($tplId);
+        }
+
+        unlink($tempFile);
+    }
+
+    $fileName = 'Class_Attendance_' . str_replace(' ', '_', $class) . '.pdf';
+
+    // VERY IMPORTANT
+    if (ob_get_length()) {
+        ob_end_clean();
+    }
+
+    $pdfContent = $mergedPdf->Output('S');
+
+    return response($pdfContent, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"')
+        ->header('Content-Length', strlen($pdfContent));
+
+    }
 
 }
