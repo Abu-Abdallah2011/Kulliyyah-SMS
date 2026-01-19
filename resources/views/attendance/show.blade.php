@@ -1,22 +1,44 @@
 <x-app-layout>
 
    <x-slot name="header">
-      <h2 class="font-semibold lg-text-xl md-text-lg text-gray-800 dark:text-gray-200 leading-tight">
-          {{ __('Attendance Record') }}
+      <div class="flex items-center justify-between">
 
-        @can('isAssistant')
-          <a href="{{ url('/attendance') }}">
-            <x-primary-button class="absolute top-15 right-3 bg-green-500">
-            <i class="fa-solid fa-pen"></i>
-            </x-primary-button>
-        </a>
-        <a href="{{ url('/attendanceForPreviousTerms')}}">
-            <x-primary-button class="absolute top-15 right-20 bg-yellow-500">
-                <i class="fa-solid fa-backward"> </i>
-            </x-primary-button>
-        </a> 
-        @endcan
-      </h2>
+    {{-- Left: Heading --}}
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Attendance Record') }}
+    </h2>
+
+    {{-- Right: Action Buttons --}}
+    @can('isAssistant')
+        @php
+        $class = $teachers->first()?->class;
+        @endphp
+
+        <div class="flex items-center gap-2">
+
+            <a href="{{ url('/attendance') }}">
+                <x-primary-button class="bg-green-600 hover:bg-green-700 flex items-center gap-2">
+                    <i class="fa-solid fa-pen"></i>
+                </x-primary-button>
+            </a>
+
+            <a href="{{ url('/attendanceForPreviousTerms') }}">
+                <x-primary-button class="bg-yellow-500 hover:bg-yellow-600 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </x-primary-button>
+            </a>
+
+            <a href="{{ route('attendance.class.pdf', ['class' => $class]) }}">
+                <x-primary-button class="bg-indigo-600 hover:bg-indigo-700 flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-file-pdf text-red-300"></i>
+                </x-primary-button>
+            </a>
+
+        </div>
+    @endcan
+
+</div>
+
   </x-slot>
   @if((Auth::user()->can('isAssistant') && Request::is('attendance/show')) || (Auth::user()->can('isAssistant') && Request::is('dashboard/attendance/*')))
   <x-success-status class="mb-4" :status="session('message')" />
