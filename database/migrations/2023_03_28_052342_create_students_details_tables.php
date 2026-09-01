@@ -29,6 +29,8 @@ return new class extends Migration
             $table->string('grad_yr')->nullable();
             $table->string('photo')->nullable();
             $table->string('guardian_id');
+            $table->string('relationship');
+            $table->string('set');
             $table->timestamps();
         });
     }

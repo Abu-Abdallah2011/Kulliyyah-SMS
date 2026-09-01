@@ -1,100 +1,3 @@
-{{-- <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Hadda Records
-            
-                @can('isAssistant')
-                <a href="{{url('hadda_page/' . $student->id . '/HaddaForm')}}">
-                <x-primary-button class="absolute top-15 right-9 bg-green-500">
-                    <i class="fa-solid fa-plus"> </i>
-                </x-primary-button>
-            </a> 
-                @endcan
-                
-        </h2>
-    </x-slot>
-        
-          <x-search-hadda :student="$student" />
-       <x-success-status class="mb-4" :status="session('message')" />
-    <div class="py-6">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900 dark:text-gray-100">
-               <div class="text-center font-bold"> {{ $student->fullname }}: {{$student->class}} </div>
-                <table class="border-collapse w-full">
-                    <thead>
-                    <tr>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">DATE</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">TERM</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">SESSION</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">FROM SURAH</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">FROM</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">TO SURAH</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">TO</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">SCORE</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">GRADE</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">TEACHER</th>
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">COMMENT</th>
-                        @can('isAssistant')
-                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">DELETE</th>
-                        @endcan
-                    </tr>
-                    
-                    </thead>
-                    <tbody>
-
-                        @foreach($hadda as $item)
-                        
-                    <tr  class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap mb-10 lg:mb-0">
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">
-                            @can('isAssistant')
-                            <a href="/hadda_page/{{$item->id}}/edit_hadda">
-                                @endcan
-                                {{ $item->date }}
-                           @can('isAssistant') 
-                        </a>
-                        @endcan
-                        </td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->term }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->session }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->sura }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->from }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->to_surah }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->to }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->score }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->grade }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800 border border-b block lg:table-cell relative lg:static">{{ $item->teacher }}</td>
-                        <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">{{ $item->comment }}</td>
-                        @can('isAssistant')
-                        <td class="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static">
-                            <form method="POST" action="/hadda_page/{{$item->id}}">
-                                @csrf
-                                @method('DELETE')
-                                <x-danger-button onclick="return confirm('Are you sure you want to delete this record?')">
-                                <i class="fa-solid fa-trash"> 
-                                     {{ __('') }}
-                                     </i>
-                            </x-danger-button> 
-                    </form> 
-                        </td>
-                        @endcan
-                    </tr>
-                    @endforeach
-                </tbody>
-                </table>
-                
-
-
-            </div>
-        </div>
-    </div>
-
-    <div class="mt-6 p-4">
-        {{$hadda->Links()}}
-    </div> 
-    
-</x-app-layout> --}}
-
-
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
@@ -133,6 +36,80 @@
                     {{ $student->fullname }} — {{ $student->class }}
                 </div>
 
+                <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wide text-emerald-700">Current Term Total Pages</p>
+                            <p class="text-sm text-emerald-800">
+                                {{ $termPageSummary['term'] ?? 'Current Term' }}{{ !empty($termPageSummary['session']) ? ' - '.$termPageSummary['session'] : '' }}
+                            </p>
+                        </div>
+                        <div class="text-left sm:text-right">
+                            <p class="text-3xl font-black">{{ $termPageSummary['pages'] ?? 0 }}</p>
+                            <p class="text-xs text-emerald-700">
+                                {{ $termPageSummary['records'] ?? 0 }} records, {{ $termPageSummary['unverified'] ?? 0 }} unverified
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                @php
+                    $classRank = $rankSummary['class'] ?? null;
+                    $schoolRank = $rankSummary['school'] ?? null;
+                @endphp
+
+                <div class="mb-4 grid gap-3 md:grid-cols-2">
+                    <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Class Rank</p>
+                        @if($classRank)
+                            <div class="mt-2 flex items-end justify-between gap-3">
+                                <div>
+                                    <p class="text-2xl font-black text-slate-900">#{{ $classRank['rank'] }}</p>
+                                    <p class="text-xs text-slate-500">in {{ $student->class }}</p>
+                                </div>
+                                <p class="text-sm font-bold text-slate-700">{{ number_format((float) $classRank['leaderboard_points'], 1) }} points</p>
+                            </div>
+                            <p class="mt-2 text-xs text-slate-500">
+                                @if($classRank['gap_to_above'] !== null)
+                                    {{ $classRank['gap_to_above'] }} point(s) behind the student above.
+                                @else
+                                    Leading this class.
+                                @endif
+                                @if($classRank['gap_to_below'] !== null)
+                                    {{ $classRank['gap_to_below'] }} point(s) ahead of the student below.
+                                @endif
+                            </p>
+                        @else
+                            <p class="mt-2 text-sm text-slate-500">No rank yet for this term.</p>
+                        @endif
+                    </div>
+
+                    <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-500">School Rank</p>
+                        @if($schoolRank)
+                            <div class="mt-2 flex items-end justify-between gap-3">
+                                <div>
+                                    <p class="text-2xl font-black text-slate-900">#{{ $schoolRank['rank'] }}</p>
+                                    <p class="text-xs text-slate-500">school-wide</p>
+                                </div>
+                                <p class="text-sm font-bold text-slate-700">{{ number_format((float) $schoolRank['leaderboard_points'], 1) }} points</p>
+                            </div>
+                            <p class="mt-2 text-xs text-slate-500">
+                                @if($schoolRank['gap_to_above'] !== null)
+                                    {{ $schoolRank['gap_to_above'] }} point(s) behind the student above.
+                                @else
+                                    Leading the school.
+                                @endif
+                                @if($schoolRank['gap_to_below'] !== null)
+                                    {{ $schoolRank['gap_to_below'] }} point(s) ahead of the student below.
+                                @endif
+                            </p>
+                        @else
+                            <p class="mt-2 text-sm text-slate-500">No school rank yet for this term.</p>
+                        @endif
+                    </div>
+                </div>
+
                 <!-- Responsive table wrapper -->
                 <div class="overflow-x-auto">
                     <table class="min-w-full border-collapse text-sm">
@@ -140,7 +117,7 @@
                             <tr>
                                 @foreach ([
                                     'Date', 'Class', 'Term', 'Session', 'From Surah', 'Verse', 
-                                    'To Surah', 'Verse', 'Score', 'Grade', 'Teacher', 'Comment'
+                                    'To Surah', 'Verse', 'Page(s)', 'Grade', 'Teacher', 'Comment'
                                 ] as $col)
                                     <th class="p-3 font-semibold uppercase text-gray-600 dark:text-gray-300 border border-gray-300 text-left hidden lg:table-cell">
                                         {{ $col }}
@@ -156,6 +133,9 @@
 
                         <tbody>
                             @forelse($hadda as $item)
+                                @php
+                                    $coverage = \App\Support\HaddaCoverageCalculator::analyze($item);
+                                @endphp
                                 <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition flex flex-col lg:table-row mb-6 lg:mb-0 border-b lg:border-0 rounded-lg lg:rounded-none shadow-sm lg:shadow-none">
                                     
                                     <!-- Date -->
@@ -177,7 +157,13 @@
                                     <td class="p-3 border-b lg:border">{{ $item->from }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->to_surah }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->to }}</td>
-                                    <td class="p-3 border-b lg:border font-bold">{{ $item->score }}</td>
+                                    <td class="p-3 border-b lg:border font-bold">
+                                        @if ($coverage['status'] === 'page')
+                                            {{ $coverage['pages'] }}
+                                        @else
+                                            Unverified
+                                        @endif
+                                    </td>
                                     <td class="p-3 border-b lg:border font-bold">{{ $item->grade }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->teacher }}</td>
                                     <td class="p-3 border-b lg:border">{{ $item->comment }}</td>

@@ -40,6 +40,41 @@
             margin: 4px 0;
         }
 
+        .summary-grid {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 8px;
+            margin-top: 10px;
+        }
+
+        .summary-card {
+            border: 1px solid #c7d2fe;
+            background: #eef2ff;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .summary-label {
+            font-size: 10px;
+            color: #475569;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .summary-value {
+            font-size: 18px;
+            color: #1e3a8a;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+
+        .summary-note {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -112,25 +147,45 @@
     <p><strong>Student ID:</strong> {{ $student->id }}</p>
     <p><strong>Class:</strong> {{ $student->class }}</p>
     <p><strong>Term:</strong> {{ $term . ' ' . $session }} Academic session</p>
-    <p>
-    <strong>Total Hadda Records:</strong>
-    <span style="color:#1e3a8a; font-weight:600;">
-        {{ $haddaCount }}
-    </span>
-</p>
     <p><strong>Date Generated:</strong> {{ now()->format('d M, Y h:i A') }}</p>
 </div>
+
+@php
+    $classRank = $rankSummary['class'] ?? null;
+    $schoolRank = $rankSummary['school'] ?? null;
+@endphp
+
+<table class="summary-grid">
+    <tr>
+        <td class="summary-card">
+            <div class="summary-label">Total Pages</div>
+            <div class="summary-value">{{ $termTotalPages ?? 0 }}</div>
+            <div class="summary-note">{{ $haddaCount }} records this term</div>
+        </td>
+        <td class="summary-card">
+            <div class="summary-label">Class Rank</div>
+            <div class="summary-value">{{ $classRank ? '#'.$classRank['rank'] : 'N/A' }}</div>
+            <div class="summary-note">{{ $classRank ? number_format((float) $classRank['leaderboard_points'], 1).' points' : 'No ranking yet' }}</div>
+        </td>
+        <td class="summary-card">
+            <div class="summary-label">School Rank</div>
+            <div class="summary-value">{{ $schoolRank ? '#'.$schoolRank['rank'] : 'N/A' }}</div>
+            <div class="summary-note">{{ $schoolRank ? number_format((float) $schoolRank['leaderboard_points'], 1).' points' : 'No ranking yet' }}</div>
+        </td>
+    </tr>
+</table>
 
 {{-- ================= HADDA TABLE ================= --}}
 <table>
     <thead>
         <tr>
             <th>Date</th>
+            <th>Class</th>
             <th>From Surah</th>
             <th>From Verse</th>
             <th>To Surah</th>
             <th>To Verse</th>
-            <th>Score</th>
+            <th>Pages</th>
             <th>Grade</th>
             <th>Teacher</th>
             <th>Comment</th>
@@ -140,11 +195,12 @@
         @foreach ($hadda as $item)
             <tr>
                 <td>{{ $item->date }}</td>
+                <td>{{ $item->class }}</td>
                 <td>{{ $item->sura_en }}</td>
                 <td>{{ $item->from }}</td>
                 <td>{{ $item->to_surah_en }}</td>
                 <td>{{ $item->to }}</td>
-                <td>{{ $item->score }}</td>
+                <td>{{ $item->page_count ?? 'Unverified' }}</td>
                 <td>{{ $item->grade_en }}</td>
                 <td>{{ $item->teacher }}</td>
                 <td>{{ $item->comment }}</td>

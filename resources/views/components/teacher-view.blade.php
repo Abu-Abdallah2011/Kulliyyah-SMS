@@ -8,7 +8,7 @@
                         <x-success-status class="mb-4" :status="session('message')" />
 
                         <h1 class="font-bold text-center text-gray-900">{{$class}}</h1>
-                    
+
                             <!-- Main Content -->
                             <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -26,7 +26,7 @@
                                         </div>
                                     </div>
                                 </a>
-                    
+
                                     <!-- Card: Number of Students -->
                                     <a href="class_students">
                                     <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
@@ -41,7 +41,7 @@
                                         </div>
                                     </div>
                                 </a>
-                    
+
                                     <!-- Card Template For Profile -->
                                     <a href="{{ url('/teachers_database/' . $teacher->id) }}">
                                     <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
@@ -87,6 +87,23 @@
                                     </div>
                                 </a>
 
+                                @can('isTeacher')
+                                <!-- Card: Hadda Leaderboard -->
+                                <a href="{{ route('hadda.leaderboard') }}">
+                                    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0">
+                                                <i class="fas fa-ranking-star fa-2x text-success"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-900">Leaderboard</h3>
+                                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">Hadda</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                @endcan
+
                                 <!-- Card: Attendance -->
                                 <a href="attendance/show">
                                     <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
@@ -101,7 +118,24 @@
                                         </div>
                                     </div>
                                 </a>
-                    
+
+                                @can('isExecutive')
+                                <!-- Card: Student Excuses -->
+                                <a href="{{ route('student_excuses.admin.index') }}">
+                                    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0">
+                                                <i class="fas fa-id-card fa-2x text-warning"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-900">Student Excuses</h3>
+                                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">Cards</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                @endcan
+
                                 </div>
 
                                 <hr class="my-4 border-gray-300 dark:border-gray-500">
@@ -168,10 +202,27 @@
                                         </div>
                                     </a>
                                     @endcan --}}
-                                
+
                                 </div>
                                 </div>
 
+                                @can('isSuperAdmin')
+                                <!-- Card: Allowance Vouchers -->
+                                <a href="{{ route('allowance_vouchers.index') }}">
+                                    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0">
+                                                <i class="fas fa-file-invoice-dollar fa-2x text-primary"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-900">Allowance Vouchers</h3>
+                                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">Open</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                @endcan
+                            <br>
                                 {{-- FOR EXECUTIVES/FINANCE OFFICERS ONLY --}}
                                 @can('isFinance')
 
@@ -189,7 +240,7 @@
                                         </div>
                                     </div>
                                 </a>
-
+                            <br>
                                 <div class="bg-gray-300 dark:bg-gray-800 shadow rounded-lg p-6">
                                     <div class="flex items-center">
                                         <div style="width: 75%;">
@@ -197,11 +248,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         var ctx = document.getElementById('FeesChart').getContext('2d');
-                                
+
                                         var labels = ['%Paid', '%Free', '%Uncleared', '%Part'];
                                         var data = [
                                             {{ $percentagepaid }},
@@ -209,7 +260,7 @@
                                             {{ $percentagenotpaid }},
                                             {{ $percentagepart }}
                                         ];
-                                
+
                                         var myChart = new Chart(ctx, {
                                             type: 'bar', // Change this to 'line', 'pie', etc. as needed
                                             data: {
@@ -298,7 +349,7 @@
                                         });
                                     });
                                 </script>
-                                
+
                                 <div class="bg-gray-300 dark:bg-gray-800 shadow rounded-lg p-6">
                                     <div class="flex items-center">
                                         <div style="width: 75%;">
@@ -306,11 +357,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         var ctx = document.getElementById('AttendanceChart').getContext('2d');
-                                
+
                                         var labels = ['%Present', '%Excused', '%Absent', '%Late'];
                                         var data = [
                                             {{ $presentpercentage }},
@@ -318,7 +369,7 @@
                                             {{ $absentpercentage }},
                                             {{ $latepercentage }}
                                         ];
-                                
+
                                         var myChart = new Chart(ctx, {
                                             type: 'pie', // Change this to 'line', 'pie', etc. as needed
                                             data: {
@@ -422,11 +473,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         var ctx = document.getElementById('teachersAttendance').getContext('2d');
-                                
+
                                         var labels = ['%Present', '%Excused', '%Absent', '%Late', '%E. Late', '%Early Close', '%Came Late And Closed Early'];
                                         var data = [
                                             {{ $presentpercentageforteachers }},
@@ -437,7 +488,7 @@
                                             {{ $percentageclosedearly }},
                                             {{ $percentagelatecominandearlyclose }},
                                         ];
-                                
+
                                         var myChart = new Chart(ctx, {
                                             type: 'line', // Change this to 'line', 'pie', etc. as needed
                                             data: {
@@ -486,4 +537,4 @@
                     </div>
                     </div>
 
-                
+

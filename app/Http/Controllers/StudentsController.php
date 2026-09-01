@@ -20,7 +20,9 @@ class StudentsController extends Controller
     public function create() {
         $classes = classes::all();
         $sets = sets::all();
-        return view('students_registration_form', ['classes' => $classes, 'sets' => $sets]);
+        $haddaStatusOptions = register_student::haddaStatusOptions();
+        $tarteelStatusOptions = register_student::tarteelStatusOptions();
+        return view('students_registration_form', compact('classes', 'sets', 'haddaStatusOptions', 'tarteelStatusOptions'));
     }
 
 
@@ -31,6 +33,8 @@ class StudentsController extends Controller
         ->first();
         
         $data = $request->validated();
+        $data['hadda_status'] = $data['hadda_status'] ?? register_student::HADDA_STATUS_ACTIVE;
+        $data['tarteel_status'] = $data['tarteel_status'] ?? register_student::TARTEEL_STATUS_NOT_APPLICABLE;
 
     $selectedOptionId = $request->input('dynamic_select');
     $selectedOption = sets::find($selectedOptionId);
@@ -81,9 +85,11 @@ public function edit($id){
 
     $classes = classes::all();
         $sets = sets::all();
+    $haddaStatusOptions = register_student::haddaStatusOptions();
+    $tarteelStatusOptions = register_student::tarteelStatusOptions();
 
     $student = register_student::find($id);
-    return view('edit_student', compact('student', 'classes', 'sets'));
+    return view('edit_student', compact('student', 'classes', 'sets', 'haddaStatusOptions', 'tarteelStatusOptions'));
 }
 
 
@@ -94,6 +100,13 @@ public function update(StudentFormRequest $request, $id){
     ->first();
         
     $data = $request->validated();
+
+    if (!Gate::allows('isAdmin')) {
+        unset($data['hadda_status'], $data['tarteel_status']);
+    } else {
+        $data['hadda_status'] = $data['hadda_status'] ?? register_student::HADDA_STATUS_ACTIVE;
+        $data['tarteel_status'] = $data['tarteel_status'] ?? register_student::TARTEEL_STATUS_NOT_APPLICABLE;
+    }
 
     $selectedOptionId = $request->input('dynamic_select');
     $selectedOption = sets::find($selectedOptionId);

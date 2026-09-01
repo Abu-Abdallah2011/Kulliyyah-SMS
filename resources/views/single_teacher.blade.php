@@ -11,7 +11,10 @@
                 <div class="flex items-center space-x-8 p-6 bg-indigo-100">
                     <!-- Photo Section -->
                     <div class="flex-shrink-0">
-                        <img class="w-32 h-32 rounded-full border-4 border-indigo-300 shadow-xl" src="{{ Storage::disk('s3')->url($teacher->photo) }}" alt="Teacher Photo" />
+                        @php($photoUrl = \App\Support\PhotoUrl::resolve($teacher->photo))
+                        @if($photoUrl)
+                        <img class="w-32 h-32 rounded-full border-4 border-indigo-300 shadow-xl" src="{{ $photoUrl }}" alt="Teacher Photo" />
+                        @endif
                     </div>
 
                     <!-- Info Section -->
@@ -189,16 +192,6 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach($attendanceRecords as $session => $terms)
                             @foreach($terms as $term => $summary)
-                                @php
-                                    $total = $summary['total'] ?: 1; // avoid division by zero
-                                    $percentages = [
-                                        'presents' => round(($summary['presents'] / $total) * 100, 1),
-                                        'absents'  => round(($summary['absents'] / $total) * 100, 1),
-                                        'lates'    => round(($summary['lates'] / $total) * 100, 1),
-                                        'excuses'  => round(($summary['excuses'] / $total) * 100, 1),
-                                    ];
-                                @endphp
-
                                 <div class="bg-white p-5 border rounded-2xl shadow-md hover:shadow-lg transition duration-300 ease-in-out">
                                     <div class="flex justify-between items-center mb-3">
                                         <h3 class="text-lg font-semibold text-indigo-700">{{ ucfirst($term) }}</h3>
@@ -210,10 +203,10 @@
                                         <div>
                                             <div class="flex justify-between text-sm font-medium">
                                                 <span class="text-green-500">Present</span>
-                                                <span class="text-green-500">{{ $percentages['presents'] }}% ({{ $summary['presents'] }})</span>
+                                                <span class="text-green-500">{{ round((($summary['presents'] ?? 0) / (($summary['total'] ?? 0) > 0 ? $summary['total'] : 1)) * 100, 1) }}% ({{ $summary['presents'] }})</span>
                                             </div>
                                             <div class="w-full bg-gray-100 rounded-full h-2">
-                                                <div class="bg-green-500 h-2 rounded-full" style="width: {{ $percentages['presents'] }}%"></div>
+                                                <div class="bg-green-500 h-2 rounded-full" style="width: {{ round((($summary['presents'] ?? 0) / (($summary['total'] ?? 0) > 0 ? $summary['total'] : 1)) * 100, 1) }}%"></div>
                                             </div>
                                         </div>
 
@@ -221,10 +214,10 @@
                                         <div>
                                             <div class="flex justify-between text-sm font-medium">
                                                 <span class="text-red-500">Absent</span>
-                                                <span class="text-red-500">{{ $percentages['absents'] }}% ({{ $summary['absents'] }})</span>
+                                                <span class="text-red-500">{{ round((($summary['absents'] ?? 0) / (($summary['total'] ?? 0) > 0 ? $summary['total'] : 1)) * 100, 1) }}% ({{ $summary['absents'] }})</span>
                                             </div>
                                             <div class="w-full bg-gray-100 rounded-full h-2">
-                                                <div class="bg-red-500 h-2 rounded-full" style="width: {{ $percentages['absents'] }}%"></div>
+                                                <div class="bg-red-500 h-2 rounded-full" style="width: {{ round((($summary['absents'] ?? 0) / (($summary['total'] ?? 0) > 0 ? $summary['total'] : 1)) * 100, 1) }}%"></div>
                                             </div>
                                         </div>
 
@@ -232,10 +225,10 @@
                                         <div>
                                             <div class="flex justify-between text-sm font-medium">
                                                 <span class="text-yellow-500">Late</span>
-                                                <span class="text-yellow-500">{{ $percentages['lates'] }}% ({{ $summary['lates'] }})</span>
+                                                <span class="text-yellow-500">{{ round((($summary['lates'] ?? 0) / (($summary['total'] ?? 0) > 0 ? $summary['total'] : 1)) * 100, 1) }}% ({{ $summary['lates'] }})</span>
                                             </div>
                                             <div class="w-full bg-gray-100 rounded-full h-2">
-                                                <div class="bg-yellow-400 h-2 rounded-full" style="width: {{ $percentages['lates'] }}%"></div>
+                                                <div class="bg-yellow-400 h-2 rounded-full" style="width: {{ round((($summary['lates'] ?? 0) / (($summary['total'] ?? 0) > 0 ? $summary['total'] : 1)) * 100, 1) }}%"></div>
                                             </div>
                                         </div>
 
@@ -243,10 +236,10 @@
                                         <div>
                                             <div class="flex justify-between text-sm font-medium">
                                                 <span class="text-purple-500">Excused</span>
-                                                <span class="text-purple-500">{{ $percentages['excuses'] }}% ({{ $summary['excuses'] }})</span>
+                                                <span class="text-purple-500">{{ round((($summary['excuses'] ?? 0) / (($summary['total'] ?? 0) > 0 ? $summary['total'] : 1)) * 100, 1) }}% ({{ $summary['excuses'] }})</span>
                                             </div>
                                             <div class="w-full bg-gray-100 rounded-full h-2">
-                                                <div class="bg-purple-500 h-2 rounded-full" style="width: {{ $percentages['excuses'] }}%"></div>
+                                                <div class="bg-purple-500 h-2 rounded-full" style="width: {{ round((($summary['excuses'] ?? 0) / (($summary['total'] ?? 0) > 0 ? $summary['total'] : 1)) * 100, 1) }}%"></div>
                                             </div>
                                         </div>
                                     </div>

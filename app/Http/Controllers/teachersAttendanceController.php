@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\sessions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Carbon\CarbonPeriod;
+use App\Models\AllowanceVoucher;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\register_teacher;
+use App\Support\TeacherAttendanceSummary;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Models\teachersAttendanceModel;
@@ -16,7 +19,8 @@ class teachersAttendanceController extends Controller
     // Show Attendance Form
     public function create()
     {
-        $teachers = register_teacher::where('status', 'IN SCHOOL')
+        $teachers = $this->orderedTeachersQuery()
+        ->where('status', 'IN SCHOOL')
         ->get();
         return view('Teachers Attendance.create', ['teachers' => $teachers]);
     }
@@ -53,18 +57,40 @@ class teachersAttendanceController extends Controller
 }
 
 // Show Attendance Report
-public function show()
+public function show(Request $request)
 {
+    $month = $request->input('month', now()->format('F'));
+    $year = (int) $request->input('year', now()->format('Y'));
+
     if (Gate::allows('isExecutive')) {
-    $teachers = register_teacher::where('status', 'IN SCHOOL')
+    $teachers = $this->orderedTeachersQuery()
+    ->where('status', 'IN SCHOOL')
     ->get(); 
     } else {
-        $teachers = register_teacher::where('user_id', Auth::user()->id)
+        $teachers = $this->orderedTeachersQuery()
+        ->where('user_id', Auth::user()->id)
         ->get();
     }
 
-$attendance = teachersAttendanceModel::latest()
-->paginate(200); 
+    $teacherIds = $teachers->pluck('id')->all();
+    $attendanceSummaries = TeacherAttendanceSummary::forMonth($teacherIds, $month, $year);
+    $attendance = TeacherAttendanceSummary::recordsForMonth($teacherIds, $month, $year);
+    $finalizedVoucher = AllowanceVoucher::with(['items' => function ($query) use ($teacherIds) {
+        $query->whereIn('teacher_id', $teacherIds);
+    }])
+        ->where('voucher_month', $month)
+        ->where('voucher_year', $year)
+        ->where('status', 'finalized')
+        ->latest('finalized_at')
+        ->first();
+    $voucherSnapshotItems = $finalizedVoucher
+        ? $finalizedVoucher->items->keyBy('teacher_id')
+        : collect();
+    $months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    $eligibilityPercentage = TeacherAttendanceSummary::ELIGIBILITY_PERCENTAGE;
 
     $statusIcons = [
         'present' => '<i class="fas fa-check text-green-500"></i>',
@@ -76,7 +102,18 @@ $attendance = teachersAttendanceModel::latest()
         'came late and closed early' => '<i class="fas bi-alarm-fill text-black-500"></i>',
     ];
     
-        return view('Teachers Attendance.show', compact('attendance', 'teachers', 'statusIcons'));
+        return view('Teachers Attendance.show', compact(
+            'attendance',
+            'teachers',
+            'statusIcons',
+            'attendanceSummaries',
+            'month',
+            'year',
+            'months',
+            'eligibilityPercentage',
+            'finalizedVoucher',
+            'voucherSnapshotItems'
+        ));
 }
 
  // Show Attendance Edit Form
@@ -85,10 +122,12 @@ $attendance = teachersAttendanceModel::latest()
 
     // if (Auth::user()->can('isExecutive')) {
     if (Gate::allows('isExecutive')) {
-        $teachers = register_teacher::where('status', 'IN SCHOOL')
+        $teachers = $this->orderedTeachersQuery()
+        ->where('status', 'IN SCHOOL')
         ->get(); 
         } else {
-            $teachers = register_teacher::where('user_id', Auth::user()->id)
+            $teachers = $this->orderedTeachersQuery()
+            ->where('user_id', Auth::user()->id)
             ->get();
         }
     
@@ -185,6 +224,56 @@ public function downloadAttendanceSummaryPDF($id)
         ->setPaper('A4', 'portrait');
 
     return $pdf->download("Attendance_Summary_{$teacher->fullname}.pdf");
+}
+
+public function downloadSigningBook($gender)
+{
+    $gender = strtolower($gender);
+    abort_unless(in_array($gender, ['male', 'female'], true), 404);
+
+    $session = sessions::orderBy('created_at', 'desc')->firstOrFail();
+    $startDate = Carbon::parse($session->term_starts)->startOfDay();
+    $endDate = Carbon::parse($session->term_ends)->startOfDay();
+
+    $teachers = $this->orderedTeachersQuery()
+        ->where('status', 'IN SCHOOL')
+        ->whereRaw('LOWER(gender) = ?', [$gender])
+        ->get();
+
+    $signingDays = collect();
+
+    foreach (CarbonPeriod::create($startDate, $endDate) as $date) {
+        if ($date->isFriday()) {
+            continue;
+        }
+
+        $sessionsForDay = ($date->isSaturday() || $date->isSunday())
+            ? ['Morning', 'Evening']
+            : ['Daily'];
+
+        foreach ($sessionsForDay as $period) {
+            $signingDays->push([
+                'date' => $date->copy(),
+                'period' => $period,
+            ]);
+        }
+    }
+
+    $pdf = Pdf::loadView('PDFs.teachers_signing_book', [
+        'teachers' => $teachers,
+        'session' => $session,
+        'signingDays' => $signingDays,
+        'gender' => ucfirst($gender),
+    ])->setPaper('a4', 'landscape');
+
+    return $pdf->download(ucfirst($gender) . '_Teachers_Signing_Book_' . str_replace('/', '-', $session->session) . '_' . str_replace(' ', '_', $session->term) . '.pdf');
+}
+
+private function orderedTeachersQuery()
+{
+    return register_teacher::query()
+        ->orderByRaw("CASE WHEN UPPER(gender) = 'MALE' THEN 0 WHEN UPPER(gender) = 'FEMALE' THEN 1 ELSE 2 END")
+        ->orderBy('fullname');
 }
 
 

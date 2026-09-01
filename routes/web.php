@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PDFsController;
 use App\Http\Controllers\setsController;
@@ -20,6 +21,8 @@ use App\Http\Controllers\GuardiansController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\SchoolFeesController;
+use App\Http\Controllers\AllowanceVouchersController;
+use App\Http\Controllers\StudentExcuseCardsController;
 use App\Http\Controllers\classesCrudController;
 use App\Http\Controllers\DisciplinaryActionController;
 use App\Http\Controllers\excusesController;
@@ -168,7 +171,7 @@ require __DIR__.'/auth.php';
 
         // Show Any selected Teachers' Dashboard
         Route::get('/dashboard/classes/{teacher_id}', 'display')->middleware('can:isExecutive')->name('dashboard.display');
-        
+
         //Take User to Class Teachers Page
         Route::get('/class_teachers', 'classTeacher');
 
@@ -223,9 +226,13 @@ require __DIR__.'/auth.php';
         // Delete Class
         Route::delete('/session/{id}', 'delete')->name('session.delete');
         });
-    
+
          //CRUD for Hadda Details
     Route::controller(HaddaController::class)->group(function () {
+        // Show Hadda Leaderboard
+        Route::get('/hadda_leaderboard', 'leaderboard')->middleware(['auth', 'can:isAssistant'])->name('hadda.leaderboard');
+        Route::get('/hadda_leaderboard/pdf', 'leaderboardPdf')->middleware(['auth', 'can:isAdmin'])->name('hadda.leaderboard.pdf');
+        Route::get('/hadda_leaderboard/class/{class}/pdf', 'classLeaderboardPdf')->middleware(['auth', 'can:isAssistant'])->name('hadda.leaderboard.class_pdf');
         // Show Hadda Entry Form
         Route::get('/hadda_page/{student_id}/HaddaForm', 'create')->middleware('can:isAssistant');
         // Store Hadda Entry Data in Database
@@ -246,6 +253,38 @@ require __DIR__.'/auth.php';
         // Download Hadda record for all students in a class for a term
         Route::get('/hadda_class/{class}/pdf', 'classHaddaPdfMerged')->middleware('can:isAssistant')->name('hadda_class.pdf');
         });
+
+    Route::get('/run-migrations', function () {
+        Artisan::call('migrate', ['--force' => true]);
+
+        return response('<pre>' . e(Artisan::output()) . '</pre>');
+    })->middleware(['auth', 'can:isSuperAdmin'])->name('admin.run-migrations');
+
+    Route::middleware(['auth', 'can:isGuardian'])->controller(StudentExcuseCardsController::class)->group(function () {
+        Route::get('/student_excuses', 'guardianIndex')->name('student_excuses.guardian.index');
+        Route::get('/student_excuses/create', 'create')->name('student_excuses.create');
+        Route::post('/student_excuses', 'store')->name('student_excuses.store');
+        Route::get('/student_excuses/{id}/edit', 'guardianEdit')->name('student_excuses.guardian.edit');
+        Route::put('/student_excuses/{id}', 'guardianUpdate')->name('student_excuses.guardian.update');
+        Route::get('/student_excuse_cards/{id}', 'guardianShow')->name('student_excuse_cards.guardian.show');
+    });
+
+    Route::middleware(['auth', 'can:isExecutive'])->controller(StudentExcuseCardsController::class)->group(function () {
+        Route::get('/admin/student_excuses', 'adminIndex')->name('student_excuses.admin.index');
+        Route::get('/admin/student_excuses/{id}/review', 'review')->name('student_excuses.admin.review');
+        Route::get('/admin/student_excuses/{id}/edit', 'adminEdit')->name('student_excuses.admin.edit');
+        Route::put('/admin/student_excuses/{id}', 'adminUpdate')->name('student_excuses.admin.update');
+        Route::post('/admin/student_excuses/{id}/approve', 'approve')->name('student_excuses.admin.approve');
+        Route::post('/admin/student_excuses/{id}/reject', 'reject')->name('student_excuses.admin.reject');
+        Route::get('/admin/student_excuse_cards/{id}', 'adminShow')->name('student_excuses.admin.show');
+        Route::post('/admin/student_excuse_cards/{id}/revoke', 'revoke')->name('student_excuse_cards.revoke');
+    });
+
+    Route::middleware('auth')->controller(StudentExcuseCardsController::class)->group(function () {
+        Route::get('/student_excuse_cards/{id}/download', 'download')->name('student_excuse_cards.download');
+    });
+
+    Route::get('/student_excuse_cards/verify/{token}', [StudentExcuseCardsController::class, 'verify'])->name('student_excuse_cards.verify');
 
 
     // CRUD for Attendance
@@ -277,15 +316,15 @@ require __DIR__.'/auth.php';
             // Download the attendance summary for a class in a single file
             Route::get('/attendance/class/{class}/pdf', 'downloadClassAttendanceSummaryPDF')->name('attendance.class.pdf');
 
-        }); 
+        });
             // Show Attendance Page to Guardian
-            Route::get('/attendance/guardian_view/{id}', [AttendanceController::class, 'attendanceGuardian']); 
+            Route::get('/attendance/guardian_view/{id}', [AttendanceController::class, 'attendanceGuardian']);
             Route::get('/student/{id}/attendance-summary-pdf', [AttendanceController::class, 'downloadAttendanceSummaryPDF'])
-            ->name('student.attendance.pdf')->middleware('can:isAdmin'); 
+            ->name('student.attendance.pdf')->middleware('can:isAdmin');
 
             // CRUD for Sets
     Route::middleware('can:isExecutive')->controller(setsController::class)->group(function () {
-       
+
         // Show Sets form
         Route::get('/setsForm', 'create');
 
@@ -306,7 +345,7 @@ require __DIR__.'/auth.php';
          });
 
     Route::middleware('can:isExecutive')->controller(classesCrudController::class)->group(function () {
-       
+
         // Show Classes form
         Route::get('/classesForm', 'create');
 
@@ -349,7 +388,7 @@ require __DIR__.'/auth.php';
         });
 
     Route::middleware('can:isExecutive')->controller(subjectsController::class)->group(function () {
-       
+
         // Show Subjects form
         Route::get('/subjectsForm', 'create');
 
@@ -368,9 +407,9 @@ require __DIR__.'/auth.php';
         // Delete Subject
         Route::delete('/subjects/{id}', 'delete')->name('subject.delete');
         });
-    
+
     Route::controller(ExamsController::class)->group(function () {
-       
+
         // Show Exams for Executive
         Route::get('dashboard/exams/{teacher_id}', 'selectedTeacherExams');
 
@@ -417,10 +456,14 @@ require __DIR__.'/auth.php';
         // Save Attendance information
         Route::post('/teachersAttendance', 'store')->middleware('can:isExecutive');
 
-        // Show Attendance Report
+          // Show Attendance Report
         Route::get('/teachersAttendance/show', 'show')->name('teachersAttendance.show');
 
-        // Show Attendance Edit Form
+          // Download teachers signing book
+        Route::get('/teachersAttendance/signing-book/{gender}', 'downloadSigningBook')
+        ->name('teachersAttendance.signingBook')->middleware('can:isExecutive');
+
+          // Show Attendance Edit Form
         Route::get('/teachersAttendance/{date}/edit_attendance', 'edit');
 
         // Update Attendance
@@ -459,7 +502,7 @@ require __DIR__.'/auth.php';
 
         // Go To Reciept
         Route::get('/reciept/{studentId}/{term}/{session}', 'showStudentRecieptForTerm');
-    }); 
+    });
 
     // DOWNLOADING PDFS
     Route::controller(PDFsController::class)->group(function () {
@@ -517,4 +560,14 @@ require __DIR__.'/auth.php';
         // Delete excuses action
         Route::delete('/excuses/delete/{id}', 'destroy')->name('excuses.delete');
     });
-   
+
+    Route::middleware('can:isSuperAdmin')->controller(AllowanceVouchersController::class)->group(function () {
+        Route::get('/allowance_vouchers', 'show')->name('allowance_vouchers.index');
+        Route::get('/allowance_vouchers/create', 'create')->name('allowance_vouchers.create');
+        Route::post('/allowance_vouchers/store', 'store')->name('allowance_vouchers.store');
+        Route::get('/allowance_vouchers/{id}', 'view')->name('allowance_vouchers.show');
+        Route::post('/allowance_vouchers/{id}/finalize', 'finalize')->name('allowance_vouchers.finalize');
+        Route::get('/allowance_vouchers/{id}/pdf', 'downloadPdf')->name('allowance_vouchers.pdf');
+        Route::post('/allowance_vouchers/{id}/cancel', 'cancel')->name('allowance_vouchers.cancel');
+    });
+

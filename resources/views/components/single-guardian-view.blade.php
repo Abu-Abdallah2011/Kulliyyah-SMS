@@ -10,7 +10,10 @@
         <div class="flex">
            @can('isAdGuardian') 
            @if ($student->photo)
-           <img class="hidden w-48 mr-6 md:block" src="{{ Storage::disk('s3')->url($student->photo) }}" alt="" />
+           @php($photoUrl = \App\Support\PhotoUrl::resolve($student->photo))
+           @if($photoUrl)
+           <img class="hidden w-48 mr-6 md:block" src="{{ $photoUrl }}" alt="" />
+           @endif
            @endif
            @endcan
             <div class="font-bold">

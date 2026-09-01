@@ -12,7 +12,7 @@ class Hadda extends Model
     // Linking this model to register_student Model
     public function student()
     {
-        return $this->belongsTo(register_student::class);
+        return $this->belongsTo(register_student::class, 'student_id', 'id');
     }
 
     protected $table = '_hadda';
@@ -34,23 +34,35 @@ class Hadda extends Model
         'score',        
     ];
 
+    public function scopeOrderByHaddaDate($query, string $direction = 'desc')
+    {
+        $direction = strtolower($direction) === 'asc' ? 'asc' : 'desc';
+
+        return $query
+            ->orderByRaw("STR_TO_DATE(`date`, '%W, %M %d, %Y') {$direction}")
+            ->orderBy('id', $direction);
+    }
+
     public function scopeFilter($query, array $filters){
         if($filters['search'] ?? false) {
-            $query->where('date', 'like', '%' . request('search') . '%')
-            ->orWhere('class', 'like', '%' . request('search') . '%')
-            ->orWhere('name', 'like', '%' . request('search') . '%')
-            ->orWhere('sura', 'like', '%' . request('search') . '%')
-            ->orWhere('from', 'like', '%' . request('search') . '%')
-            ->orWhere('to', 'like', '%' . request('search') . '%')
-            ->orWhere('grade', 'like', '%' . request('search') . '%')
-            ->orWhere('comment', 'like', '%' . request('search') . '%')
-            ->orWhere('teacher', 'like', '%' . request('search') . '%')
-            ->orWhere('term', 'like', '%' . request('search') . '%')
-            ->orWhere('session', 'like', '%' . request('search') . '%')
-            ->orWhere('student_id', 'like', '%' . request('search') . '%')
-            ->orWhere('to_surah', 'like', '%' . request('search') . '%')
-            ->orWhere('score', 'like', '%' . request('search') . '%')
-            ;
+            $search = request('search');
+
+            $query->where(function ($query) use ($search) {
+                $query->where('date', 'like', '%' . $search . '%')
+                ->orWhere('class', 'like', '%' . $search . '%')
+                ->orWhere('name', 'like', '%' . $search . '%')
+                ->orWhere('sura', 'like', '%' . $search . '%')
+                ->orWhere('from', 'like', '%' . $search . '%')
+                ->orWhere('to', 'like', '%' . $search . '%')
+                ->orWhere('grade', 'like', '%' . $search . '%')
+                ->orWhere('comment', 'like', '%' . $search . '%')
+                ->orWhere('teacher', 'like', '%' . $search . '%')
+                ->orWhere('term', 'like', '%' . $search . '%')
+                ->orWhere('session', 'like', '%' . $search . '%')
+                ->orWhere('student_id', 'like', '%' . $search . '%')
+                ->orWhere('to_surah', 'like', '%' . $search . '%')
+                ->orWhere('score', 'like', '%' . $search . '%');
+            });
         }
 
     }

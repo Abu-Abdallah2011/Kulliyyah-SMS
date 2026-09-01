@@ -147,6 +147,10 @@
                                             {{$student->status}}
                                         </span>
                                     </p>
+                                    @can('isAdmin')
+                                        <p class="mb-1 text-sm text-gray-600">Hadda: <span class="font-semibold">{{$student->haddaStatusLabel()}}</span></p>
+                                        <p class="mb-1 text-sm text-gray-600">Tarteel: <span class="font-semibold">{{$student->tarteelStatusLabel()}}</span></p>
+                                    @endcan
                                 </div>
 
                                 <div class="mt-4 text-lg text-gray-600 flex items-center">

@@ -42,21 +42,33 @@ class curriculum extends Model
         
     ];
 
+    public function scopeOrderByCurriculumDate($query, string $direction = 'desc')
+    {
+        $direction = strtolower($direction) === 'asc' ? 'asc' : 'desc';
+
+        return $query
+            ->orderByRaw("STR_TO_DATE(`date`, '%W, %M %d, %Y') {$direction}")
+            ->orderBy('id', $direction);
+    }
+
     public function scopeFilter($query, array $filters){
         if($filters['search'] ?? false) {
-            $query->where('date', 'like', '%' . request('search') . '%')
-            ->orWhere('class', 'like', '%' . request('search') . '%')
-            ->orWhere('sura', 'like', '%' . request('search') . '%')
-            ->orWhere('from', 'like', '%' . request('search') . '%')
-            ->orWhere('to', 'like', '%' . request('search') . '%')
-            ->orWhere('times', 'like', '%' . request('search') . '%')
-            ->orWhere('bita', 'like', '%' . request('search') . '%')
-            ->orWhere('grade', 'like', '%' . request('search') . '%')
-            ->orWhere('hadda', 'like', '%' . request('search') . '%')
-            ->orWhere('comment', 'like', '%' . request('search') . '%')
-            ->orWhere('teacher', 'like', '%' . request('search') . '%')
-            ->orWhere('set', 'like', '%' . request('search') . '%')
-            ;
+            $search = request('search');
+
+            $query->where(function ($query) use ($search) {
+                $query->where('date', 'like', '%' . $search . '%')
+                ->orWhere('class', 'like', '%' . $search . '%')
+                ->orWhere('sura', 'like', '%' . $search . '%')
+                ->orWhere('from', 'like', '%' . $search . '%')
+                ->orWhere('to', 'like', '%' . $search . '%')
+                ->orWhere('times', 'like', '%' . $search . '%')
+                ->orWhere('bita', 'like', '%' . $search . '%')
+                ->orWhere('grade', 'like', '%' . $search . '%')
+                ->orWhere('hadda', 'like', '%' . $search . '%')
+                ->orWhere('comment', 'like', '%' . $search . '%')
+                ->orWhere('teacher', 'like', '%' . $search . '%')
+                ->orWhere('set', 'like', '%' . $search . '%');
+            });
         }
     }
 }

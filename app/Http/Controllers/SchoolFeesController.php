@@ -20,22 +20,17 @@ public function show(Request $request)
 
     $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])->with('user')
         ->get();
         
 
     
     $students = register_student::with(['fees' => function($query) {
-        $studentIds = register_student::where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA')
-        ->pluck('id');
+        $studentIds = register_student::currentlyEnrolled()->pluck('id');
         $query->whereIn('student_id', $studentIds);
         }])
-        ->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA')
+        ->currentlyEnrolled()
         ->WhereNot('class', '#')
         ->orderByDesc(function ($query) {
             $query->select('updated_at')
@@ -147,9 +142,7 @@ $firstTerm = sessions::where('session', $session)
      $teachers = register_teacher::where('user_id', Auth::user()->id)
      ->with(['students' => function ($query) 
      {
-         $query->where('status', 'IN SCHOOL')
-         ->orWhere('grad_type', 'TARTEEL ZALLA')
-         ->orderBy('fullname');
+         $query->currentlyEnrolled()->orderBy('fullname');
      }])->with('user')
      ->get();
      return view('SchoolFees.create', 

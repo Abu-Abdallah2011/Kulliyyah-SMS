@@ -32,6 +32,10 @@
                             <p><strong>Date of Admission:</strong> {{$student->doa}}</p>
                             <p><strong>Registration Fee:</strong> {{$student->reg_fee}}</p>
                             <p><strong>Status:</strong> {{$student->status}}</p>
+                            @can('isAdmin')
+                                <p><strong>Hadda Status:</strong> {{$student->haddaStatusLabel()}}</p>
+                                <p><strong>Tarteel Status:</strong> {{$student->tarteelStatusLabel()}}</p>
+                            @endcan
                             
                             @if ($student->status === 'GRADUATE')
                             <div class="space-y-4 mt-4">

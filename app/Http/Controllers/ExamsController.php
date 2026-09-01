@@ -32,8 +32,7 @@ public function show(){
     ->where('user_id', Auth::id())
     ->with([
         'students' => function ($query) {
-            $query->where('status', 'IN SCHOOL')
-                  ->orWhere('grad_type', 'TARTEEL ZALLA');
+            $query->currentlyEnrolled();
         },
         'students.attendance' => function ($query) use ($sessions) {
             $query->where('session', $sessions->session)
@@ -263,9 +262,7 @@ public function selectedTeacherExams($teacher_id){
         $teacher = register_teacher::where('class', $class)->where('id', $teacher_id)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ;
+            $query->currentlyEnrolled();
         }, 'students.attendance'])
         ->first();
 
@@ -471,9 +468,7 @@ $term = sessions::orderBy('created_at', 'desc')->first('term');
         ->where('user_id', auth()->user()->id)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])
         ->first();
 
@@ -529,9 +524,7 @@ public function examComment(){
     ->where('user_id', auth()->user()->id)
     ->with(['students' => function ($query) 
     {
-        $query->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA')
-        ->orderBy('fullname');
+        $query->currentlyEnrolled()->orderBy('fullname');
     }])
     ->first();
 
@@ -722,9 +715,7 @@ public function selectSubjects(){
     $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
     ->with(['students' => function ($query) 
     {
-        $query->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA')
-        ->orderBy('fullname');
+        $query->currentlyEnrolled()->orderBy('fullname');
     }])
     ->first();
 
@@ -742,9 +733,7 @@ public function subjectsCreate(Request $request){
     $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])
         ->first();
 
@@ -829,7 +818,7 @@ public function update(Request $request, $id){
 public function delete($id) {
 
     $teacherClass = Auth::user()->teachers->class;
-    $studentIds = register_student::where('class', $teacherClass)->pluck('id')->toArray();
+    $studentIds = register_student::where('class', $teacherClass)->currentlyEnrolled()->pluck('id')->toArray();
 
     $session = sessions::pluck('session')->last();
     $term = sessions::pluck('term')->last();
@@ -853,14 +842,12 @@ public function examsForPreviousTerms($class){
     $teacher = register_teacher::where('class', $class)
     ->where('user_id', auth()->user()->id)
     ->with(['students' => function ($query) {
-        $query->where('status', 'IN SCHOOL')
-              ->orWhere('grad_type', 'TARTEEL ZALLA');
+        $query->currentlyEnrolled();
     }, 'students.exams'])
     ->first();
 
 $students = register_student::where('class', $class)
-->where('status', 'IN SCHOOL')
-->orWhere('grad_type', 'TARTEEL ZALLA')
+->currentlyEnrolled()
 ->with('exams')->get();
 
 
@@ -893,8 +880,7 @@ public function PreviousTermsCleansheet($term, $session){
         $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA');
+            $query->currentlyEnrolled();
         }, 'students.attendance', 'students.exams' => function ($query) use ($class) {
             // Filter the exams to only include those where the class matches the teacher's class
             $query->where('class', $class);

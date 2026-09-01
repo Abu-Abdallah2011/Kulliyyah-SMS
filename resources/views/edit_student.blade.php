@@ -115,6 +115,26 @@
                             <x-input-error :messages="$errors->get('status')" class="mt-2" />
                         </div>
 
+                        <div>
+                            <x-input-label for="hadda_status" :value="__('Hadda Status')" />
+                            <x-select-input id="hadda_status" class="block mt-1 w-full" type="text" name="hadda_status" />
+                                @foreach($haddaStatusOptions as $value => $label)
+                                    <option value="{{ $value }}" @selected(old('hadda_status', $student->hadda_status ?? \App\Models\register_student::HADDA_STATUS_ACTIVE) === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('hadda_status')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="tarteel_status" :value="__('Tarteel Status')" />
+                            <x-select-input id="tarteel_status" class="block mt-1 w-full" type="text" name="tarteel_status" />
+                                @foreach($tarteelStatusOptions as $value => $label)
+                                    <option value="{{ $value }}" @selected(old('tarteel_status', $student->tarteel_status ?? \App\Models\register_student::TARTEEL_STATUS_NOT_APPLICABLE) === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('tarteel_status')" class="mt-2" />
+                        </div>
+
                         {{-- GRADUATION FIELDS --}}
                         {{-- THE JAVASCRIPT COMMAND FOR SHOWING AND HIDING THESE FIELDS IS IN THE text-input COMPONENT --}}
 
@@ -181,9 +201,10 @@
                                 <x-input-label for="photo" :value="__('Photo')" />
                                 <x-text-input id="file" class="block mt-1 w-full" type="file" name="photo" autofocus autocomplete="photo" />
                                 <x-input-error :messages="$errors->get('photo')" class="mt-2" />
-                                    @if ($student->photo)
-                                <img class="hidden w-48 mr-6 md:block" src="{{ Storage::disk('s3')->url($student->photo) }}" alt="" />
-                                @endif
+                                    @php($photoUrl = \App\Support\PhotoUrl::resolve($student->photo))
+                                    @if ($photoUrl)
+                                <img class="hidden w-48 mr-6 md:block" src="{{ $photoUrl }}" alt="" />
+                                    @endif
                             </div>
 
                             @endcan

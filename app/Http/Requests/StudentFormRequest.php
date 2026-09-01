@@ -49,6 +49,14 @@ class StudentFormRequest extends FormRequest
             'status' => [
                 'max:255'
             ],
+            'hadda_status' => [
+                'nullable',
+                'in:active_memorization,mock_exam,graduated,not_applicable',
+            ],
+            'tarteel_status' => [
+                'nullable',
+                'in:active,graduated,not_applicable',
+            ],
             'guardian_id' => [
                 'max:255'
             ],

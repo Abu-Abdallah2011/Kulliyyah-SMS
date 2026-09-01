@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Models\teachersAttendanceModel;
+use App\Support\HaddaLeaderboardBuilder;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Foundation\Http\FormRequest;
@@ -29,9 +30,7 @@ class DashboardController extends Controller
         $teachers = register_teacher::where('class', $class)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])->with('user')
         ->get();
 
@@ -39,9 +38,7 @@ class DashboardController extends Controller
         $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])
         ->first();
         
@@ -73,6 +70,8 @@ class DashboardController extends Controller
         // STUDENTS ATTENDANCE STATISTICS
 
         $sessions = sessions::orderBy('created_at', 'desc')->first();
+        $haddaLeaderboardData = HaddaLeaderboardBuilder::build($sessions?->session, $sessions?->term);
+        $haddaTopStudents = $haddaLeaderboardData['topStudents'];
     
         $totalattendancerecordsforterm = AttendanceModel::where('session', $sessions->session)
         ->where('term', $sessions->term)
@@ -167,15 +166,15 @@ class DashboardController extends Controller
 
         // TOTAL NUMBER OF STUDENTS
 
-        $totalstudents = register_student::where('status', 'IN SCHOOL')->count();
+        $totalstudents = register_student::currentlyEnrolled()->count();
 
-        $totalmalestudents = register_student::where('status', 'IN SCHOOL')
-        ->where('gender', 'MALE')
-        ->count();
-        
-        $totalfemalestudents = register_student::where('status', 'IN SCHOOL')
-        ->where('gender', 'FEMALE')
-        ->count();
+        $totalmalestudents = register_student::currentlyEnrolled()
+            ->where('gender', 'MALE')
+            ->count();
+
+        $totalfemalestudents = register_student::currentlyEnrolled()
+            ->where('gender', 'FEMALE')
+            ->count();
 
         // CALCULATING SINGLE CLASS STUDENTS ATTENDANCE PERCENTAGES
 
@@ -269,9 +268,7 @@ class DashboardController extends Controller
         if (Gate::allows('isAssistant')) {
             $teacher = register_teacher::where('user_id', Auth::user()->id)
                 ->with(['students' => function ($query) {
-                    $query->where('status', 'IN SCHOOL')
-                        ->orWhere('grad_type', 'TARTEEL ZALLA')
-                        ->orderBy('fullname');
+                    $query->currentlyEnrolled()->orderBy('fullname');
                 }])
                 ->first();
         
@@ -318,6 +315,7 @@ return view('dashboard', [
     'percentageclasslate' => $percentageclasslate,
     'percentageclassexcused' => $percentageclassexcused,
     'percentageclassabsent' => $percentageclassabsent,
+    'haddaTopStudents' => $haddaTopStudents,
 ]);
 }
 
@@ -353,6 +351,7 @@ return view('dashboard', [
         'totalstudents' => $totalstudents,
         'totalmalestudents' => $totalmalestudents,
         'totalfemalestudents' => $totalfemalestudents,
+        'haddaTopStudents' => $haddaTopStudents,
     ]);
     }
     

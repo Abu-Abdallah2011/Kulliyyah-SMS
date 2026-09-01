@@ -22,9 +22,7 @@ class AttendanceController extends Controller
         $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])->with('user')
         ->get();
         return view('attendance.create', ['teachers' => $teachers]);
@@ -60,9 +58,7 @@ public function show()
 {
     $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])->with('user')
         ->get(); 
 
@@ -72,6 +68,7 @@ public function show()
     $teacherClass = $teachers->first()->class;
 
     $studentIds = register_student::where('class', $teacherClass)
+    ->currentlyEnrolled()
     ->pluck('id')
     ->toArray();
 
@@ -99,15 +96,14 @@ $attendance = AttendanceModel::whereIn('student_id', $studentIds)
 
     $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])->with('user')
         ->get(); 
     
     $teacherClass = $teachers->first()->class;
 
     $studentIds = register_student::where('class', $teacherClass)
+    ->currentlyEnrolled()
     ->pluck('id')
     ->toArray();
     
@@ -156,7 +152,7 @@ $attendance = AttendanceModel::whereIn('student_id', $studentIds)
 public function delete($date) {
 
     $teacherClass = Auth::user()->teachers->class;
-$studentIds = register_student::where('class', $teacherClass)->pluck('id')->toArray();
+$studentIds = register_student::where('class', $teacherClass)->currentlyEnrolled()->pluck('id')->toArray();
 
 $attendance = AttendanceModel::where('date', $date)
     ->whereIn('student_id', $studentIds)
@@ -171,15 +167,14 @@ $attendance = AttendanceModel::where('date', $date)
      $teachers = register_teacher::where('id', $teacher_id)
      ->with(['students' => function ($query) 
      {
-        $query->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA')
-         ->orderBy('fullname');
+        $query->currentlyEnrolled()->orderBy('fullname');
      }])->with('user')
      ->get();
 
      $teacherClass = $teachers->pluck('class')->first();
 
      $studentIds = register_student::where('class', $teacherClass)
+     ->currentlyEnrolled()
      ->pluck('id')
      ->toArray();
  
@@ -204,6 +199,8 @@ public function attendanceGuardian($id)
 {
    
 $student = register_student::where('id', $id)->first();
+
+$teachers = register_teacher::where('class', $student->class)->get();
     
 $attendance = AttendanceModel::where('student_id', $id)
 ->latest()
@@ -253,6 +250,7 @@ $attendanceRecords = $student->attendance()
             'statusIcons', 
             'student',
             'attendanceRecords',
+            'teachers',
         ));
 }
 
@@ -301,7 +299,7 @@ public function downloadAttendanceSummaryPDF($id)
 public function downloadClassAttendanceSummaryPDF($class)
 {
     $students = register_student::where('class', $class)
-        ->where('status', 'IN SCHOOL')
+        ->currentlyEnrolled()
         ->get();
 
     if ($students->isEmpty()) {

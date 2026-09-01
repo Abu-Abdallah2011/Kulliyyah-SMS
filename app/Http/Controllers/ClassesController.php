@@ -17,7 +17,7 @@ class ClassesController extends Controller
         $allteachers = register_teacher::distinct('class')->pluck('class');
 
         $malams = register_teacher::with(['students' => function ($query) {
-            $query->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])
         ->where('status', 'IN SCHOOL')
         ->with('user')
@@ -27,7 +27,7 @@ class ClassesController extends Controller
         $teachers = register_teacher::where('user_id', Auth::user()->id)
         ->with(['students' => function ($query) 
         {
-            $query->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])->with('user')
         ->get();
     
@@ -46,9 +46,7 @@ class ClassesController extends Controller
         $teacher = register_teacher::
         with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA')
-            ->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])
         ->with('user')
         ->where('id', $teacher_id)
@@ -59,7 +57,7 @@ class ClassesController extends Controller
             $teachers = register_teacher::where('class', $class)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+            $query->currentlyEnrolled()->orderBy('fullname');
         }])->with('user')
         ->get();
     
@@ -76,7 +74,7 @@ public function classTeacher()
    $class = register_teacher::where('user_id', Auth::user()->id)->value('class');
 
    $malams = register_teacher::with(['students' => function ($query) {
-       $query->orderBy('fullname');
+       $query->currentlyEnrolled()->orderBy('fullname');
    }])
    ->with('user')
    ->where('class', $class)
@@ -86,7 +84,7 @@ public function classTeacher()
    $teachers = register_teacher::where('user_id', Auth::user()->id)
    ->with(['students' => function ($query) 
    {
-       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+       $query->currentlyEnrolled()->orderBy('fullname');
    }])->with('user')
    ->get();
    
@@ -106,7 +104,7 @@ public function classStudent()
    $teachers = register_teacher::where('user_id', Auth::user()->id)
    ->with(['students' => function ($query) 
    {
-       $query->where('status', 'IN SCHOOL')->orWhere('grad_type', 'TARTEEL ZALLA')->orderBy('fullname');
+       $query->currentlyEnrolled()->orderBy('fullname');
    }])->with('user')
    ->get();
    
@@ -123,7 +121,7 @@ public function studentsHadda()
    $teachers = register_teacher::where('user_id', Auth::user()->id)
    ->with(['students' => function ($query) 
    {
-       $query->where('status', 'IN SCHOOL')->orWhere('grad_type', 'TARTEEL ZALLA')->orderBy('fullname');
+       $query->currentlyEnrolled()->orderBy('fullname');
    }])->with('user')
    ->get();
    
@@ -140,7 +138,7 @@ public function selectedClassTeacher($teacher_id)
    $class = register_teacher::where('id', $teacher_id)->value('class');
 
    $malams = register_teacher::with(['students' => function ($query) {
-       $query->orderBy('fullname');
+       $query->currentlyEnrolled()->orderBy('fullname');
    }])
    ->with('user')
    ->where('class', $class)
@@ -150,7 +148,7 @@ public function selectedClassTeacher($teacher_id)
    $teachers = register_teacher::where('user_id', $teacher_id)
    ->with(['students' => function ($query) 
    {
-       $query->where('status', 'IN SCHOOL')->orderBy('fullname');
+       $query->currentlyEnrolled()->orderBy('fullname');
    }])->with('user')
    ->get();
    
@@ -169,7 +167,7 @@ public function selectedClassStudent($teacher_id)
    $teachers = register_teacher::where('id', $teacher_id)
    ->with(['students' => function ($query) 
    {
-       $query->where('status', 'IN SCHOOL')->orWhere('grad_type', 'TARTEEL ZALLA')->orderBy('fullname');
+       $query->currentlyEnrolled()->orderBy('fullname');
    }])->with('user')
    ->get();
    
@@ -186,15 +184,14 @@ public function selectedStudentsHadda($teacher_id)
 $teacher = register_teacher::where('id', $teacher_id)
             ->with(['students' => function ($query) 
             {
-                $query->where('status', 'IN SCHOOL')
-                ->orWhere('grad_type', 'TARTEEL ZALLA')
-                ->orderBy('fullname');
+                $query->currentlyEnrolled()->orderBy('fullname');
             }])
             ->first();
 
             $teacherClass = $teacher->class;
 
             $studentIds = register_student::where('class', $teacherClass)
+            ->currentlyEnrolled()
             ->pluck('id')
             ->toArray();
 

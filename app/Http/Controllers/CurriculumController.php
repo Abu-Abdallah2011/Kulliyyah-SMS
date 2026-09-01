@@ -12,6 +12,7 @@ use App\Models\register_teacher;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CurriculumFormRequest;
 use App\Models\surasModel;
+use App\Support\AcademicPeriodResolver;
 
 class CurriculumController extends Controller
 {
@@ -29,7 +30,7 @@ class CurriculumController extends Controller
     $selectedOptionId = $request->input('dynamic_select');
 
     $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
-    $sessions = sessions::orderBy('created_at', 'desc')->first();
+    $sessions = AcademicPeriodResolver::forDate($request->input('date'));
     $selectedOption = surasModel::find($selectedOptionId);
 
     $formData = $request->only([
@@ -47,8 +48,8 @@ class CurriculumController extends Controller
         'class' => $teacher->class,
         'teacher' => $teacher->fullname,
         'set' => $teacher->set,
-        'session' => $sessions->session,
-        'term' => $sessions->term,
+        'session' => $sessions?->session,
+        'term' => $sessions?->term,
         'sura' => $selectedOption->sura,
     ]);
 
@@ -63,9 +64,11 @@ public function show(){
     $set = register_teacher::where('user_id', Auth::user()->id)->value('set');
     // $sessions = sessions::get();
 
-        $sets = curriculum::latest()->filter(request(['search']))->with(['teacher'])
+        $sets = curriculum::query()->filter(request(['search']))->with(['teacher'])
         ->where('set', $set)
-        ->paginate(10);
+        ->orderByCurriculumDate('desc')
+        ->paginate(10)
+        ->withQueryString();
 
     return view('CurriculumScale.curriculum_scale', [
         // 'sessions' => $sessions,
@@ -89,7 +92,7 @@ public function update(CurriculumFormRequest $request, $id){
     $selectedOptionId = $request->input('dynamic_select');
 
     $teacher = register_teacher::where('user_id', Auth::user()->id)->first();
-    $sessions = sessions::orderBy('created_at', 'desc')->first();
+    $sessions = AcademicPeriodResolver::forDate($request->input('date'));
     $selectedOption = surasModel::find($selectedOptionId);
 
     $formData = $request->only([
@@ -107,8 +110,8 @@ public function update(CurriculumFormRequest $request, $id){
         'class' => $teacher->class,
         'teacher' => $teacher->fullname,
         'set' => $teacher->set,
-        'session' => $sessions->session,
-        'term' => $sessions->term,
+        'session' => $sessions?->session,
+        'term' => $sessions?->term,
     ]);
 
     if ($selectedOption) {
@@ -134,9 +137,11 @@ public function display($teacher_id)
 {
     $set = register_teacher::where('id', $teacher_id)->value('set');
 
-    $sets = curriculum::latest()->filter(request(['search']))->with(['teacher'])
+    $sets = curriculum::query()->filter(request(['search']))->with(['teacher'])
     ->where('set', $set)
-    ->paginate(10);
+    ->orderByCurriculumDate('desc')
+    ->paginate(10)
+    ->withQueryString();
 
 return view('CurriculumScale.curriculum_scale', [
     // 'sessions' => $sessions,
@@ -150,9 +155,11 @@ public function displayForGuardian($student_id)
 {
     $set = register_student::where('id', $student_id)->value('set');
 
-    $sets = curriculum::latest()->filter(request(['search']))->with(['student'])
+    $sets = curriculum::query()->filter(request(['search']))->with(['student'])
     ->where('set', $set)
-    ->paginate(10);
+    ->orderByCurriculumDate('desc')
+    ->paginate(10)
+    ->withQueryString();
 
 return view('CurriculumScale.curriculum_scale', [
     // 'sessions' => $sessions,

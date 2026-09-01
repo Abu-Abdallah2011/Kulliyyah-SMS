@@ -9,6 +9,15 @@ class register_student extends Model
 {
     use HasFactory;
 
+    public const HADDA_STATUS_ACTIVE = 'active_memorization';
+    public const HADDA_STATUS_MOCK = 'mock_exam';
+    public const HADDA_STATUS_GRADUATED = 'graduated';
+    public const HADDA_STATUS_NOT_APPLICABLE = 'not_applicable';
+
+    public const TARTEEL_STATUS_ACTIVE = 'active';
+    public const TARTEEL_STATUS_GRADUATED = 'graduated';
+    public const TARTEEL_STATUS_NOT_APPLICABLE = 'not_applicable';
+
 
     // Surrender Details to Teachers Model
     public function teacher()
@@ -75,6 +84,8 @@ class register_student extends Model
         'reg_fee',
         'address',
         'status',
+        'hadda_status',
+        'tarteel_status',
         'guardian_id',
         // 'grad_type',
         // 'mock_fee',
@@ -97,11 +108,76 @@ class register_student extends Model
             ->orWhere('reg_fee', 'like', '%' . request('search') . '%')
             ->orWhere('address', 'like', '%' . request('search') . '%')
             ->orWhere('status', 'like', '%' . request('search') . '%')
+            ->orWhere('hadda_status', 'like', '%' . request('search') . '%')
+            ->orWhere('tarteel_status', 'like', '%' . request('search') . '%')
             ->orWhere('guardian_id', 'like', '%' . request('search') . '%')
             ->orWhere('gender', 'like', '%' . request('search') . '%')
             ->orWhere('relationship', 'like', '%' . request('search') . '%')
             ->orWhere('id', 'like', '%' . request('search') . '%')
             ->orWhere('set', 'like', '%' . request('search') . '%');
         }
+    }
+
+    public function scopeCurrentlyEnrolled($query)
+    {
+        return $query->where(function ($query) {
+            $query->where('status', 'IN SCHOOL')
+                ->orWhere(function ($query) {
+                    $query->where('status', 'GRADUATE')
+                        ->where('grad_type', 'TARTEEL ZALLA')
+                        ->where('hadda_status', self::HADDA_STATUS_ACTIVE);
+                });
+        });
+    }
+
+    public function scopeCoverageLeaderboardEligible($query)
+    {
+        return $query
+            ->where(function ($query) {
+                $query->where('status', 'IN SCHOOL')
+                    ->orWhere('grad_type', 'TARTEEL ZALLA');
+            })
+            ->where(function ($query) {
+                $query->where('hadda_status', self::HADDA_STATUS_ACTIVE)
+                    ->orWhere('tarteel_status', self::TARTEEL_STATUS_ACTIVE);
+            });
+    }
+
+    public function isCoverageLeaderboardEligible(): bool
+    {
+        $hasActiveSchoolStatus = $this->status === 'IN SCHOOL' || $this->grad_type === 'TARTEEL ZALLA';
+        $hasActiveTrack = $this->hadda_status === self::HADDA_STATUS_ACTIVE
+            || $this->tarteel_status === self::TARTEEL_STATUS_ACTIVE;
+
+        return $hasActiveSchoolStatus && $hasActiveTrack;
+    }
+
+    public static function haddaStatusOptions(): array
+    {
+        return [
+            self::HADDA_STATUS_ACTIVE => 'Active Memorization',
+            self::HADDA_STATUS_MOCK => 'Mock Exam',
+            self::HADDA_STATUS_GRADUATED => 'Graduated',
+            self::HADDA_STATUS_NOT_APPLICABLE => 'Not Applicable',
+        ];
+    }
+
+    public static function tarteelStatusOptions(): array
+    {
+        return [
+            self::TARTEEL_STATUS_ACTIVE => 'Active',
+            self::TARTEEL_STATUS_GRADUATED => 'Graduated',
+            self::TARTEEL_STATUS_NOT_APPLICABLE => 'Not Applicable',
+        ];
+    }
+
+    public function haddaStatusLabel(): string
+    {
+        return self::haddaStatusOptions()[$this->hadda_status] ?? 'Active Memorization';
+    }
+
+    public function tarteelStatusLabel(): string
+    {
+        return self::tarteelStatusOptions()[$this->tarteel_status] ?? 'Not Applicable';
     }
 }

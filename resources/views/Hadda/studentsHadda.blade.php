@@ -26,7 +26,56 @@
        <div class="p-3 text-gray-900 dark:text-gray-100">
 
         {{-- @foreach ($teachers as $teacher) --}}
-                    
+
+        <div class="mb-5 overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 via-white to-cyan-50 shadow-sm">
+            <div class="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Current Class Hadda Rank</p>
+                    <h3 class="mt-1 text-2xl font-black text-gray-900">{{ $teacher->class }}</h3>
+                    <p class="text-sm text-gray-600">{{ $rankingTerm ?? 'Current Term' }}{{ !empty($rankingSession) ? ' - '.$rankingSession : '' }}</p>
+                </div>
+
+                @if($classRank)
+                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                        <div class="rounded-xl bg-white/80 p-3 text-center shadow-sm">
+                            <p class="text-xs font-semibold uppercase text-gray-500">Rank</p>
+                            <p class="text-2xl font-black text-emerald-700">#{{ $classRank['rank'] }}</p>
+                        </div>
+                        <div class="rounded-xl bg-white/80 p-3 text-center shadow-sm">
+                            <p class="text-xs font-semibold uppercase text-gray-500">Avg Points</p>
+                            <p class="text-2xl font-black text-gray-900">{{ number_format((float) $classRank['average_points_per_student'], 1) }}</p>
+                        </div>
+                        <div class="rounded-xl bg-white/80 p-3 text-center shadow-sm">
+                            <p class="text-xs font-semibold uppercase text-gray-500">Total Pages</p>
+                            <p class="text-2xl font-black text-gray-900">{{ $classRank['confirmed_pages'] }}</p>
+                        </div>
+                        <div class="rounded-xl bg-white/80 p-3 text-center shadow-sm">
+                            <p class="text-xs font-semibold uppercase text-gray-500">Students</p>
+                            <p class="text-2xl font-black text-gray-900">{{ $classRank['student_count'] }}</p>
+                        </div>
+                    </div>
+                @else
+                    <div class="rounded-xl bg-white/80 p-4 text-sm font-semibold text-gray-500 shadow-sm">
+                        No class ranking yet for this term.
+                    </div>
+                @endif
+            </div>
+
+            @if($classRank)
+                <div class="border-t border-emerald-100 px-5 py-3 text-sm text-gray-600">
+                    @if($classRank['gap_to_above'] !== null)
+                        {{ $classRank['gap_to_above'] }} avg point(s) behind {{ $classRank['above_name'] ?? 'the class above' }}.
+                    @else
+                        Leading the class leaderboard.
+                    @endif
+
+                    @if($classRank['gap_to_below'] !== null)
+                        {{ $classRank['gap_to_below'] }} avg point(s) ahead of {{ $classRank['below_name'] ?? 'the class below' }}.
+                    @endif
+                </div>
+            @endif
+        </div>
+
   <h1 class="font-bold text-center">Students: {{ $teacher->students->count() }}</h1>
                     <div class="table-responsive">
                     <table class="border-collapse w-full">

@@ -23,6 +23,9 @@
             <x-select-input id="role" class="block mt-1 w-full" type="text" name="role" value="{{ $user->role }}" required autofocus autocomplete="role" />
            <option>{{ $user->role }}</option>
            <option>ADMIN</option>
+           @can('isSuperAdmin')
+           <option>SUPER_ADMIN</option>
+           @endcan
            <option>EXECUTIVE</option>
            <option>FINXAM</option>
            <option>FINANCE</option>

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class LandingController extends Controller
 {
     public function index() {
-        $students = register_student::where('status', 'IN SCHOOL')->get();
+        $students = register_student::currentlyEnrolled()->get();
 
         $teachers = register_teacher::where('status', 'IN SCHOOL')->get();
 

@@ -27,8 +27,7 @@ public function cleanSheets(){
         $teacher = register_teacher::where('user_id', auth()->user()->id)
         ->with(['students' => function ($query) 
         {
-            $query->where('status', 'IN SCHOOL')
-            ->orWhere('grad_type', 'TARTEEL ZALLA');
+            $query->currentlyEnrolled();
         }, 'students.attendance'])
         ->first();
 
@@ -245,16 +244,14 @@ public function reportSheet($id){
     $teacher = register_teacher::where('class', $class)->where('user_id', auth()->user()->id)
     ->with(['students' => function ($query) 
     {
-        $query->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA');
+        $query->currentlyEnrolled();
     }, 'students.attendance'])
     ->first();
 
     $dalibi = register_student::where('id', $id)->first();
 
     $class = register_student::where('class', $dalibi->class)
-    ->where('status', 'IN SCHOOL')
-    ->orwhere('status', 'TARTEEL ZALLA')
+    ->currentlyEnrolled()
     ->count();
 
     $totalCa = [];
@@ -704,8 +701,7 @@ foreach ($student->exams as $jarabawa) {
 
     $teacher = register_teacher::where('user_id', auth()->user()->id)
             ->with(['students' => function ($query) {
-                $query->where('status', 'IN SCHOOL')
-                    ->orWhere('grad_type', 'TARTEEL ZALLA');
+                $query->currentlyEnrolled();
             }, 'students.exams'])
             ->first();
 
@@ -885,8 +881,7 @@ private function getClassStudentPosition($studentId, $session, $term, $averageTo
     $teacher = register_teacher::where('class', $studentClass)
         ->where('user_id', auth()->user()->id)
         ->with(['students' => function ($query) {
-            $query->where('status', 'IN SCHOOL')
-                ->orWhere('grad_type', 'TARTEEL ZALLA');
+            $query->currentlyEnrolled();
         }, 'students.exams'])
         ->first();
 
@@ -1171,16 +1166,14 @@ public function reportSheetForGuardians($id, $term, $session){
     $teacher = register_teacher::where('class', $class)
     ->with(['students' => function ($query) 
     {
-        $query->where('status', 'IN SCHOOL')
-        ->orWhere('grad_type', 'TARTEEL ZALLA');
+        $query->currentlyEnrolled();
     }, 'students.attendance'])
     ->first();
 
     $dalibi = register_student::where('id', $id)->first();
 
     $class = register_student::where('class', $dalibi->class)
-    ->where('status', 'IN SCHOOL')
-    ->orwhere('status', 'TARTEEL ZALLA')
+    ->currentlyEnrolled()
     ->count();
 
     $first_cas = [];

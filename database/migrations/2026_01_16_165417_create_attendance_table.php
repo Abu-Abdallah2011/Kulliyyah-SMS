@@ -13,9 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('guardians_details', function (Blueprint $table) {
-            $table->string('created_by')->nullable();
-            $table->string('edited_by')->nullable();
+        Schema::create('attendance', function (Blueprint $table) {
+            $table->id();
+            $table->string('student_id');
+            $table->string('date');
+            $table->string('status');
+            $table->string('term');
+            $table->string('session');
+            $table->string('time');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('guardians_details', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('attendance');
     }
 };

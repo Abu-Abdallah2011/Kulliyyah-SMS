@@ -27,43 +27,47 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('isAdmin', function($user){
-            return $user->role == 'ADMIN';
+            return $user->role == 'ADMIN' || $user->role == 'SUPER_ADMIN';
         });
 
         Gate::define('isExecutive', function($user){
-            return $user->role == 'EXECUTIVE' || $user->role == 'ADMIN';
+            return $user->role == 'EXECUTIVE' || $user->role == 'ADMIN' || $user->role == 'SUPER_ADMIN';
         });
 
         Gate::define('isFinxam', function($user){
-            return $user->role == 'FINXAM' || $user->role == 'ADMIN' || $user->role == 'EXECUTIVE';
+            return $user->role == 'FINXAM' || $user->role == 'ADMIN' || $user->role == 'EXECUTIVE' || $user->role == 'SUPER_ADMIN';
         });
 
         Gate::define('isFinance', function($user){
-            return $user->role == 'FINANCE' || $user->role == 'ADMIN' || $user->role == 'EXECUTIVE' || $user->role == 'FINXAM';
+            return $user->role == 'FINANCE' || $user->role == 'ADMIN' || $user->role == 'EXECUTIVE' || $user->role == 'FINXAM' || $user->role == 'SUPER_ADMIN';
         });
 
         Gate::define('isExam', function($user){
-            return $user->role == 'EXAM' || $user->role == 'ADMIN' || $user->role == 'EXECUTIVE' || $user->role == 'FINXAM';
+            return $user->role == 'EXAM' || $user->role == 'ADMIN' || $user->role == 'EXECUTIVE' || $user->role == 'FINXAM' || $user->role == 'SUPER_ADMIN';
         });
 
         Gate::define('isDiscipline', function($user){
-            return $user->role == 'ADMIN' || $user->role == 'EXECUTIVE' || $user->role == 'DISCIPLINE';
+            return $user->role == 'ADMIN' || $user->role == 'EXECUTIVE' || $user->role == 'DISCIPLINE' || $user->role == 'SUPER_ADMIN';
         });
 
         Gate::define('isTeacher', function($user){
-            return $user->role == 'TEACHER' || $user->role == 'EXECUTIVE' || $user->role == 'ADMIN' || $user->role == 'FINXAM' || $user->role == 'FINANCE' || $user->role == 'EXAM' || $user->role == 'DISCIPLINE';
+            return $user->role == 'TEACHER' || $user->role == 'EXECUTIVE' || $user->role == 'ADMIN' || $user->role == 'FINXAM' || $user->role == 'FINANCE' || $user->role == 'EXAM' || $user->role == 'DISCIPLINE' || $user->role == 'SUPER_ADMIN';
         });
 
         Gate::define('isAssistant', function($user){
-            return $user->role == 'ASSISTANT' || $user->role == 'TEACHER' || $user->role == 'EXECUTIVE' || $user->role == 'ADMIN' || $user->role == 'FINXAM' || $user->role == 'FINANCE' || $user->role == 'EXAM' || $user->role == 'DISCIPLINE';
+            return $user->role == 'ASSISTANT' || $user->role == 'TEACHER' || $user->role == 'EXECUTIVE' || $user->role == 'ADMIN' || $user->role == 'FINXAM' || $user->role == 'FINANCE' || $user->role == 'EXAM' || $user->role == 'DISCIPLINE' || $user->role == 'SUPER_ADMIN';
         });
 
         Gate::define('isGuardian', function($user){
-            return $user->role == 'GUARDIAN' || $user->role == 'ADMIN';
+            return $user->role == 'GUARDIAN' || $user->role == 'ADMIN' || $user->role == 'SUPER_ADMIN';
         });
         
         Gate::define('isAdGuardian', function($user){
-            return $user->role == 'GUARDIAN' || $user->role == 'ADMIN';
+            return $user->role == 'GUARDIAN' || $user->role == 'ADMIN' || $user->role == 'SUPER_ADMIN';
+        });
+
+        Gate::define('isSuperAdmin', function($user){
+            return $user->role == 'SUPER_ADMIN';
         });
     }
 }

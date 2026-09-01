@@ -6,7 +6,6 @@
     </x-slot>
 
     <div class="py-6">
-
     {{-- SINGLE CLASS DASHBOARD VIEW FOR EXECUTIVE --}}
     @if(Auth::user()->can('isExecutive') && Request::is('dashboard/classes/*'))
     <x-single-teacher-view :teacher="$teacher" :class="$class" :teachers="$teachers" />
@@ -26,7 +25,7 @@
     :totalteachers="$totalteachers" :totalmaleteachers="$totalmaleteachers" :totalfemaleteachers="$totalfemaleteachers"
     :totalstudents="$totalstudents" :totalmalestudents="$totalmalestudents" :totalfemalestudents="$totalfemalestudents"
     :percentageclasspresent="$percentageclasspresent" :percentageclasslate="$percentageclasslate" :percentageclassexcused="$percentageclassexcused"
-    :percentageclassabsent="$percentageclassabsent" />
+    :percentageclassabsent="$percentageclassabsent" :haddaTopStudents="$haddaTopStudents" />
     @endif
 
         @can('isAssistant')
