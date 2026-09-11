@@ -20,6 +20,13 @@
             <i class="fa-solid fa-file-pdf text-red-600"></i>
         </x-primary-button>
     </a>
+
+    <a href="{{ route('hadda.analytics', ['class' => $student->class, 'student_id' => $student->id]) }}"
+       title="View Hadda Analytics">
+        <x-primary-button class="bg-indigo-600 hover:bg-indigo-700 p-2">
+            <i class="fa-solid fa-chart-line"></i>
+        </x-primary-button>
+    </a>
 </div>
 
             @endcan

@@ -38,6 +38,16 @@ class HaddaLeaderboardBuilder
                 return $recordDate && $recordDate->betweenIncluded($dateFrom, $dateTo);
             });
 
+        $studentIdsWithRecords = $records
+            ->pluck('student_id')
+            ->map(fn ($studentId) => (int) $studentId)
+            ->unique()
+            ->all();
+
+        $studentsWithoutRecords = $eligibleStudents
+            ->reject(fn ($student) => in_array((int) $student->id, $studentIdsWithRecords, true))
+            ->values();
+
         $studentRankings = $records
             ->groupBy('student_id')
             ->map(function ($studentRecords) {
@@ -99,13 +109,7 @@ class HaddaLeaderboardBuilder
             ->values();
 
         if ($includeStudentsWithoutRecords) {
-            $rankedStudentIds = $studentRankings
-                ->map(fn ($row) => (int) ($row['student']?->id ?? 0))
-                ->filter()
-                ->all();
-
-            $studentsWithoutRecords = $eligibleStudents
-                ->reject(fn ($student) => in_array((int) $student->id, $rankedStudentIds, true))
+            $emptyStudentRows = $studentsWithoutRecords
                 ->map(function ($student) {
                     return [
                         'student' => $student,
@@ -125,7 +129,7 @@ class HaddaLeaderboardBuilder
                     ];
                 });
 
-            $studentRankings = $studentRankings->concat($studentsWithoutRecords)->values();
+            $studentRankings = $studentRankings->concat($emptyStudentRows)->values();
         }
 
         $studentRankings = self::withRankContext($studentRankings, 'leaderboard_points');
@@ -161,6 +165,7 @@ class HaddaLeaderboardBuilder
 
         $classRankings = self::withRankContext($classRankings, 'average_points_per_student');
         $excludedStudents = collect();
+        $summary = self::summary($eligibleStudents, $studentRankings, $classRankings);
 
         if ($includeStudentsWithoutRecords && $class) {
             $excludedStudents = register_student::query()
@@ -176,6 +181,8 @@ class HaddaLeaderboardBuilder
             'studentRankings' => $studentRankings,
             'topStudents' => $studentRankings->take(3),
             'classRankings' => $classRankings,
+            'summary' => $summary,
+            'studentsWithoutRecords' => $studentsWithoutRecords,
             'excludedStudents' => $excludedStudents,
             'classes' => register_student::query()
                 ->tap(fn ($query) => self::applyEligibleClassFilter($query))
@@ -184,6 +191,32 @@ class HaddaLeaderboardBuilder
                 ->pluck('class')
                 ->unique()
                 ->values(),
+            ];
+    }
+
+    private static function summary(Collection $eligibleStudents, Collection $studentRankings, Collection $classRankings): array
+    {
+        $eligibleStudentCount = $eligibleStudents->count();
+        $recordedStudentCount = $studentRankings
+            ->filter(fn ($row) => (int) ($row['record_count'] ?? 0) > 0)
+            ->count();
+        $totalPages = (int) $studentRankings->sum('confirmed_pages');
+        $totalPoints = round((float) $studentRankings->sum('leaderboard_points'), 1);
+        $classesWithStudents = $eligibleStudents->pluck('class')->filter()->unique()->count();
+        $topClass = $classRankings->first();
+        $lowestClass = $classRankings->filter(fn ($row) => (int) ($row['student_count'] ?? 0) > 0)->last();
+
+        return [
+            'eligible_student_count' => $eligibleStudentCount,
+            'recorded_student_count' => $recordedStudentCount,
+            'no_record_count' => max(0, $eligibleStudentCount - $recordedStudentCount),
+            'total_pages' => $totalPages,
+            'total_points' => $totalPoints,
+            'average_pages_per_student' => $eligibleStudentCount > 0 ? round($totalPages / $eligibleStudentCount, 1) : 0,
+            'average_points_per_student' => $eligibleStudentCount > 0 ? round($totalPoints / $eligibleStudentCount, 1) : 0,
+            'class_count' => $classesWithStudents,
+            'top_class' => $topClass,
+            'lowest_class' => $lowestClass,
         ];
     }
 

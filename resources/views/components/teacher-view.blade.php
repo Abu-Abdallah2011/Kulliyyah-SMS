@@ -104,6 +104,23 @@
                                 </a>
                                 @endcan
 
+                                @can('isAssistant')
+                                <!-- Card: Hadda Analytics -->
+                                <a href="{{ route('hadda.analytics') }}">
+                                    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0">
+                                                <i class="fas fa-chart-line fa-2x text-primary"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-900">Analytics</h3>
+                                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">Hadda</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                @endcan
+
                                 <!-- Card: Attendance -->
                                 <a href="attendance/show">
                                     <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">

@@ -233,6 +233,7 @@ require __DIR__.'/auth.php';
         Route::get('/hadda_leaderboard', 'leaderboard')->middleware(['auth', 'can:isAssistant'])->name('hadda.leaderboard');
         Route::get('/hadda_leaderboard/pdf', 'leaderboardPdf')->middleware(['auth', 'can:isAdmin'])->name('hadda.leaderboard.pdf');
         Route::get('/hadda_leaderboard/class/{class}/pdf', 'classLeaderboardPdf')->middleware(['auth', 'can:isAssistant'])->name('hadda.leaderboard.class_pdf');
+        Route::get('/hadda_analytics', 'analytics')->middleware(['auth', 'can:isAssistant'])->name('hadda.analytics');
         // Show Hadda Entry Form
         Route::get('/hadda_page/{student_id}/HaddaForm', 'create')->middleware('can:isAssistant');
         // Store Hadda Entry Data in Database

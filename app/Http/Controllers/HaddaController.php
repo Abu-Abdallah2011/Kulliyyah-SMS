@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\HaddaFormRequest;
 use App\Models\surasModel;
 use App\Support\AcademicPeriodResolver;
+use App\Support\HaddaAnalyticsBuilder;
 use App\Support\HaddaLeaderboardBuilder;
 use App\Support\HaddaRecordGuard;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
@@ -63,10 +64,16 @@ class HaddaController extends Controller
             $leaderboardDownloadLabel = $selectedClass ? 'Download Class Leaderboard PDF' : 'Download Top 5 PDF';
         }
 
+        $studentsWithoutRecords = ($hasFullLeaderboardAccess || $selectedClass)
+            ? $leaderboardData['studentsWithoutRecords']
+            : collect();
+
         return view('Hadda.leaderboard', [
             'leaderboard' => $leaderboardData['studentRankings'],
             'topStudents' => $leaderboardData['topStudents'],
             'classRankings' => $leaderboardData['classRankings'],
+            'summary' => $leaderboardData['summary'],
+            'studentsWithoutRecords' => $studentsWithoutRecords,
             'classes' => $classes,
             'sessions' => $sessions,
             'selectedSession' => $selectedSession,
@@ -148,6 +155,61 @@ class HaddaController extends Controller
         $filePeriod = $dateFrom && $dateTo ? $dateFrom->format('Y-m-d').'-to-'.$dateTo->format('Y-m-d') : $selectedTerm;
 
         return $pdf->download($fileScope.' Hadda Leaderboard - '.$filePeriod.'.pdf');
+    }
+
+    public function analytics(Request $request)
+    {
+        $hasFullAnalyticsAccess = Gate::allows('isAdmin');
+        $teacherClass = register_teacher::where('user_id', Auth::id())->value('class');
+
+        abort_unless($hasFullAnalyticsAccess || $teacherClass, 403);
+
+        $currentSession = sessions::orderBy('created_at', 'desc')->first();
+        $selectedSession = $request->input('session', $currentSession?->session);
+        $selectedTerm = $request->input('term', $currentSession?->term);
+        $selectedClass = $request->input('class');
+        $selectedStudentId = $request->integer('student_id') ?: null;
+
+        if (!$hasFullAnalyticsAccess) {
+            $selectedClass = $teacherClass;
+        }
+
+        $selectedStudent = null;
+        if ($selectedStudentId) {
+            $selectedStudent = register_student::coverageLeaderboardEligible()->findOrFail($selectedStudentId);
+
+            if (!$hasFullAnalyticsAccess && $selectedStudent->class !== $teacherClass) {
+                abort(403);
+            }
+
+            $selectedClass = $selectedStudent->class;
+        }
+
+        $analytics = HaddaAnalyticsBuilder::build($selectedSession, $selectedTerm, $selectedClass, $selectedStudentId);
+        $sessions = sessions::orderBy('created_at', 'desc')->get();
+        $classes = $hasFullAnalyticsAccess
+            ? HaddaAnalyticsBuilder::classes()
+            : collect([$teacherClass])->filter()->values();
+        $students = $selectedClass
+            ? register_student::coverageLeaderboardEligible()
+                ->where('class', $selectedClass)
+                ->orderBy('fullname')
+                ->get()
+            : collect();
+
+        return view('Hadda.analytics', [
+            'analytics' => $analytics,
+            'sessions' => $sessions,
+            'classes' => $classes,
+            'students' => $students,
+            'selectedSession' => $selectedSession,
+            'selectedTerm' => $selectedTerm,
+            'selectedClass' => $selectedClass,
+            'selectedStudentId' => $selectedStudentId,
+            'selectedStudent' => $selectedStudent,
+            'hasFullAnalyticsAccess' => $hasFullAnalyticsAccess,
+            'teacherClass' => $teacherClass,
+        ]);
     }
 
     // Show Hadda Page
