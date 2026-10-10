@@ -32,13 +32,13 @@ class HaddaRecordGuard
             ];
         }
 
-        $ranges = self::existingPageRanges($studentId, $session, $term, $excludeId);
+        $ranges = self::existingPageRanges($studentId, $session, null, $excludeId);
         $overlaps = $ranges->filter(function ($range) use ($from, $to) {
             return $from <= $range['to'] && $to >= $range['from'];
         })->values();
 
         if ($overlaps->isNotEmpty()) {
-            $errors[] = 'This page range overlaps with an existing Hadda record for this student in the same term.';
+            $errors[] = 'This page range overlaps with an existing Hadda record for this student in the same session.';
         }
 
         $latestRange = $ranges
@@ -85,6 +85,8 @@ class HaddaRecordGuard
                     'from' => HaddaCoverageCalculator::normalizeNumber($record->from),
                     'to' => HaddaCoverageCalculator::normalizeNumber($record->to),
                     'date' => $record->date,
+                    'session' => $record->session,
+                    'term' => $record->term,
                     'record_date_timestamp' => optional(HaddaCoverageCalculator::parseRecordDate($record->date))->timestamp ?? 0,
                 ];
             })

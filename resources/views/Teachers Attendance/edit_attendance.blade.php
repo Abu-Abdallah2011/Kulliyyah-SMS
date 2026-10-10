@@ -15,12 +15,13 @@
                         @method('PUT')
                         <div class="flex">
                         <label for="date">Date: </label>
+                        <x-input-error :messages="$errors->get('date')" class="mt-2" />
                         @if (Auth::user()->can('isExecutive'))
-                        <x-date-picker class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{ $date }}" placeholder="Input Date..."/>
+                        <x-date-picker data-date-end-date="{{ now()->format('l, F d, Y') }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{ $date }}" placeholder="Input Date..."/>
                         @endif
 
                         @if (!Auth::user()->can('isExecutive'))
-                        <x-date-picker class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{ $date }}" placeholder="Input Date..." disabled />
+                        <x-date-picker data-date-end-date="{{ now()->format('l, F d, Y') }}" class="block appearance-none w-half bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="{{ $date }}" placeholder="Input Date..." disabled />
                         @endif
 
                     </div>

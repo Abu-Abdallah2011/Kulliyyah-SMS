@@ -26,6 +26,8 @@ class CurriculumFormRequest extends FormRequest
         return [
             'date' => [
                 'required',
+                'date',
+                'before_or_equal:' . now()->toDateString(),
                 'max:255'
             ],
             'class' => [
@@ -64,5 +66,9 @@ class CurriculumFormRequest extends FormRequest
                 'max:255'
             ],
         ];
+    }
+    public function messages()
+    {
+        return ['date.before_or_equal' => 'The record date cannot be in the future.'];
     }
 }

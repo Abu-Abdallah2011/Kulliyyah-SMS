@@ -28,6 +28,10 @@ class teachersAttendanceController extends Controller
     // Save Attendance to database
     public function store(Request $request)
 {
+    $request->validate([
+        'date' => ['required', 'date', 'before_or_equal:' . now()->toDateString()],
+    ], ['date.before_or_equal' => 'The record date cannot be in the future.']);
+
     $date = $request->input('date');
     $attendance = $request->input('attendance');
     $teacherIds = $request->input('teacher_ids');
@@ -144,6 +148,13 @@ public function show(Request $request)
   // Update Attendance to database
   public function update(Request $request, $date)
   {
+    // Attendance edits use the route date to identify existing records.
+    $request->merge(['date' => $date]);
+
+    $request->validate([
+        'date' => ['required', 'date', 'before_or_equal:' . now()->toDateString()],
+    ], ['date.before_or_equal' => 'The record date cannot be in the future.']);
+
     $attendanceData = $request->input('attendance');
     $teacherIds = $request->input('teacher_ids');
     $times = $request->input('time');

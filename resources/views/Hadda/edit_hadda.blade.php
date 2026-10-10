@@ -21,7 +21,7 @@
                  <!-- Date -->
                  <div>
                     <x-input-label for="date" :value="__('Date')" />
-                    <x-date-picker id="date" class="block mt-1 w-full" type="text" name="date" value="{{ $hadda->date }}" required autocomplete="date" />
+                    <x-date-picker data-date-end-date="{{ now()->format('l, F d, Y') }}" id="date" class="block mt-1 w-full" type="text" name="date" value="{{ $hadda->date }}" required autocomplete="date" />
                     <x-input-error :messages="$errors->get('date')" class="mt-2" />
                 </div>
         
@@ -116,7 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const pageCountMessage = form?.querySelector('[data-hadda-page-count-message]');
     const pageAlert = form?.querySelector('[data-hadda-page-alert]');
     const submitButton = form?.querySelector('[data-hadda-submit]');
+    const dateInput = form?.querySelector('[name="date"]');
     const existingPageRanges = @json($existingPageRanges ?? []);
+    const academicPeriods = @json($academicPeriods ?? []);
 
     const normalizeNumber = (value) => {
         const normalized = value.trim().replace(/,/g, '').replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (digit) => {
@@ -150,12 +152,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    const findOverlap = (from, to) => existingPageRanges.find((range) => {
+    const parseDate = (value) => {
+        if (!value) {
+            return null;
+        }
+
+        const parsed = new Date(value);
+        return Number.isNaN(parsed.getTime()) ? null : parsed;
+    };
+
+    const sessionForSelectedDate = () => {
+        const selectedDate = parseDate(dateInput?.value);
+
+        if (!selectedDate) {
+            return null;
+        }
+
+        const period = academicPeriods.find((period) => {
+            const start = parseDate(period.term_starts);
+            const end = parseDate(period.term_ends);
+
+            return start && end && selectedDate >= start && selectedDate <= end;
+        });
+
+        return period?.session || null;
+    };
+
+    const pageRangesForSelectedSession = () => {
+        const selectedSession = sessionForSelectedDate();
+
+        if (!selectedSession) {
+            return existingPageRanges;
+        }
+
+        return existingPageRanges.filter((range) => range.session === selectedSession);
+    };
+
+    const findOverlap = (from, to) => pageRangesForSelectedSession().find((range) => {
         return from <= Number(range.to) && to >= Number(range.from);
     });
 
     const findSkippedPages = (to) => {
-        const latestRange = existingPageRanges
+        const latestRange = pageRangesForSelectedSession()
             .slice()
             .sort((a, b) => {
                 const dateDifference = Number(b.record_date_timestamp || 0) - Number(a.record_date_timestamp || 0);
@@ -224,6 +262,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     fromPage?.addEventListener('input', updatePageCount);
     toPage?.addEventListener('input', updatePageCount);
+    dateInput?.addEventListener('change', updatePageCount);
+    dateInput?.addEventListener('input', updatePageCount);
     updatePageCount();
 });
 </script>

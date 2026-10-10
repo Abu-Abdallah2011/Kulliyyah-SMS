@@ -21,6 +21,7 @@ use App\Http\Controllers\GuardiansController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\SchoolFeesController;
+use App\Http\Controllers\MockController;
 use App\Http\Controllers\AllowanceVouchersController;
 use App\Http\Controllers\StudentExcuseCardsController;
 use App\Http\Controllers\classesCrudController;
@@ -254,6 +255,24 @@ require __DIR__.'/auth.php';
         // Download Hadda record for all students in a class for a term
         Route::get('/hadda_class/{class}/pdf', 'classHaddaPdfMerged')->middleware('can:isAssistant')->name('hadda_class.pdf');
         });
+
+    Route::middleware(['auth', 'can:isAssistant'])->controller(MockController::class)->group(function () {
+        Route::get('/mock_cycles', 'index')->name('mock_cycles.index');
+        Route::get('/mock_cycles/{id}', 'show')->whereNumber('id')->name('mock_cycles.show');
+        Route::get('/mock_cycles/{id}/records/create', 'createRecord')->whereNumber('id')->name('mock_records.create');
+        Route::post('/mock_cycles/{id}/records', 'storeRecord')->whereNumber('id')->name('mock_records.store');
+        Route::get('/mock_records/{id}/edit', 'editRecord')->whereNumber('id')->name('mock_records.edit');
+        Route::put('/mock_records/{id}', 'updateRecord')->whereNumber('id')->name('mock_records.update');
+        Route::delete('/mock_records/{id}', 'deleteRecord')->whereNumber('id')->name('mock_records.delete');
+    });
+
+    Route::middleware(['auth', 'can:isExecutive'])->controller(MockController::class)->group(function () {
+        Route::get('/mock_cycles/create', 'create')->name('mock_cycles.create');
+        Route::post('/mock_cycles', 'store')->name('mock_cycles.store');
+        Route::post('/mock_cycles/{id}/complete', 'complete')->whereNumber('id')->name('mock_cycles.complete');
+        Route::post('/mock_cycles/{id}/fail', 'fail')->whereNumber('id')->name('mock_cycles.fail');
+        Route::post('/mock_cycles/{id}/cancel', 'cancel')->whereNumber('id')->name('mock_cycles.cancel');
+    });
 
     Route::get('/run-migrations', function () {
         Artisan::call('migrate', ['--force' => true]);

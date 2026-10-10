@@ -15,6 +15,7 @@ class register_student extends Model
     public const HADDA_STATUS_NOT_APPLICABLE = 'not_applicable';
 
     public const TARTEEL_STATUS_ACTIVE = 'active';
+    public const TARTEEL_STATUS_MOCK = 'mock_exam';
     public const TARTEEL_STATUS_GRADUATED = 'graduated';
     public const TARTEEL_STATUS_NOT_APPLICABLE = 'not_applicable';
 
@@ -41,6 +42,16 @@ class register_student extends Model
     public function Hadda()
     {
        return $this->hasMany(Hadda::class, 'student_id', 'student_id');
+    }
+
+    public function mockCycles()
+    {
+       return $this->hasMany(MockCycle::class, 'student_id', 'id');
+    }
+
+    public function mockRecords()
+    {
+       return $this->hasMany(MockRecord::class, 'student_id', 'id');
     }
 
     //  Link this model to Attendance model
@@ -166,6 +177,7 @@ class register_student extends Model
     {
         return [
             self::TARTEEL_STATUS_ACTIVE => 'Active',
+            self::TARTEEL_STATUS_MOCK => 'Mock Exam',
             self::TARTEEL_STATUS_GRADUATED => 'Graduated',
             self::TARTEEL_STATUS_NOT_APPLICABLE => 'Not Applicable',
         ];

@@ -21,7 +21,7 @@
                             {{-- Select Date --}}
                             <div>
                                 <x-input-label class="font-bold" for="date" :value="__('Select a Date')" />
-                                <x-date-picker id="date" class="block mt-1 w-full" type="text" name="date" required/>
+                                <x-date-picker data-date-end-date="{{ now()->format('l, F d, Y') }}" id="date" class="block mt-1 w-full" type="text" name="date" required/>
                                 <x-input-error :messages="$errors->get('date')" class="mt-2" />
                             </div>
                             {{-- Surah --}}

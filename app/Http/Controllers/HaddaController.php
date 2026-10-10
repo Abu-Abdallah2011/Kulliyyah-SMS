@@ -171,7 +171,13 @@ class HaddaController extends Controller
         $selectedStudentId = $request->integer('student_id') ?: null;
 
         if (!$hasFullAnalyticsAccess) {
-            $selectedClass = $teacherClass;
+            if (!$request->has('class')) {
+                $selectedClass = $teacherClass;
+            } elseif ($selectedClass !== null && $selectedClass !== '' && $selectedClass !== $teacherClass) {
+                abort(403);
+            } else {
+                $selectedClass = $selectedClass ?: null;
+            }
         }
 
         $selectedStudent = null;
@@ -307,9 +313,11 @@ class HaddaController extends Controller
         $sura = surasModel::all();
         $surah = surasModel::all();
         $student = register_student::where('id', $student_id)->first();
+        $currentSession = sessions::orderBy('created_at', 'desc')->first();
+        $academicPeriods = sessions::orderBy('term_starts')->get(['session', 'term_starts', 'term_ends']);
         $existingPageRanges = HaddaRecordGuard::existingPageRanges(
             $student->id,
-            null,
+            $currentSession?->session,
             null
         );
 
@@ -318,6 +326,7 @@ class HaddaController extends Controller
             'sura' => $sura,
             'surah' => $surah,
             'existingPageRanges' => $existingPageRanges,
+            'academicPeriods' => $academicPeriods,
         ]
         );
     }
@@ -335,13 +344,13 @@ class HaddaController extends Controller
     $sessions = AcademicPeriodResolver::forDate($request->input('date'));
     $selectedOption = surasModel::find($selectedOptionId);
     $to_selectedOption = surasModel::find($to_selectedOptionId);
-    $guard = HaddaRecordGuard::inspect(
-        $request->input('from'),
-        $request->input('to'),
-        $student->id,
-        null,
-        null
-    );
+        $guard = HaddaRecordGuard::inspect(
+            $request->input('from'),
+            $request->input('to'),
+            $student->id,
+            $sessions?->session,
+            null
+        );
 
     if ($guard['errors']) {
         return back()->withErrors(['from' => implode(' ', $guard['errors'])])->withInput();
@@ -384,14 +393,16 @@ public function edit($id){
     $sura = surasModel::all();
     $surah = surasModel::all();
     $hadda = Hadda::find($id);
+    $currentSession = sessions::orderBy('created_at', 'desc')->first();
+    $academicPeriods = sessions::orderBy('term_starts')->get(['session', 'term_starts', 'term_ends']);
     $existingPageRanges = HaddaRecordGuard::existingPageRanges(
         $hadda->student_id,
-        null,
+        $currentSession?->session,
         null,
         $hadda->id
     );
 
-    return view('Hadda.edit_hadda', compact('hadda', 'sura', 'surah', 'existingPageRanges'));
+    return view('Hadda.edit_hadda', compact('hadda', 'sura', 'surah', 'existingPageRanges', 'academicPeriods'));
 }
 
       //update Hadda Information
@@ -413,7 +424,7 @@ public function edit($id){
             $request->input('from'),
             $request->input('to'),
             $student->id,
-            null,
+            $sessions?->session,
             null,
             $entry->id
         );

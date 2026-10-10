@@ -46,6 +46,7 @@ class HaddaLeaderboardBuilder
 
         $studentsWithoutRecords = $eligibleStudents
             ->reject(fn ($student) => in_array((int) $student->id, $studentIdsWithRecords, true))
+            ->sortBy(fn ($student) => strtolower(trim((string) $student->class)).'|'.strtolower(trim((string) $student->fullname)))
             ->values();
 
         $studentRankings = $records

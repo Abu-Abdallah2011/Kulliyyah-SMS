@@ -39,6 +39,16 @@ class register_teacher extends Model
        return $this->hasMany(teachersAttendanceModel::class, 'teacher_id', 'id');
     }
 
+    public function mockCycles()
+    {
+       return $this->hasMany(MockCycle::class, 'teacher_id', 'id');
+    }
+
+    public function mockRecords()
+    {
+       return $this->hasMany(MockRecord::class, 'teacher_id', 'id');
+    }
+
     //  Link this model to Teachers Disciplinary action model
     public function disciplinaryActions()
     {

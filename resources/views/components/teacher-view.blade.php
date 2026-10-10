@@ -87,6 +87,23 @@
                                     </div>
                                 </a>
 
+                                @can('isAssistant')
+                                <!-- Card: Mock Cycles -->
+                                <a href="{{ route('mock_cycles.index') }}">
+                                    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0">
+                                                <i class="fas fa-clipboard-check fa-2x text-info"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-900">Mock</h3>
+                                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-900">Cycles</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                @endcan
+
                                 @can('isTeacher')
                                 <!-- Card: Hadda Leaderboard -->
                                 <a href="{{ route('hadda.leaderboard') }}">

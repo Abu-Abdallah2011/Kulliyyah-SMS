@@ -27,6 +27,8 @@ class HaddaFormRequest extends FormRequest
             
                 'date' => [
                     'required',
+                'date',
+                'before_or_equal:' . now()->toDateString(),
                     'max:255'
                 ],
                 // 'class' => [
@@ -67,5 +69,9 @@ class HaddaFormRequest extends FormRequest
                 // ],
             ];
         
+    }
+    public function messages()
+    {
+        return ['date.before_or_equal' => 'The record date cannot be in the future.'];
     }
 }

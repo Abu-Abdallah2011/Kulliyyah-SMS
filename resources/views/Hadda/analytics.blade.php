@@ -51,10 +51,8 @@
 
                     <div>
                         <x-input-label for="class" :value="__('Class')" />
-                        <select id="class" name="class" class="block mt-1 w-full h-10 px-3 py-2 border-gray-300 bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" @disabled(!$hasFullAnalyticsAccess)>
-                            @if($hasFullAnalyticsAccess)
-                                <option value="">School Wide</option>
-                            @endif
+                        <select id="class" name="class" class="block mt-1 w-full h-10 px-3 py-2 border-gray-300 bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                            <option value="">School Wide</option>
                             @foreach($classes as $class)
                                 <option value="{{ $class }}" @selected($class === $selectedClass)>{{ $class }}</option>
                             @endforeach
@@ -136,7 +134,7 @@
                     </div>
                 </div>
 
-                <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div class="mt-6 grid grid-cols-1 gap-4 {{ $hasFullAnalyticsAccess ? 'lg:grid-cols-2' : 'lg:grid-cols-1' }}">
                     <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
                         <h3 class="mb-3 text-lg font-bold text-gray-800">Top Students</h3>
                         <div class="space-y-2">
@@ -154,6 +152,7 @@
                         </div>
                     </div>
 
+                    @if($hasFullAnalyticsAccess)
                     <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
                         <h3 class="mb-3 text-lg font-bold text-gray-800">Needs Attention</h3>
                         <div class="space-y-2">
@@ -170,6 +169,7 @@
                             @endforelse
                         </div>
                     </div>
+                    @endif
                 </div>
 
                 @if(!$selectedStudent)
@@ -180,13 +180,20 @@
                         </div>
                         <div class="space-y-3 p-4 pt-0 md:hidden">
                             @forelse($visibleStudents as $row)
+                                @php
+                                    $canOpenStudentAnalytics = $hasFullAnalyticsAccess || ($teacherClass && $row['class'] === $teacherClass);
+                                @endphp
                                 <div class="rounded-xl border border-gray-200 bg-gray-50 p-3">
                                     <div class="flex items-start justify-between gap-3">
                                         <div class="min-w-0">
                                             <p class="text-xs font-black uppercase text-indigo-600">#{{ $row['rank'] }}</p>
-                                            <a href="{{ route('hadda.analytics', array_merge(request()->except('student_id'), ['student_id' => $row['student_id'], 'class' => $row['class']])) }}" class="break-words font-bold text-gray-900 hover:underline">
-                                                {{ $row['fullname'] }}
-                                            </a>
+                                            @if($canOpenStudentAnalytics)
+                                                <a href="{{ route('hadda.analytics', array_merge(request()->except('student_id'), ['student_id' => $row['student_id'], 'class' => $row['class']])) }}" class="break-words font-bold text-gray-900 hover:underline">
+                                                    {{ $row['fullname'] }}
+                                                </a>
+                                            @else
+                                                <p class="break-words font-bold text-gray-900">{{ $row['fullname'] }}</p>
+                                            @endif
                                             <p class="text-xs text-gray-500">{{ $row['class'] }}</p>
                                         </div>
                                         <div class="shrink-0 rounded-lg bg-white px-3 py-2 text-right shadow-sm">
@@ -229,12 +236,19 @@
                                 </thead>
                                 <tbody>
                                     @forelse($visibleStudents as $row)
+                                        @php
+                                            $canOpenStudentAnalytics = $hasFullAnalyticsAccess || ($teacherClass && $row['class'] === $teacherClass);
+                                        @endphp
                                         <tr>
                                             <td class="border p-3 text-center font-bold">#{{ $row['rank'] }}</td>
                                             <td class="border p-3 font-bold">
-                                                <a href="{{ route('hadda.analytics', array_merge(request()->except('student_id'), ['student_id' => $row['student_id'], 'class' => $row['class']])) }}" class="text-indigo-600 hover:underline">
-                                                    {{ $row['fullname'] }}
-                                                </a>
+                                                @if($canOpenStudentAnalytics)
+                                                    <a href="{{ route('hadda.analytics', array_merge(request()->except('student_id'), ['student_id' => $row['student_id'], 'class' => $row['class']])) }}" class="text-indigo-600 hover:underline">
+                                                        {{ $row['fullname'] }}
+                                                    </a>
+                                                @else
+                                                    <span>{{ $row['fullname'] }}</span>
+                                                @endif
                                             </td>
                                             <td class="border p-3">{{ $row['class'] }}</td>
                                             <td class="border p-3 text-center font-bold">{{ $row['confirmed_pages'] }}</td>
@@ -311,13 +325,20 @@
                         </div>
                         <div class="space-y-3 p-4 pt-0 md:hidden">
                             @forelse($classRows as $row)
+                                @php
+                                    $canOpenClassAnalytics = $hasFullAnalyticsAccess || ($teacherClass && $row['class'] === $teacherClass);
+                                @endphp
                                 <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-3">
                                     <div class="flex items-start justify-between gap-3">
                                         <div class="min-w-0">
                                             <p class="text-xs font-black uppercase text-emerald-700">#{{ $row['rank'] }}</p>
-                                            <a href="{{ route('hadda.analytics', array_merge(request()->query(), ['class' => $row['class'], 'student_id' => null])) }}" class="break-words font-bold text-gray-900 hover:underline">
-                                                {{ $row['class'] }}
-                                            </a>
+                                            @if($canOpenClassAnalytics)
+                                                <a href="{{ route('hadda.analytics', array_merge(request()->query(), ['class' => $row['class'], 'student_id' => null])) }}" class="break-words font-bold text-gray-900 hover:underline">
+                                                    {{ $row['class'] }}
+                                                </a>
+                                            @else
+                                                <p class="break-words font-bold text-gray-900">{{ $row['class'] }}</p>
+                                            @endif
                                             <p class="text-xs text-gray-500">{{ $row['student_count'] }} students · {{ $row['recorded_student_count'] }} recorded</p>
                                         </div>
                                         <div class="shrink-0 rounded-lg bg-white px-3 py-2 text-right shadow-sm">
@@ -356,12 +377,19 @@
                                 </thead>
                                 <tbody>
                                     @forelse($classRows as $row)
+                                        @php
+                                            $canOpenClassAnalytics = $hasFullAnalyticsAccess || ($teacherClass && $row['class'] === $teacherClass);
+                                        @endphp
                                         <tr>
                                             <td class="border p-3 text-center font-bold">#{{ $row['rank'] }}</td>
                                             <td class="border p-3 font-bold">
-                                                <a href="{{ route('hadda.analytics', array_merge(request()->query(), ['class' => $row['class'], 'student_id' => null])) }}" class="text-indigo-600 hover:underline">
-                                                    {{ $row['class'] }}
-                                                </a>
+                                                @if($canOpenClassAnalytics)
+                                                    <a href="{{ route('hadda.analytics', array_merge(request()->query(), ['class' => $row['class'], 'student_id' => null])) }}" class="text-indigo-600 hover:underline">
+                                                        {{ $row['class'] }}
+                                                    </a>
+                                                @else
+                                                    <span>{{ $row['class'] }}</span>
+                                                @endif
                                             </td>
                                             <td class="border p-3 text-center">{{ $row['student_count'] }}</td>
                                             <td class="border p-3 text-center">{{ $row['recorded_student_count'] }}</td>

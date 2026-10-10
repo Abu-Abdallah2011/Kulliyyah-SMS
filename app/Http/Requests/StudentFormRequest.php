@@ -55,7 +55,7 @@ class StudentFormRequest extends FormRequest
             ],
             'tarteel_status' => [
                 'nullable',
-                'in:active,graduated,not_applicable',
+                'in:active,mock_exam,graduated,not_applicable',
             ],
             'guardian_id' => [
                 'max:255'
